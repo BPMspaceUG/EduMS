@@ -1,0 +1,65 @@
+#!/bin/bash
+
+date=`date +%y%m%d`
+
+if [ -d $date ]; then
+	echo "Folder ${date}/ already exists ..."
+	exit
+fi
+
+if [ -e ${date}.sql ]; then
+	echo "Dump ${date}.sql already exists ..."
+	exit
+fi
+
+if [ ! -e schema_participant.sql ]; then
+	echo "scheme for table participant does NOT exist ..."
+	exit
+fi
+
+if [ ! -e schema_organization.sql ]; then
+	echo "scheme for table organization does NOT exist ..."
+	exit
+fi
+
+if [ ! -e schema_trainer.sql ]; then
+	echo "scheme for table trainer does NOT exist ..."
+	exit
+fi
+
+if [ ! -e schema_location.sql ]; then
+	echo "scheme for table location does NOT exist ..."
+	exit
+fi
+
+if [ ! -e schema_anmeldungen.sql ]; then
+	echo "scheme for table anmeldungen does NOT exist ..."
+	exit
+fi
+
+mkdir $date
+
+read -sp "MySQL root password: " rPW
+echo ""
+read -sp "DB Name" rDB
+echo ""
+
+mysqldump -u root -p${rPW} ${rDB} all_events_web brand contact_channel course event feedback gender location organization participation status_billing status_buch status_event status_eventguarantee status_participation status_sales status_sales_interests status_trainer trainer trainer_event_assignment > $date/non_critical.sql
+
+if [ $? -ne 0 ]; then
+	rm -r $date
+	echo "Fehler!"
+	exit
+fi
+
+
+./create_insert_statements ${rPW} participant > $date/participant_fakedata.sql
+./create_insert_statements ${rPW} organization > $date/organization_fakedata.sql
+./create_insert_statements ${rPW} trainer > $date/trainer_fakedata.sql
+./create_insert_statements ${rPW} location > $date/location_fakedata.sql
+./create_insert_statements ${rPW} anmeldungen > $date/anmeldungen_fakedata.sql
+
+cat $date/non_critical.sql schema_participant.sql $date/participant_fakedata.sql schema_organization.sql $date/organization_fakedata.sql schema_trainer.sql $date/trainer_fakedata.sql schema_location.sql $date/location_fakedata.sql schema_anmeldungen.sql $date/anmeldungen_fakedata.sql > dump_anon_$date.sql
+rm -r $date
+
+echo "Datei dump_anon_${date}.sql erstellt!"

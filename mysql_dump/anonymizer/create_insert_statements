@@ -1,0 +1,474 @@
+#!/usr/bin/php
+<?php
+	function generateNumber($digits) {
+		$endNum = "";
+		for ($i = 0; $i < $digits; $i++) {
+			$endNum .= rand(0,9);
+		}
+		return $endNum;
+	}
+
+	function generateEmail() {
+		$email_address = strtolower(createFakeName(FALSE)) . "@" . strtolower(createFakeName(FALSE));
+		if (rand(0,1) == 1) {
+			$email_address .= ".de";
+		} else {
+			$email_address .= ".com";
+		}
+
+		return $email_address;
+	}
+
+	function createWord() {
+		$vokale = array("a", "e", "i", "o", "u");
+		$konsonanten = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z");
+
+		$complLen = rand(4,12);
+		$fullName = "";
+
+		if (rand(0, 1) == TRUE) {
+			$nowKons = TRUE;
+		} else {
+			$nowKons = FALSE;
+		}
+
+		for ($i = 0; $i < $complLen; $i++) {
+			if ($nowKons) {
+				$nowCharNo = rand(0, count($konsonanten)-1);
+				$nowChar = $konsonanten[$nowCharNo];
+				$nowKons = FALSE;
+			} else {
+				$nowCharNo = rand(0, count($vokale)-1);
+				$nowChar = $vokale[$nowCharNo];
+				$nowKons = TRUE;
+			}
+
+			if (strlen($fullName) == 0) {
+				// Erster Buchstabe gross
+				$fullName = strtoupper($nowChar);
+			} else {
+				$fullName .= $nowChar;
+			}
+		}
+
+		return $fullName;
+	}
+
+	function createFakeName($nachname) {
+		if ($nachname) {
+			if (rand(0,11) == 11) {
+				$doppelname = TRUE;
+			} else {
+				$doppelname = FALSE;
+			}
+		} else {
+			$doppelname = FALSE;
+		}
+
+
+		$fullName = createWord();
+
+		if ($doppelname) {
+			$fullName .= "-";
+			$fullName .= createWord();
+		}
+
+		return($fullName);
+	}
+
+	function zeroNullVal($input, $fakeout) {
+		if (is_null($input)) {
+			$retVal = "NULL";
+		} else if (empty($input)) {
+			$retVal = "\"\"";
+		} else {
+			$retVal = "\"" . $fakeout . "\"";
+		}
+
+		return($retVal);
+	}
+
+	function fake_anmeldungen() {
+		echo "-- \n";
+		echo "-- Creating fake data for table 'anmeldungen'\n";
+		echo "-- \n";
+		echo "\n";
+	
+		echo "INSERT INTO anmeldungen VALUES ";
+	
+		$res = mysql_query("SELECT id, anm_datum, kdnr, paket, ansprechpartner, email_ap, firma, strasse, plzort, land, teltag, telhandy, tn1_name, tn1_email, tn2_name, tn2_email, tn3_name, tn3_email, zus_infos, pruefung FROM anmeldungen");
+
+		if (!$res) {
+			die("MySQL Query Failed\n");
+		}
+		$firstEntry = TRUE;
+		while ($row = mysql_fetch_row($res)) {
+			$id = $row[0];
+			$anm_datum = zeroNullVal($row[1], $row[1]);
+			$kdnr = zeroNullVal($row[2], generateNumber(8));
+			$paket = zeroNullVal($row[3], $row[3]);
+			$ansprechpartner = zeroNullVal($row[4], createFakeName(FALSE) . " " . createFakeName(TRUE));
+			$email_ap = zeroNullVal($row[5], generateEmail());
+			$firma = zeroNullVal($row[6], createFakeName(FALSE) . " " . createFakeName(FALSE));
+			$strasse = zeroNullVal($row[7], createFakeName(FALSE) . ". " . rand(1, 200));
+			$plzort = zeroNullVal($row[8], generateNumber(5) . " " . createFakeName(TRUE));
+			$land = zeroNullVal($row[9], createFakeName(FALSE));
+			$teltag = zeroNullVal($row[10], generateNumber(rand(4,6)) .  "-" . generateNumber(rand(4,10)));
+			$telhandy = zeroNullVal($row[11], generateNumber(rand(4,6)) .  "-" . generateNumber(rand(4,10)));
+			$tn1_name = zeroNullVal($row[12], createFakeName(FALSE) . " " . createFakeName(TRUE));
+			$tn1_email = zeroNullVal($row[13], generateEmail());
+			$tn2_name = zeroNullVal($row[14], createFakeName(FALSE) . " " . createFakeName(TRUE));
+			$tn2_email = zeroNullVal($row[15], generateEmail());
+			$tn3_name = zeroNullVal($row[16], createFakeName(FALSE) . " " . createFakeName(TRUE));
+			$tn3_email = zeroNullVal($row[17], generateEmail());
+			$zus_infos = zeroNullVal($row[18], createFakeName(TRUE) . " " . createFakeName(TRUE) . " " . createFakeName(TRUE) . " " . createFakeName(TRUE) . " " . createFakeName(TRUE) . " " . createFakeName(TRUE) . " " . createFakeName(TRUE) . " " . createFakeName(TRUE));
+			$pruefung = $row[19];
+
+			if (!$firstEntry) {
+				echo ",";
+			} else {
+				$firstEntry = FALSE;
+			}
+
+			echo "(" .      $id . ", " .
+				$anm_datum . ", " .
+				$kdnr . ", " .
+				$paket . ", " .
+				$ansprechpartner . ", " .
+				$email_ap . ", " .
+				$firma . ", " .
+				$strasse . ", " .
+				$plzort . ", " .
+				$land . ", " .
+				$teltag . ", " .
+				$telhandy . ", " .
+				$tn1_name . ", " .
+				$tn1_email . ", " .
+				$tn2_name . ", " .
+				$tn2_email . ", " .
+				$tn3_name . ", " .
+				$tn3_email . ", " .
+				$zus_infos . ", " .
+				$pruefung . ")";
+		}
+		echo ";\n";
+        } // fake_anmeldungen() Function
+
+	function fake_location() {
+		echo "-- \n";
+		echo "-- Creating fake data for table 'location'\n";
+		echo "-- \n";
+		echo "\n";
+	
+		echo "INSERT INTO location VALUES ";
+	
+		$res = mysql_query("SELECT location_id, location_name, internet_location_name FROM location");
+
+		if (!$res) {
+			die("MySQL Query Failed\n");
+		}
+		$firstEntry = TRUE;
+		while ($row = mysql_fetch_row($res)) {
+			$id = $row[0];
+			$location_name = zeroNullVal($row[1], createFakeName(FALSE) . " " . createFakeName(TRUE));
+			$internet_location_name = zeroNullVal($row[2], createFakeName(FALSE) . " " . createFakeName(TRUE));
+
+			if (!$firstEntry) {
+				echo ",";
+			} else {
+				$firstEntry = FALSE;
+			}
+
+			echo "(" .      $id . ", " .
+				$location_name . ", " .
+				$internet_location_name . ", " .
+				"0)";
+		}
+		echo ";\n";
+        } // fake_location() Function
+
+	function fake_trainer() {
+		echo "-- \n";
+		echo "-- Creating fake data for table 'trainer'\n";
+		echo "-- \n";
+		echo "\n";
+	
+		echo "INSERT INTO trainer VALUES ";
+	
+		$res = mysql_query("SELECT trainer_id, trainer_name, email_address, phone_number, trainer_hash FROM trainer");
+
+		if (!$res) {
+			die("MySQL Query Failed\n");
+		}
+		$firstEntry = TRUE;
+		while ($row = mysql_fetch_row($res)) {
+			$id = $row[0];
+			$trainer_name = zeroNullVal($row[1], createFakeName(FALSE) . " " . createFakeName(TRUE));
+			$email_address = zeroNullVal($row[2], generateEmail());
+			$phone_number = zeroNullVal($row[3], generateNumber(rand(4,6)) .  "-" . generateNumber(rand(4,10)));
+			$trainer_hash = zeroNullVal($row[4], md5(rand(0, 9999999)));
+
+			if (!$firstEntry) {
+				echo ",";
+			} else {
+				$firstEntry = FALSE;
+			}
+
+			echo "(" .      $id . ", " .
+				$trainer_name . ", " .
+				$email_address . ", " .
+				$phone_number . ", " .
+				$trainer_hash . ")";
+		}
+		echo ";\n";
+        } // fake_trainer() Function
+
+	function fake_organization() {
+		echo "-- \n";
+		echo "-- Creating fake data for table 'participant'\n";
+		echo "-- \n";
+		echo "\n";
+	
+		echo "INSERT INTO organization VALUES ";
+	
+		$res = mysql_query("SELECT organization_id, organization_name, contact_url, address_line_1, address_line_2, city, state, zip, country FROM organization");
+
+		if (!$res) {
+			die("MySQL Query Failed\n");
+		}
+		$firstEntry = TRUE;
+		while ($row = mysql_fetch_row($res)) {
+			$id = $row[0];
+			$organization_name = zeroNullVal($row[1], createFakeName(TRUE) . " " . createFakeName(FALSE));
+			$contact_url = zeroNullVal($row[2], "http://" . createFakeName(FALSE) . ".de");
+			$address_line_1 = zeroNullVal($row[3], createFakeName(FALSE) . ". " . rand(1,200));
+			$address_line_2 = zeroNullVal($row[4], createFakeName(FALSE) . ". " . rand(1,200));
+			$city = zeroNullVal($row[5], createFakeName(FALSE));
+			$state = zeroNullVal($row[6], createFakeName(FALSE));
+			$zip = zeroNullVal($row[7], generateNumber(5));
+			$country = zeroNullVal($row[8], createFakeName(FALSE));
+
+			if (!$firstEntry) {
+				echo ",";
+			} else {
+				$firstEntry = FALSE;
+			}
+
+			echo "(" .      $id . ", " .
+				$organization_name . ", " .
+				$contact_url . ", " .
+				$address_line_1 . ", " .
+				$address_line_2 . ", " .
+				$city . ", " .
+				$state . ", " .
+				$zip . ", " .
+				$country . ")";
+		}
+		echo ";\n";
+        } // fake_organization() Function
+
+	function fake_participant() {
+		echo "-- \n";
+		echo "-- Creating fake data for table 'participant'\n";
+		echo "-- \n";
+		echo "\n";
+	
+		echo "INSERT INTO participant VALUES ";
+	
+		$res = mysql_query("SELECT participant_id, gender_id, titel, country, organization_id, contact_channel_id, contact_channel_data, contact_only, contact_person, status_sales_id, status_sales_interests FROM participant");
+		if (!$res) {
+			die("MySQL Query Failed\n");
+		}
+		$firstEntry = TRUE;
+		while ($row = mysql_fetch_row($res)) {
+			$id = $row[0];
+			$gender_id = $row[1];
+			if (is_null($row[2])) {
+				$titel = "NULL";
+			} else {
+				$titel = "\"" . $row[2] . "\"";
+			}
+	
+			$last_name = "\"" . createFakeName(TRUE) . "\"";
+			$first_name = "\"" . createFakeName(FALSE) . "\"";
+			$email_address = "\"" . generateEmail() . "\"";
+	
+			if (rand(0, 5) == 2) {
+				$email_address_2 = "\"" . generateEmail() . "\"";
+			} else {
+				$email_address_2 = "NULL";
+			}
+	
+			if (rand(0,1) == 0) {
+				$phone_business = "\"" . generateNumber(rand(4,6)) .  "-" . generateNumber(rand(4,10)) . "\"";
+			} else {
+				$phone_business = "NULL";
+			}
+	
+			if (rand(0,1) == 0) {
+				$phone_private = "\"" . generateNumber(rand(4,6)) . "-" . generateNumber(rand(4,10)) . "\"";
+			} else {
+				$phone_private = "NULL";
+			}
+	
+			if (rand(0,1) == 0) {
+				$phone_mobile = "\"" . generateNumber(rand(4,6)) . "-" . generateNumber(rand(4,10)) . "\"";
+			} else {
+				$phone_mobile = "NULL";
+			}
+	
+			if (rand(0,3) == 0) {
+				$phone_fax = "\"" . generateNumber(rand(4,6)) . "-" . generateNumber(rand(4,10)) . "\"";
+			} else {
+				$phone_fax = "NULL";
+			}
+	
+			$address_line_1 = "\"" . createFakeName(FALSE) . ". " . rand(1,200) . "\"";
+	
+			if (rand(0,5) == 0) {
+				$address_line_2 = "\"" . rand(1,10) . ". OG" . "\"";
+			} else {
+				$address_line_2 = "NULL";
+			}
+	
+			$city = "\"" . createFakeName(FALSE) . "\"";
+			if (rand(0,10) == 2) {
+				$state = "\"" . createFakeName(FALSE) . "\"";
+			} else {
+				if (rand(0, 1)) {
+					$state = "\"\"";
+				} else {
+					$state = "NULL";
+				}
+			}
+	
+			$zip = "\"" . generateNumber(5) . "\"";
+			if (is_null($row[3])) {
+				$country = "NULL";
+			} else {
+				$country = "\"" . $row[3] . "\"";
+			}
+	
+			$date_of_birth = "\"" . rand(1950, 1995) . "-" . rand(1,12) . "-" . rand(1,28) . "\"";
+	
+			$place_of_birth = "\"" . createFakeName(FALSE) . "\"";
+	
+			$organization_id = $row[4];
+			if (is_null($row[5])) {
+				$contact_channel_id = "NULL";
+			} else {
+				$contact_channel_id = $row[5];
+			}
+			if (is_null($row[6])) {
+				$contact_channel_data = "NULL";
+			} else {
+				$contact_channel_data = "\"" . $row[6] . "\"";
+			}
+			$contact_only = $row[7];
+			if (is_null($row[8])) {
+				$contact_person = "NULL";
+			} else {
+				$contact_person = $row[8];
+			}
+			if (is_null($row[9])) {
+				$status_sales_id = "NULL";
+			} else {
+				$status_sales_id = $row[9];
+			}
+			if (is_null($row[10])) {
+				$status_sales_interests = "NULL";
+			} else {
+				$status_sales_interests = "\"" . $row[10] . "\"";
+			}
+	
+			if (rand(0, 10) == 1) {
+				// Gegeben
+				$sales_history = "\"" . createFakeName(FALSE) . "\"";
+			} else {
+				if (rand(0,3) == 1) {
+					$sales_history = "\"\"";
+				} else {
+					$sales_history = "NULL";
+				}
+			}
+	
+			$data_history = "NULL";
+			$joomla_id = "NULL";
+			$history_data = "NULL";
+	
+			if (!$firstEntry) {
+				echo ",";
+			} else {
+				$firstEntry = FALSE;
+			}
+			echo "(" . 	$id . ", " .
+					$gender_id . ", " .
+					$titel . ", " . 
+					$last_name . ", " .
+					$first_name . ", " .
+					$email_address . ", " .
+					$email_address_2 . ", " .
+					$phone_business . ", " .
+					$phone_private . ", " .
+					$phone_mobile . ", " . 
+					$phone_fax . ", " .
+					$address_line_1 . ", " .
+					$address_line_2 . ", " .
+					$city . ", " .
+					$state . ", " .
+					$zip . ", " .
+					$country . ", " .
+					$date_of_birth . ", " .
+					$place_of_birth . ", " .
+					$organization_id . ", " .
+					$contact_channel_id . ", " .
+					$contact_channel_data . ", " .
+					$contact_only . ", " .
+					$contact_person . ", " .
+					$status_sales_id . ", " . 
+					$status_sales_interests . ", " .
+					$sales_history . ", " .
+					$data_history . ", " .
+					$joomla_id . ", " .
+					$history_data . ")";
+		}
+		echo ";\n";
+	} // fake_participant() Function
+
+	// Test
+	/*
+	for ($i = 0; $i < 20; $i++) {
+		echo "Vorname: " . createFakeName(FALSE) . ", Nachname: " . createFakeName(TRUE) . "\n";
+	}
+	exit;
+	*/
+
+	if ((!isset($argv[1])) || (!isset($argv[2]))) {
+		echo "Sie wollten bestimmt anon_data aufrufen!\n";
+		exit;
+	}
+
+	$db = mysql_connect("localhost", "root", $argv[1]);
+	if (!$db) {
+		echo "MySQL Open Fehler: " . mysql_error();
+		exit;
+	}
+	if (!mysql_select_db("mitsm_business_warehouse", $db)) {
+		echo "MySQL Select DB Fehler: " . mysql_error();
+		exit;
+	}
+
+	if ($argv[2] == "participant") {
+		fake_participant();
+	} else if ($argv[2] == "organization") {
+		fake_organization();
+	} else if ($argv[2] == "trainer") {
+		fake_trainer();
+	} else if ($argv[2] == "location") {
+		fake_location();
+	} else if ($argv[2] == "anmeldungen") {
+		fake_anmeldungen();
+	} else {
+		echo "Unknown Table";
+	}
+?>

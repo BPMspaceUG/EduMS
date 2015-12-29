@@ -1,0 +1,12 @@
+- user an session hanlding as described in http://m.wikihow.com/Create-a-Secure-Session-Managment-System-in-PHP-and-MySQL - should be in an own DB so it can be reused in other BPMSpace applications
+- SQL - trainer is realted to 1 or more organisations (table brand) (N:M)
+- SQL - user is related to min 1 or more organisations (table brand) (N:M)
+- SQL - Trainer is related to exact 1 user but not every user is a trainer 
+- SQL add state machine to state_event
+- Add add state machine to participation
+- add tabel role - a user can have 1 or more roles for 1 ore more organisations (brand)
+- 
+
+
+  
+  
