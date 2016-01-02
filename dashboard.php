@@ -10,6 +10,7 @@ include_once '_header.inc.php';
  <i class="fa fa-tachometer fa-5x text-success"></i>
  <i class="fa fa-tachometer fa-5x text-danger"></i>
 </div> 
+<p> example <a href="http://bootstrapmaster.com/live/perfectum/" > Dashboard Example</a>
 <?php
 include_once '_footer.inc.php';
 ?>
