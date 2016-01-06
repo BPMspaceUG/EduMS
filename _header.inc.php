@@ -20,17 +20,24 @@ if(login_check($mysqli) != true) {
   header("Location: ../index.php?error_messages='You are not logged in!'");
   exit();
 }
+  else {
+  	$logged = 'in';
+  }
+
 ?>
 
 <div class="container">
-	<div class="container text-right">
-	<button type="button" class="btn collapsed row" data-toggle="collapse" data-target="#logo"><i class="fa fa-caret-square-o-down"></i></button>
+	<div class="container">
+		<div class="col-md-10"></div>
+	  	<div class="col-md-2"><?php include_once '../_header_LIAM.inc.php'; ?></div>
+	</div>
+
+    <div class="container text-right">
+	<a href='#' class="btn collapsed row" data-toggle="collapse" data-target="#logo"><i class="fa fa-caret-square-o-down"></i></a>
 	</div>
 	<div class="row collapse in" id="logo">
-	  <div class="col-md-4"><img src="../images/yourLogo.png" alt="mITSM Logo Partner-Network"></div>
-	  <div class="col-md-4"></div>
-	  <div class="col-md-4"><img src="../images/bpmspace_icon-EduMS-right-200px-text.png" alt="mITSM Logo Partner-Network" width=70% height=70%></div>
-    
+	  <div class="col-md-6"><img src="../images/yourLogo.png" alt="mITSM Logo Partner-Network"></div>
+	  <div class="col-md-6"><img class="pull-right" src="../images/bpmspace_icon-EduMS-right-200px-text.png" alt="mITSM Logo Partner-Network" width=80% height=80%></div>
 	</div>
 </div>
 </br>
