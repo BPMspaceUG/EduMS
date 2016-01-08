@@ -11,7 +11,7 @@ if ($help_text) {
 		echo '<div class="container bg-info 90_percent" >' ;
 			echo "<a data-toggle=\"collapse\" data-target=\"#collapse_help_event\" >PSEUDO CODE FOR EVENT_GRID PHP - Later here will be the helptext&nbsp;<i class=\"fa fa-chevron-down\"></i></a>";
 			echo "<div id=\"collapse_help_event\" class=\"collapse\"> ";
-			include_once 'event_helptxt.php';
+			include_once 'event_helptxt.inc.php';
 			echo "</div>";
 		echo "</div><p></p><p></p>";
 		
