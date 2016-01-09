@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>BPMspace EduMS</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" media="screen"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" media="screen">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css">
 <link rel="stylesheet" href="custom/custom.css">
@@ -27,8 +27,8 @@ if(login_check($mysqli) != true) {
 
 <div class="container">
 	<div class="container">
-		<div class="col-md-10"></div>
-	  	<div class="col-md-2"><?php include_once '../_header_LIAM.inc.php'; ?></div>
+		<div class="col-md-8"></div>
+	  	<div class="col-md-4"><?php include_once '../_header_LIAM.inc.php'; ?></div>
 	</div>
 
     <div class="container text-right">
