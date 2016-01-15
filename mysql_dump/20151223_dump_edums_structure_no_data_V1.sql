@@ -15,6 +15,16 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Datenbank: `bpmspace_edums_v1`
+--
+
+DROP DATABASE IF EXISTS`bpmspace_edums_v1` ;
+CREATE DATABASE `bpmspace_edums_v1` ;
+GRANT SELECT, INSERT, UPDATE ON `bpmspace_edums_v1`.* TO 'bpmspace_edums'@'localhost';
+USE bpmspace_edums_v1;
+
 --
 -- Temporary table structure for view `all_events`
 --
@@ -92,6 +102,38 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `anmeldungen`
+--
+
+DROP TABLE IF EXISTS `anmeldungen`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `anmeldungen` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `anm_datum` datetime DEFAULT NULL,
+  `kdnr` text,
+  `paket` text,
+  `ansprechpartner` text,
+  `email_ap` text,
+  `firma` text,
+  `strasse` text,
+  `plzort` text,
+  `land` text,
+  `teltag` text,
+  `telhandy` text,
+  `tn1_name` text,
+  `tn1_email` text,
+  `tn2_name` text,
+  `tn2_email` text,
+  `tn3_name` text,
+  `tn3_email` text,
+  `zus_infos` text,
+  `pruefung` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=525 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Temporary table structure for view `apieventdata`
 --
 
@@ -131,77 +173,40 @@ CREATE TABLE `brand` (
   `brand_name` varchar(50) DEFAULT NULL,
   `accesstoken` varchar(50) NOT NULL,
   `login` varchar(50) NOT NULL,
-  `brand_description` longtext,
-  `brand_description_footer` longtext,
   PRIMARY KEY (`brand_id`),
   UNIQUE KEY `brand_name` (`brand_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `brand`
+-- Table structure for table `brand_location_limit`
 --
 
-LOCK TABLES `brand` WRITE;
-/*!40000 ALTER TABLE `brand` DISABLE KEYS */;
-/*!40000 ALTER TABLE `brand` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `brand_location`
---
-
-DROP TABLE IF EXISTS `brand_location`;
+DROP TABLE IF EXISTS `brand_location_limit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `brand_location` (
-  `brand_location_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `brand_location_limit` (
+  `entryid` int(11) NOT NULL AUTO_INCREMENT,
   `location_id` int(11) NOT NULL,
   `brand_id` int(11) NOT NULL,
-  PRIMARY KEY (`brand_location_id`),
-  KEY `location_id_1_idx` (`location_id`),
-  KEY `brand_id_4_idx` (`brand_id`),
-  CONSTRAINT `brand_id_4` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`brand_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `location_id_1` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`entryid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `brand_location`
+-- Table structure for table `brand_topic_limit`
 --
 
-LOCK TABLES `brand_location` WRITE;
-/*!40000 ALTER TABLE `brand_location` DISABLE KEYS */;
-/*!40000 ALTER TABLE `brand_location` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `brand_topic`
---
-
-DROP TABLE IF EXISTS `brand_topic`;
+DROP TABLE IF EXISTS `brand_topic_limit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `brand_topic` (
-  `brand_topic_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `brand_topic_limit` (
+  `entry_id` int(11) NOT NULL AUTO_INCREMENT,
   `brand_id` int(11) NOT NULL,
   `topic_id` int(11) NOT NULL,
-  PRIMARY KEY (`brand_topic_id`),
-  KEY `brand_id_5_idx` (`brand_id`),
-  KEY `topic_id_4_idx` (`topic_id`),
-  CONSTRAINT `brand_id_5` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`brand_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `topic_id_4` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`topic_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`entry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `brand_topic`
---
-
-LOCK TABLES `brand_topic` WRITE;
-/*!40000 ALTER TABLE `brand_topic` DISABLE KEYS */;
-/*!40000 ALTER TABLE `brand_topic` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `contact_channel`
@@ -219,15 +224,6 @@ CREATE TABLE `contact_channel` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contact_channel`
---
-
-LOCK TABLES `contact_channel` WRITE;
-/*!40000 ALTER TABLE `contact_channel` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contact_channel` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `course`
 --
 
@@ -243,50 +239,27 @@ CREATE TABLE `course` (
   `internet_course_article_id` int(10) DEFAULT NULL,
   `min_participants` int(10) DEFAULT NULL,
   `deprecated` tinyint(4) DEFAULT '0',
+  `topic_id` int(11) NOT NULL,
   `course_mail_desc` mediumtext,
-  `course_price` int(10) DEFAULT NULL,
-  `course_certificate_desc` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`course_id`),
   UNIQUE KEY `course_name` (`course_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=194 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `course`
+-- Table structure for table `course_course`
 --
 
-LOCK TABLES `course` WRITE;
-/*!40000 ALTER TABLE `course` DISABLE KEYS */;
-/*!40000 ALTER TABLE `course` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `course_test`
---
-
-DROP TABLE IF EXISTS `course_test`;
+DROP TABLE IF EXISTS `course_course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `course_test` (
-  `course_test_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` int(11) DEFAULT NULL,
-  `test_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`course_test_id`),
-  KEY `course_id_idx` (`course_id`),
-  KEY `test_id_idx` (`test_id`),
-  CONSTRAINT `course_id` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `test_id` FOREIGN KEY (`test_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `course_course` (
+  `entry_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `super_course_id` int(11) NOT NULL,
+  PRIMARY KEY (`entry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `course_test`
---
-
-LOCK TABLES `course_test` WRITE;
-/*!40000 ALTER TABLE `course_test` DISABLE KEYS */;
-/*!40000 ALTER TABLE `course_test` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `event`
@@ -336,15 +309,6 @@ CREATE TABLE `event` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `event`
---
-
-LOCK TABLES `event` WRITE;
-/*!40000 ALTER TABLE `event` DISABLE KEYS */;
-/*!40000 ALTER TABLE `event` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `feedback`
 --
 
@@ -359,15 +323,6 @@ CREATE TABLE `feedback` (
   CONSTRAINT `eventfeedback` FOREIGN KEY (`event_id`) REFERENCES `event` (`event_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `feedback`
---
-
-LOCK TABLES `feedback` WRITE;
-/*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-/*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `gender`
@@ -385,15 +340,6 @@ CREATE TABLE `gender` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `gender`
---
-
-LOCK TABLES `gender` WRITE;
-/*!40000 ALTER TABLE `gender` DISABLE KEYS */;
-/*!40000 ALTER TABLE `gender` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `location`
 --
 
@@ -407,21 +353,10 @@ CREATE TABLE `location` (
   `deprecated` tinyint(1) NOT NULL,
   `internet_location_name` varchar(255) DEFAULT NULL,
   `internet_location_article_id` int(10) DEFAULT NULL,
-  `location_mail_desc` tinytext,
-  `favourite` int(11) DEFAULT NULL,
   PRIMARY KEY (`location_id`),
   UNIQUE KEY `location_name` (`location_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `location`
---
-
-LOCK TABLES `location` WRITE;
-/*!40000 ALTER TABLE `location` DISABLE KEYS */;
-/*!40000 ALTER TABLE `location` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `organization`
@@ -446,15 +381,6 @@ CREATE TABLE `organization` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `organization`
---
-
-LOCK TABLES `organization` WRITE;
-/*!40000 ALTER TABLE `organization` DISABLE KEYS */;
-/*!40000 ALTER TABLE `organization` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `package`
 --
 
@@ -463,26 +389,15 @@ DROP TABLE IF EXISTS `package`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `package` (
   `package_id` int(11) NOT NULL AUTO_INCREMENT,
-  `package_name` longtext NOT NULL,
+  `package_name` mediumtext NOT NULL,
   `package_price` float NOT NULL,
   `package_discount` float NOT NULL,
   `topic_id` int(11) NOT NULL,
   `package_description` longtext NOT NULL,
   `deprecated` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`package_id`),
-  KEY `topic_id` (`topic_id`),
-  CONSTRAINT `topicid_fk` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`topic_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`package_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `package`
---
-
-LOCK TABLES `package` WRITE;
-/*!40000 ALTER TABLE `package` DISABLE KEYS */;
-/*!40000 ALTER TABLE `package` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Temporary table structure for view `packageview`
@@ -555,15 +470,6 @@ CREATE TABLE `participant` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `participant`
---
-
-LOCK TABLES `participant` WRITE;
-/*!40000 ALTER TABLE `participant` DISABLE KEYS */;
-/*!40000 ALTER TABLE `participant` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `participation`
 --
 
@@ -595,56 +501,6 @@ CREATE TABLE `participation` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `participation`
---
-
-LOCK TABLES `participation` WRITE;
-/*!40000 ALTER TABLE `participation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `participation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `registration`
---
-
-DROP TABLE IF EXISTS `registration`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registration` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `anm_datum` datetime DEFAULT NULL,
-  `kdnr` text CHARACTER SET latin1,
-  `paket` text CHARACTER SET latin1,
-  `ansprechpartner` text CHARACTER SET latin1,
-  `email_ap` text CHARACTER SET latin1,
-  `firma` text CHARACTER SET latin1,
-  `strasse` text CHARACTER SET latin1,
-  `plzort` text CHARACTER SET latin1,
-  `land` text CHARACTER SET latin1,
-  `teltag` text CHARACTER SET latin1,
-  `telhandy` text CHARACTER SET latin1,
-  `tn1_name` text CHARACTER SET latin1,
-  `tn1_email` text CHARACTER SET latin1,
-  `tn2_name` text CHARACTER SET latin1,
-  `tn2_email` text CHARACTER SET latin1,
-  `tn3_name` text CHARACTER SET latin1,
-  `tn3_email` text CHARACTER SET latin1,
-  `zus_infos` text CHARACTER SET latin1,
-  `pruefung` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=525 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `registration`
---
-
-LOCK TABLES `registration` WRITE;
-/*!40000 ALTER TABLE `registration` DISABLE KEYS */;
-/*!40000 ALTER TABLE `registration` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `status_billing`
 --
 
@@ -658,15 +514,6 @@ CREATE TABLE `status_billing` (
   UNIQUE KEY `status_billing` (`status_billing`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `status_billing`
---
-
-LOCK TABLES `status_billing` WRITE;
-/*!40000 ALTER TABLE `status_billing` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_billing` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `status_buch`
@@ -684,15 +531,6 @@ CREATE TABLE `status_buch` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `status_buch`
---
-
-LOCK TABLES `status_buch` WRITE;
-/*!40000 ALTER TABLE `status_buch` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_buch` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `status_event`
 --
 
@@ -706,15 +544,6 @@ CREATE TABLE `status_event` (
   UNIQUE KEY `status_event` (`status_event`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `status_event`
---
-
-LOCK TABLES `status_event` WRITE;
-/*!40000 ALTER TABLE `status_event` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_event` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `status_eventguarantee`
@@ -732,15 +561,6 @@ CREATE TABLE `status_eventguarantee` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `status_eventguarantee`
---
-
-LOCK TABLES `status_eventguarantee` WRITE;
-/*!40000 ALTER TABLE `status_eventguarantee` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_eventguarantee` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `status_participation`
 --
 
@@ -754,15 +574,6 @@ CREATE TABLE `status_participation` (
   UNIQUE KEY `status_participation` (`status_participation`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `status_participation`
---
-
-LOCK TABLES `status_participation` WRITE;
-/*!40000 ALTER TABLE `status_participation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_participation` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `status_sales`
@@ -780,15 +591,6 @@ CREATE TABLE `status_sales` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `status_sales`
---
-
-LOCK TABLES `status_sales` WRITE;
-/*!40000 ALTER TABLE `status_sales` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_sales` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `status_sales_interests`
 --
 
@@ -802,15 +604,6 @@ CREATE TABLE `status_sales_interests` (
   UNIQUE KEY `status_sales_interests` (`status_sales_interests`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `status_sales_interests`
---
-
-LOCK TABLES `status_sales_interests` WRITE;
-/*!40000 ALTER TABLE `status_sales_interests` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_sales_interests` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `status_trainer`
@@ -828,15 +621,6 @@ CREATE TABLE `status_trainer` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `status_trainer`
---
-
-LOCK TABLES `status_trainer` WRITE;
-/*!40000 ALTER TABLE `status_trainer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_trainer` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `topic`
 --
 
@@ -845,53 +629,15 @@ DROP TABLE IF EXISTS `topic`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `topic` (
   `topic_id` int(11) NOT NULL AUTO_INCREMENT,
-  `topic_name` longtext NOT NULL,
+  `topic_name` mediumtext NOT NULL,
   `topic_description` longtext NOT NULL,
   `sidebar_descrition` longtext NOT NULL,
   `footer` longtext NOT NULL,
   `trainer_id` int(11) NOT NULL,
   `deprecated` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`topic_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `topic`
---
-
-LOCK TABLES `topic` WRITE;
-/*!40000 ALTER TABLE `topic` DISABLE KEYS */;
-/*!40000 ALTER TABLE `topic` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `topic_course`
---
-
-DROP TABLE IF EXISTS `topic_course`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `topic_course` (
-  `topic_course_id` int(11) NOT NULL,
-  `topic_id` int(11) DEFAULT NULL,
-  `course_id` int(11) DEFAULT NULL,
-  `order` int(11) DEFAULT NULL,
-  PRIMARY KEY (`topic_course_id`),
-  KEY `course_id_idx` (`course_id`),
-  KEY `topic_id_idx` (`topic_id`),
-  CONSTRAINT `course_id_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `topic_id` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`topic_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `topic_course`
---
-
-LOCK TABLES `topic_course` WRITE;
-/*!40000 ALTER TABLE `topic_course` DISABLE KEYS */;
-/*!40000 ALTER TABLE `topic_course` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `trainer`
@@ -910,43 +656,6 @@ CREATE TABLE `trainer` (
   UNIQUE KEY `trainer_name` (`trainer_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `trainer`
---
-
-LOCK TABLES `trainer` WRITE;
-/*!40000 ALTER TABLE `trainer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `trainer` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `trainer_course`
---
-
-DROP TABLE IF EXISTS `trainer_course`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `trainer_course` (
-  `trainer_course_id` int(11) NOT NULL,
-  `trainer_id` int(11) DEFAULT NULL,
-  `course_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`trainer_course_id`),
-  KEY `trainer_id_idx` (`trainer_id`),
-  KEY `course_id_3_idx` (`course_id`),
-  CONSTRAINT `course_id_3` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `trainer_id` FOREIGN KEY (`trainer_id`) REFERENCES `trainer` (`trainer_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `trainer_course`
---
-
-LOCK TABLES `trainer_course` WRITE;
-/*!40000 ALTER TABLE `trainer_course` DISABLE KEYS */;
-/*!40000 ALTER TABLE `trainer_course` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `trainer_event_assignment`
@@ -970,15 +679,6 @@ CREATE TABLE `trainer_event_assignment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `trainer_event_assignment`
---
-
-LOCK TABLES `trainer_event_assignment` WRITE;
-/*!40000 ALTER TABLE `trainer_event_assignment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `trainer_event_assignment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Final view structure for view `all_events`
 --
 
@@ -987,9 +687,9 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `all_events` AS select `event`.`event_id` AS `event_id`,`event`.`start_date` AS `start_date`,`event`.`finish_date` AS `finish_date`,`event`.`start_time` AS `start_time`,`event`.`finish_time` AS `finish_time`,`course`.`course_id` AS `course_id`,`course`.`course_name` AS `course_name`,`course`.`internet_course_article_id` AS `internet_course_article_id`,`course`.`test` AS `test`,`location`.`internet_location_name` AS `internet_location_name`,`location`.`internet_location_article_id` AS `internet_location_article_id`,`event`.`event_status_id` AS `event_status_id`,`event`.`eventguaranteestatus` AS `eventguaranteestatus` from ((`event` join `course`) join `location`) where ((`event`.`course_id` = `course`.`course_id`) and (`event`.`location_id` = `location`.`location_id`)) order by `event`.`start_date`,`event`.`finish_date` */;
@@ -1006,9 +706,9 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `all_events_participant_participation` AS select `e`.`event_id` AS `event_id`,`e`.`start_date` AS `event_start_date`,`c`.`course_name` AS `course_name`,`p`.`participant_id` AS `participant_id`,`p`.`last_name` AS `last_name`,`p`.`first_name` AS `first_name`,`p`.`email_address` AS `email_address`,`p`.`email_address_2` AS `email_address_2`,`p`.`organization_id` AS `organization_id`,`t`.`status_participation_id` AS `status_participation_id`,`t`.`order_date` AS `order_date`,`t`.`comment` AS `comment`,`t`.`status_billing_id` AS `status_billing_id`,`t`.`invoice_info` AS `invoice_info` from (((`participant` `p` join `participation` `t`) join `course` `c`) join `event` `e`) where ((`p`.`participant_id` = `t`.`participant_id`) and (`e`.`event_id` = `t`.`event_id`) and (`e`.`course_id` = `c`.`course_id`)) order by `p`.`participant_id` desc */;
@@ -1025,9 +725,9 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `all_events_web` AS select `event`.`event_id` AS `event_id`,`event`.`start_date` AS `start_date`,`event`.`finish_date` AS `finish_date`,`event`.`start_time` AS `start_time`,`event`.`finish_time` AS `finish_time`,`course`.`course_id` AS `course_id`,`course`.`course_name` AS `course_name`,`course`.`internet_course_article_id` AS `internet_course_article_id`,`course`.`test` AS `test`,`location`.`internet_location_name` AS `internet_location_name`,`location`.`internet_location_article_id` AS `internet_location_article_id`,`event`.`event_status_id` AS `event_status_id`,`event`.`eventguaranteestatus` AS `eventguaranteestatus` from ((`event` join `course`) join `location`) where ((`event`.`start_date` >= curdate()) and (`event`.`course_id` = `course`.`course_id`) and (`event`.`location_id` = `location`.`location_id`) and (`event`.`inhouse` = 0) and ((`event`.`event_status_id` = 2) or (`event`.`event_status_id` = 3))) order by `event`.`start_date`,`event`.`finish_date` */;
@@ -1044,9 +744,9 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `apieventdata` AS select `e`.`event_id` AS `event_id`,`e`.`course_id` AS `course_id`,`e`.`start_date` AS `start_date`,`e`.`start_time` AS `start_time`,`e`.`finish_date` AS `finish_date`,`e`.`finish_time` AS `finish_time`,`e`.`location_id` AS `location_id`,`c`.`course_name` AS `course_name`,`c`.`test` AS `test`,`c`.`number_of_days` AS `number_of_days`,`l`.`location_name` AS `location_name`,`l`.`location_description` AS `location_description` from ((`event` `e` left join `course` `c` on((`c`.`course_id` = `e`.`course_id`))) left join `location` `l` on((`l`.`location_id` = `e`.`location_id`))) where ((`e`.`start_date` > now()) and (`e`.`inhouse` = 0) and (`c`.`deprecated` = 0)) order by `e`.`start_date` */;
@@ -1063,9 +763,9 @@ UNLOCK TABLES;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `packageview` AS select `topic`.`topic_id` AS `topic_id`,`topic`.`topic_name` AS `topic_name`,`topic`.`topic_description` AS `topic_description`,`package`.`package_id` AS `package_id`,`package`.`package_name` AS `package_name`,`package`.`package_price` AS `package_price`,`package`.`package_discount` AS `package_discount`,`package`.`package_description` AS `package_description` from (`topic` left join `package` on((`package`.`topic_id` = `topic`.`topic_id`))) where (`package`.`deprecated` <> 1) */;
@@ -1082,4 +782,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-07 15:09:56
+-- Dump completed on 2015-12-25 10:11:55

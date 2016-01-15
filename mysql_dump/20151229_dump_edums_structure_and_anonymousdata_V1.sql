@@ -15,6 +15,16 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Datenbank: `bpmspace_edums_v1`
+--
+
+DROP DATABASE IF EXISTS`bpmspace_edums_v1` ;
+CREATE DATABASE `bpmspace_edums_v1` ;
+GRANT SELECT, INSERT, UPDATE ON `bpmspace_edums_v1`.* TO 'bpmspace_edums'@'localhost';
+USE bpmspace_edums_v1;
+
 --
 -- Temporary table structure for view `all_events`
 --

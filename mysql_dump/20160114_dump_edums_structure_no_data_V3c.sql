@@ -16,6 +16,15 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Datenbank: `bpmspace_edums_v3`
+--
+
+DROP DATABASE IF EXISTS`bpmspace_edums_v3` ;
+CREATE DATABASE `bpmspace_edums_v3` ;
+GRANT SELECT, INSERT, UPDATE ON `bpmspace_edums_v3`.* TO 'bpmspace_edums'@'localhost';
+USE bpmspace_edums_v3;
+
+--
 -- Temporary table structure for view `all_events`
 --
 
@@ -177,6 +186,35 @@ CREATE TABLE `brand_topic` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `candidate_selection`
+--
+
+DROP TABLE IF EXISTS `candidate_selection`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `candidate_selection` (
+  `candidate_selection_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(250) DEFAULT NULL,
+  `sql_query` text,
+  `visited_courses` text,
+  `not_visited_courses` text,
+  `z_candidates` tinyint(4) DEFAULT NULL,
+  `joomla_users` tinyint(4) DEFAULT NULL,
+  `visited_courses_public` tinyint(4) DEFAULT NULL,
+  `visited_courses_inhouse` tinyint(4) DEFAULT NULL,
+  `not_visited_courses_public` tinyint(4) DEFAULT NULL,
+  `not_visited_courses_inhouse` tinyint(4) DEFAULT NULL,
+  `show_date_start` date DEFAULT NULL,
+  `show_date_end` date DEFAULT NULL,
+  `method_visited` varchar(45) DEFAULT NULL,
+  `method_not_visited` varchar(45) DEFAULT NULL,
+  `mail_include` text,
+  `mail_exclude` text,
+  PRIMARY KEY (`candidate_selection_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `contact_channel`
 --
 
@@ -207,6 +245,7 @@ CREATE TABLE `course` (
   `internet_course_article_id` int(10) DEFAULT NULL,
   `min_participants` int(10) DEFAULT NULL,
   `deprecated` tinyint(4) DEFAULT '0',
+  `topic_id` int(11) NOT NULL,
   `course_mail_desc` mediumtext,
   `course_price` int(10) DEFAULT NULL,
   `course_certificate_desc` varchar(45) DEFAULT NULL,
@@ -368,10 +407,12 @@ CREATE TABLE `package` (
   `package_price` float NOT NULL,
   `package_discount` float NOT NULL,
   `topic_id` int(11) NOT NULL,
-  `package_description` longtext NOT NULL,
+  `package_description` longtext CHARACTER SET latin1 NOT NULL,
   `deprecated` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`package_id`),
   KEY `topic_id` (`topic_id`),
+  KEY `topic_id_2_idx` (`topic_id`),
+  CONSTRAINT `topic_id_2` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`topic_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `topicid_fk` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`topic_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -434,6 +475,10 @@ CREATE TABLE `participant` (
   `data_history` text,
   `joomla_id` int(11) DEFAULT NULL,
   `history_data` longtext,
+  `joomla_email` varchar(250) NOT NULL,
+  `joomla_sync_history` text NOT NULL,
+  `no_contact` tinyint(1) DEFAULT '0',
+  `mail_history` text NOT NULL,
   PRIMARY KEY (`participant_id`),
   KEY `contact_channelparticipant` (`contact_channel_id`),
   KEY `genderparticipant` (`gender_id`),
@@ -443,7 +488,7 @@ CREATE TABLE `participant` (
   CONSTRAINT `participant_ibfk_3` FOREIGN KEY (`contact_channel_id`) REFERENCES `contact_channel` (`contact_channel_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `participant_ibfk_4` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`organization_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `participant_ibfk_6` FOREIGN KEY (`status_sales_id`) REFERENCES `status_sales` (`status_sales_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5908 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6424 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -485,28 +530,46 @@ DROP TABLE IF EXISTS `registration`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registration` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `anm_datum` datetime DEFAULT NULL,
-  `kdnr` text CHARACTER SET latin1,
-  `paket` text CHARACTER SET latin1,
-  `ansprechpartner` text CHARACTER SET latin1,
-  `email_ap` text CHARACTER SET latin1,
-  `firma` text CHARACTER SET latin1,
-  `strasse` text CHARACTER SET latin1,
-  `plzort` text CHARACTER SET latin1,
-  `land` text CHARACTER SET latin1,
-  `teltag` text CHARACTER SET latin1,
-  `telhandy` text CHARACTER SET latin1,
-  `tn1_name` text CHARACTER SET latin1,
-  `tn1_email` text CHARACTER SET latin1,
-  `tn2_name` text CHARACTER SET latin1,
-  `tn2_email` text CHARACTER SET latin1,
-  `tn3_name` text CHARACTER SET latin1,
-  `tn3_email` text CHARACTER SET latin1,
-  `zus_infos` text CHARACTER SET latin1,
-  `pruefung` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=525 DEFAULT CHARSET=utf8;
+  `registration_id` int(11) NOT NULL,
+  `registration_date` datetime DEFAULT NULL,
+  `customer_id` text,
+  `package` tinytext,
+  `contact_person` text,
+  `email_contact_person` text,
+  `company` text,
+  `street` text,
+  `postcode` int(11) DEFAULT NULL,
+  `city` text,
+  `country` text,
+  `phone_day` text,
+  `phone_mobile` text,
+  `participant1_name` text,
+  `participant_email` text,
+  `participant2_name` text,
+  `participant2_email` text,
+  `participant3_name` text,
+  `participant3_email` text,
+  `additional_information` text,
+  `test` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`registration_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `registration_events`
+--
+
+DROP TABLE IF EXISTS `registration_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `registration_events` (
+  `registration_id` int(11) DEFAULT NULL,
+  `event_id` int(11) DEFAULT NULL,
+  KEY `registration_id_1_idx` (`registration_id`),
+  KEY `event_id_5_idx` (`event_id`),
+  CONSTRAINT `registration_id_1` FOREIGN KEY (`registration_id`) REFERENCES `registration` (`registration_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `event_id_5` FOREIGN KEY (`event_id`) REFERENCES `event` (`event_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -639,9 +702,9 @@ DROP TABLE IF EXISTS `topic`;
 CREATE TABLE `topic` (
   `topic_id` int(11) NOT NULL AUTO_INCREMENT,
   `topic_name` longtext NOT NULL,
-  `topic_description` longtext NOT NULL,
-  `sidebar_descrition` longtext NOT NULL,
-  `footer` longtext NOT NULL,
+  `topic_description` longtext CHARACTER SET latin1 NOT NULL,
+  `sidebar_descrition` longtext CHARACTER SET latin1 NOT NULL,
+  `footer` longtext CHARACTER SET latin1 NOT NULL,
   `trainer_id` int(11) NOT NULL,
   `deprecated` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`topic_id`)
@@ -659,9 +722,8 @@ CREATE TABLE `topic_course` (
   `topic_course_id` int(11) NOT NULL,
   `topic_id` int(11) DEFAULT NULL,
   `course_id` int(11) DEFAULT NULL,
-  `order` int(11) DEFAULT NULL,
   PRIMARY KEY (`topic_course_id`),
-  KEY `course_id_idx` (`course_id`),
+  KEY `course_id_2_idx` (`course_id`),
   KEY `topic_id_idx` (`topic_id`),
   CONSTRAINT `course_id_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `topic_id` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`topic_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -735,9 +797,9 @@ CREATE TABLE `trainer_event_assignment` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `all_events` AS select `event`.`event_id` AS `event_id`,`event`.`start_date` AS `start_date`,`event`.`finish_date` AS `finish_date`,`event`.`start_time` AS `start_time`,`event`.`finish_time` AS `finish_time`,`course`.`course_id` AS `course_id`,`course`.`course_name` AS `course_name`,`course`.`internet_course_article_id` AS `internet_course_article_id`,`course`.`test` AS `test`,`location`.`internet_location_name` AS `internet_location_name`,`location`.`internet_location_article_id` AS `internet_location_article_id`,`event`.`event_status_id` AS `event_status_id`,`event`.`eventguaranteestatus` AS `eventguaranteestatus` from ((`event` join `course`) join `location`) where ((`event`.`course_id` = `course`.`course_id`) and (`event`.`location_id` = `location`.`location_id`)) order by `event`.`start_date`,`event`.`finish_date` */;
@@ -754,9 +816,9 @@ CREATE TABLE `trainer_event_assignment` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `all_events_participant_participation` AS select `e`.`event_id` AS `event_id`,`e`.`start_date` AS `event_start_date`,`c`.`course_name` AS `course_name`,`p`.`participant_id` AS `participant_id`,`p`.`last_name` AS `last_name`,`p`.`first_name` AS `first_name`,`p`.`email_address` AS `email_address`,`p`.`email_address_2` AS `email_address_2`,`p`.`organization_id` AS `organization_id`,`t`.`status_participation_id` AS `status_participation_id`,`t`.`order_date` AS `order_date`,`t`.`comment` AS `comment`,`t`.`status_billing_id` AS `status_billing_id`,`t`.`invoice_info` AS `invoice_info` from (((`participant` `p` join `participation` `t`) join `course` `c`) join `event` `e`) where ((`p`.`participant_id` = `t`.`participant_id`) and (`e`.`event_id` = `t`.`event_id`) and (`e`.`course_id` = `c`.`course_id`)) order by `p`.`participant_id` desc */;
@@ -773,9 +835,9 @@ CREATE TABLE `trainer_event_assignment` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `all_events_web` AS select `event`.`event_id` AS `event_id`,`event`.`start_date` AS `start_date`,`event`.`finish_date` AS `finish_date`,`event`.`start_time` AS `start_time`,`event`.`finish_time` AS `finish_time`,`course`.`course_id` AS `course_id`,`course`.`course_name` AS `course_name`,`course`.`internet_course_article_id` AS `internet_course_article_id`,`course`.`test` AS `test`,`location`.`internet_location_name` AS `internet_location_name`,`location`.`internet_location_article_id` AS `internet_location_article_id`,`event`.`event_status_id` AS `event_status_id`,`event`.`eventguaranteestatus` AS `eventguaranteestatus` from ((`event` join `course`) join `location`) where ((`event`.`start_date` >= curdate()) and (`event`.`course_id` = `course`.`course_id`) and (`event`.`location_id` = `location`.`location_id`) and (`event`.`inhouse` = 0) and ((`event`.`event_status_id` = 2) or (`event`.`event_status_id` = 3))) order by `event`.`start_date`,`event`.`finish_date` */;
@@ -792,9 +854,9 @@ CREATE TABLE `trainer_event_assignment` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `apieventdata` AS select `e`.`event_id` AS `event_id`,`e`.`course_id` AS `course_id`,`e`.`start_date` AS `start_date`,`e`.`start_time` AS `start_time`,`e`.`finish_date` AS `finish_date`,`e`.`finish_time` AS `finish_time`,`e`.`location_id` AS `location_id`,`c`.`course_name` AS `course_name`,`c`.`test` AS `test`,`c`.`number_of_days` AS `number_of_days`,`l`.`location_name` AS `location_name`,`l`.`location_description` AS `location_description` from ((`event` `e` left join `course` `c` on((`c`.`course_id` = `e`.`course_id`))) left join `location` `l` on((`l`.`location_id` = `e`.`location_id`))) where ((`e`.`start_date` > now()) and (`e`.`inhouse` = 0) and (`c`.`deprecated` = 0)) order by `e`.`start_date` */;
@@ -811,9 +873,9 @@ CREATE TABLE `trainer_event_assignment` (
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `packageview` AS select `topic`.`topic_id` AS `topic_id`,`topic`.`topic_name` AS `topic_name`,`topic`.`topic_description` AS `topic_description`,`package`.`package_id` AS `package_id`,`package`.`package_name` AS `package_name`,`package`.`package_price` AS `package_price`,`package`.`package_discount` AS `package_discount`,`package`.`package_description` AS `package_description` from (`topic` left join `package` on((`package`.`topic_id` = `topic`.`topic_id`))) where (`package`.`deprecated` <> 1) */;
@@ -830,4 +892,4 @@ CREATE TABLE `trainer_event_assignment` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-07 15:04:47
+-- Dump completed on 2016-01-14  8:17:10
