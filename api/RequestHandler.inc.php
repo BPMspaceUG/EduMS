@@ -182,7 +182,8 @@ Name          <input type="text" name="name" \>
 Vorname          <input type="text" name="vorname" \>
 E-Mail          <input type="email" name="email" \>
 </form>
-<script type="text/javascript" src="../EduMs/api/jscn.js"></script>'
+<script type="text/javascript" src="../EduMs/api/jscn.js"></script>
+<script testAnker1();</script>'
                     )
                 );
                 return $return;
@@ -488,7 +489,7 @@ E-Mail          <input type="email" name="email" \>
     private function getEventsByParticipants($participantId)
     {
         $return = array();
-        if (!$eventId) {
+        if (!$participantId) {
             $return['eventsonparticipant'] = 'Bitte Participant-ID angeben.'
             return $return;
         }
@@ -570,9 +571,9 @@ E-Mail          <input type="email" name="email" \>
             'gender','participant','status_buch','status_sales_interests','apieventdata','organization','all_events_participant_participation',
             'all_events_web','contact_channel','status_sales','packageview','all_events','candidate_selection');
 
-        //Prüfe übergebener String ein valider Tabellenname
+        //Prüfe ob übergebener String ein valider Tabellenname
         for ($i=0; $i < count($tables); $i++) { 
-            if (preg_match($name,$table($i))) {
+            if ($name===table($i)) {//evtl. 'preg_match($name,$table($i))' besser 
                 $sql = "SELECT * FROM ".$name;
                 $return['table'] = $this->getResultArray($sql);
                 return $return; 
@@ -611,6 +612,7 @@ public function testAnker1()
     echo 'GetterTest:\n'.$str;
  
 }
+
 
 
 
