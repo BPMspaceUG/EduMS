@@ -182,8 +182,7 @@ Name          <input type="text" name="name" \>
 Vorname          <input type="text" name="vorname" \>
 E-Mail          <input type="email" name="email" \>
 </form>
-<script type="text/javascript" src="../EduMs/api/jscn.js"></script>
-<script testAnker1();</script>'
+<script type="text/javascript" src="../EduMs/api/jscn.js"></script>'
                     )
                 );
                 return $return;
@@ -369,35 +368,35 @@ E-Mail          <input type="email" name="email" \>
 
     //tbl->trainer _ GETTRAINER
         /*Eine TrainerList ist die Liste aller registrieten Trainer*/ 
-    private function getTrainerList(){
+    /*private function getTrainerList(){
         $return = array();
         $sql = "SELECT * FROM `trainer` WHERE trainer_id = TRUE";
         $return['trainerlist'] = $this->getResultArray($query);
         return $return;
-    }
+    }*/
 
     /*Aufruf eines Trainers anhand der id*/
-    private function getTrainerById($id){
+    /*private function getTrainerById($id){
         $return = array();
         $query = "SELECT * FROM `trainer`
                 WHERE
                     trainer_id =".$id;
         $return['trainer'] = $this->getResultArray($query);
         return $return;
-    }
+    }*/
 
     /*Aufruf eines Trainers anhand des Namens*/
-    private function getTrainerByName($name){
+    /*private function getTrainerByName($name){
         $return = array();
         $query = "SELECT * FROM `trainer`
                 WHERE
                     trainer_name =".$name;
         $return['trainer'] = $this->getResultArray($query);
         return $return;
-    }
+    }*/
 
     /*Aufruf aller Trainer anhand einer Teilinfo. Zweck: Suchfunktion für Bruchstückhafte Eingaben*/
-    private function getTrainerByIndicator($inidcator){
+    /*private function getTrainerByIndicator($inidcator){
         $return = array();
 
         //lade Liste aller Trainer
@@ -413,39 +412,39 @@ E-Mail          <input type="email" name="email" \>
             }
         } 
         return $return;
-    }
+    }*/
 
     //tbl-participant _ GETPARTICIPANT
         /*Eine Participantlist ist die Liste aller registrieten Partizipanten (Teilnehmer)*/ 
-    private function getParticipantList(){
+    /*private function getParticipantList(){
         $return = array();
         $sql = "SELECT * FROM `participant` WHERE participant_id = TRUE";
         $return['participantlist'] = $this->getResultArray($sql);
         return $return;
-    }
+    }*/
 
     /*Aufruf eines Participants anhand der id*/
-    private function getParticipantById($id){
+    /*private function getParticipantById($id){
         $return = array();
         $query = "SELECT * FROM `participant`
                 WHERE
                     trainer_id =".$id;
         $return['participant'] = $this->getResultArray($query);
         return $return;
-    }
+    }*/
 
     /*Aufruf eines Participants anhand des Namens*/
-    private function getParticipantByName($name){
+    /*private function getParticipantByName($name){
         $return = array();
         $query = "SELECT * FROM `participant`
                 WHERE
                     first_name =".$name" OR last_name =".$name;
         $return['participant'] = $this->getResultArray($query);
         return $return;
-    }
+    }*/
 
     /*Aufruf aller Participants anhand einer Teilinfo. Zweck: Suchfunktion für Bruchstückhafte Eingaben*/
-    private function getParticipantByIndicator($inidcator){
+    /*private function getParticipantByIndicator($inidcator){
         $return = array();
 
         //lade Liste aller Participants
@@ -461,19 +460,19 @@ E-Mail          <input type="email" name="email" \>
             }
         } 
         return $return;
-    }
+    }*/
 
     //tbl-participation _ GETPARTICIPATION  
     //Eine participationList gibt Auskunft, wer an welchem Event teilnimmt
-    private function getParticipationList(){
+    /*private function getParticipationList(){
         $return = array();
         $sql = "SELECT * FROM `participation` WHERE event_id = TRUE";//event_id = true evtl hinderlich
         $return['participationlist'] = $this->getResultArray($sql);
         return $return;
-    }
+    }*/
 
     //Aufruf aller Participanten eines bestimmten Events
-    private function getParticipantsByEvent($eventId)
+    /*private function getParticipantsByEvent($eventId)
     {
         $return = array();
         if (!$eventId) {
@@ -483,10 +482,10 @@ E-Mail          <input type="email" name="email" \>
         $sql = "SELECT * FROM `participation` WHERE event_id =".$eventId;
         $return['participantsonevent'] = $this->getResultArray($sql);
         return $return;
-    }
+    }*/
 
     //Aufruf aller Events an denen ein bestimmer Participant registriert ist
-    private function getEventsByParticipants($participantId)
+    /*private function getEventsByParticipants($participantId)
     {
         $return = array();
         if (!$participantId) {
@@ -496,30 +495,30 @@ E-Mail          <input type="email" name="email" \>
         $sql = "SELECT * FROM `participation` WHERE participant_id =".$participantId;
         $return['eventsonparticipant'] = $this->getResultArray($sql);
         return $return;
-    }
+    }*/
 
     //tbl-brand _ GETBRAND
     //Eine Brandlist gibt Auskunft welche Firmen für Topics registriert wurden
-    private function getBrandList()
+    /*private function getBrandList()
     {
         $return = array();
         $sql = "SELECT * FROM `brand` WHERE brand_id = TRUE";
         $return['brandlist'] = $this->getResultArray($sql);
         return $return;
-    }
+    }*/
 
     //Aufruf aller Informationen zu einem Firmennamen
-    private function getBrandByName($brandname)
+    /*private function getBrandByName($brandname)
     {
         $return = array();
         $sql = "SELECT * FROM `brand` WHERE brand_name =".$brandname;
         $return['brand'] = $this->getResultArray($sql);
         return $return;
-    }
+    }*/
 
     //tbl-event _ GETEVENT
     // Ein Event ist eine geplantes Ereignis, dass mit einem Trainer und n Participanten and einem Standort zu in einem definierten Zeitraum stattfindet
-    private function getEventByCourse($courseId)
+    /*private function getEventByCourse($courseId)
     {
         //wenn $course etwas anderes als eine Zahl enthält 
         if (preg_match(/\D/, $courseId)) {
@@ -530,10 +529,10 @@ E-Mail          <input type="email" name="email" \>
             $return['courseonevent'] = $this->getResultArray($sql);
             return $return;            
         } 
-    }
+    }*/
 
     //Aufruf aller Events zu denen ein Firmenname registriert ist
-    private function getEventByBrand($brandId)
+    /*private function getEventByBrand($brandId)
     {
         //wenn $brandId etwas anderes als eine Zahl enthält ist es eine Fehlerhafte Eingabe
         if (preg_match(/\D/, $brandId)) {
@@ -544,10 +543,10 @@ E-Mail          <input type="email" name="email" \>
             $return['brandonevent'] = $this->getResultArray($sql);
             return $return;             
         } 
-    }
+    }*/
 
     //Aufruf aller Events die einer bestimmten Lokation zugeordnet sind
-    private function getEventByLocation($locationId)
+    /*private function getEventByLocation($locationId)
     {
         //wenn $locationId etwas anderes als eine Zahl enthält ist es eine Fehlerhafte Eingabe
         if (preg_match(/\D/, $locationId)) {
@@ -558,11 +557,11 @@ E-Mail          <input type="email" name="email" \>
             $return['locationonevent'] = $this->getResultArray($sql);
             return $return;             
         } 
-    }
+    }*/
 
     //alle Tabellen _ GET
     //Eine Allgemeine Funktion zur Rückgabe einer Tabelle
-    private function getTblByName($name)
+    /*private function getTblByName($name)
     {
         //Definition aller validen Tabellennamen
         $tables = array('course','trainer_course','trainer','status_trainer','trainer_event_assignment','registration_events',
@@ -583,12 +582,12 @@ E-Mail          <input type="email" name="email" \>
         //Falls kein valider Tabellenname gefunden wurde
         $return['table'] = 'Es ist keine Tabelle mit dieser Bezeichnung in de Datenbank';
         return $return;
-    }
+    }*/
 
 
 
 //'oneclick' Testfunktion für alle Getter seit 21.1.16 
-public function testAnker1()
+/*public function testAnker1()
 {
     $str = '';
     $str .=getTrainerList().'\n\n-----------\n';
@@ -611,7 +610,7 @@ public function testAnker1()
 
     echo 'GetterTest:\n'.$str;
  
-}
+}*/
 
 
 
