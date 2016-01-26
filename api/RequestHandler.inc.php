@@ -6,6 +6,8 @@
  * Date: 30.09.15
  * Time: 09:08
  */
+/*löschen--> $handler = new RequestHandler($user,$token,$db);
+    $response = $handler->handle($routes); <--löschen*/
 class RequestHandler 
 {
     /*Allgemeines Konzept: Jede Ressource bekommt eine Handlefunction diese definiert ob ein Defaultwert oder Parametergebundener Wert zurrück gegeben
@@ -91,11 +93,11 @@ class RequestHandler
             return array ("response"=>"invalidCredentials");
         }
         
-        //lösche Benutzername und Passwort, aktueller Abschnitt = route[0], neuer handle für route
-        $route = $this->rmFirstParam($route);
-        $route = $this->rmFirstParam($route);
-        $section = $route[0];
-        $handle = $this->rmFirstParam($route);
+        //Beispiel uri -> $route: .../api/index.php/Benutzername/Passwort/section?a=A&b=B
+        $route = $this->rmFirstParam($route); //lösche Benutzername
+        $route = $this->rmFirstParam($route); //lösche Passwort
+        $section = $route[0]; // $section = 'section'
+        $handle = $this->rmFirstParam($route); //$handle = array('A','B')
 
 
         switch($section){
@@ -106,7 +108,7 @@ class RequestHandler
              */
             case 'location':
                 $return = $this->handleLocations($handle);
-                $return['topnav'] = array(/*Zweck: überschreiben der Navigationselemente (oben)*/
+                $return['topnav'] = array(
                     array("text"=>"Anmeldung","path"=>"?navdest=signup"),
                     array("text"=>"Standorte","path"=>"?navdest=locations"),
                     array("text"=>"Pakete","path"=>"?navdest=packages"),
@@ -124,7 +126,7 @@ class RequestHandler
 
             case 'topics':
                 /*
-                /topics == Liste aller Topics
+                /topics = Liste aller Topics
                 /topics/{id} = Daten eines Topics incl. events
                 */
                 return $this->handleTopic($handle);
@@ -691,11 +693,7 @@ E-Mail          <input type="email" name="email" \>
     }
 
     private function getEventList(){
-        $query = "SELECT * FROM `event`
-                WHERE
-                    start_date > NOW() AND
-                    inhouse = 0
-        ";
+        $query = "SELECT * FROM `event` WHERE start_date > NOW() AND inhouse = 0";
         return $this->getResultArray($query);;
     }
 
