@@ -38,7 +38,7 @@ else{
 //Aufruf der Debug-Funktion durch '.../api/index.php/x/y?debug=18234'
 if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
     echo "<pre>";
-    echo "Debug - print variable 'response':\n";
+    //echo "Debug - print variable 'response':\n";
     var_dump($response);
     echo "<hr>JSON<br>";
 }
@@ -59,7 +59,7 @@ if(!array_key_exists('nextEvents',$response)){
     $response['nextEvents'] = $handler->getNextEvents();
 }*/
 
-echo "Debug - print variable 'response' in JSON";
+//echo "Debug - print variable 'response' in JSON";
 echo json_encode($response);
 
 

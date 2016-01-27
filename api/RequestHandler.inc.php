@@ -184,13 +184,17 @@ Name          <input type="text" name="name" \>
 Vorname          <input type="text" name="vorname" \>
 E-Mail          <input type="email" name="email" \>
 </form>
-<script type="text/javascript" src="../EduMs/api/jscn.js"></script>'
+'
                     )
                 );
                 return $return;
                 break;
 
-
+                case 'boot':    
+                echo 'testecho von RequestHandler->section=boot';
+                return $return['content'] ='return[content] von RequestHandler->section=boot';
+                exit;
+                break;
             default:
                 echo "fail";
                 exit;
