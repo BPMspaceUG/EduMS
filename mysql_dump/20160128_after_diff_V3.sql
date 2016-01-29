@@ -3,6 +3,8 @@ ALTER TABLE `topic` CHANGE `footer` `footer` LONGTEXT CHARACTER SET utf8 COLLATE
 ALTER TABLE `topic` CHANGE `topic_description` `topic_description` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `topic` CHANGE `sidebar_descrition` `sidebar_descrition` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `topic` CHANGE `sidebar_descrition` `sidebar_description` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+SET foreign_key_checks=0;
 ALTER TABLE `registration` CHANGE COLUMN `registration_id` `registration_id` INT(11) NOT NULL AUTO_INCREMENT ;
 
 --- davor unbedingt die Tabellen topic und topic_course leeren. Sonst müsste Copy&Paste klappen
@@ -57,7 +59,6 @@ CHANGE COLUMN `footer` `footer` LONGTEXT NULL ,
 CHANGE COLUMN `trainer_id` `trainer_id` INT(11) NULL ,
 CHANGE COLUMN `deprecated` `deprecated` TINYINT(1) NULL DEFAULT '0' ;
 
-SET foreign_key_checks=0;
 
 INSERT INTO `topic` (`topic_id`, `topic_name`) VALUES ('1', 'Topic 1');
 INSERT INTO `topic` (`topic_id`, `topic_name`) VALUES ('2', 'Topic 2');
