@@ -49,7 +49,8 @@ if(!array_key_exists('topnav',$response)){
         array("text"=>"Standorte","path"=>"?navdest=locations"),
         array("text"=>"Anmeldung","path"=>"?navdest=signup"),
         array("text"=>"Pakete","path"=>"?navdest=packages"),
-        array("text"=>"Themen","path"=>"?navdest=topics"));
+        array("text"=>"Themen","path"=>"?navdest=topics"),
+        array("text"=>"Boot","path"=>"?navdest=boot"));
 }
 if(!array_key_exists('footer',$response)){
     $response['footer'][0]['text']  = $config['text']['defaultfooter'];
