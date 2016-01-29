@@ -309,6 +309,10 @@ INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`bra
 INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (10,'',0,0,NULL,'Orga 10','','',NULL,NULL);
 INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (11,'',0,0,NULL,'Orga 11','','',NULL,NULL);
 
-
+ALTER TABLE topic CHANGE COLUMN topic_description topic_description longtext,
+                  CHANGE COLUMN sidebar_description sidebar_description longtext,
+                  CHANGE COLUMN footer footer longtext,
+                  CHANGE COLUMN trainer_id trainer_id integer(11) DEFAULT NULL,
+                  CHANGE COLUMN deprecated deprecated tinyint(1) DEFAULT 0;
 
 SET foreign_key_checks=1;
