@@ -112,7 +112,14 @@ class RequestHandler
                     array("text"=>"Anmeldung","path"=>"?navdest=signup"),
                     array("text"=>"Standorte","path"=>"?navdest=locations"),
                     array("text"=>"Pakete","path"=>"?navdest=packages"),
-                    array("text"=>"Themen","path"=>"?navdest=topics"));
+                    array("text"=>"Themen","path"=>"?navdest=topics"),
+                    array("text"=>"Boot","path"=>"?navdest=boot"));
+                return $return;
+                break;
+
+            case "boot":
+                $return['content'] = file_get_contents('./boot.html');
+                
                 return $return;
                 break;
 
@@ -146,28 +153,24 @@ class RequestHandler
                 */
                 echo $css = '
                         #seite {
-            width: 780px;
-            margin: 0 auto;
+            
         }
 
         #kopfbereich {
-            background-color:lightblue;
+           
         }
 
         #inhalt {
-            background-color: lightgreen;
-            margin-right: 250px;
+            background-color: #FFAD39;
         }
 
         #steuerung {
             float: right;
-            width:250px;
-            background-color: yellow;
+            
         }
 
         #fussbereich {
             clear: both;
-            background-color:lightblue;
         }
         ';
                 exit;
@@ -190,11 +193,8 @@ E-Mail          <input type="email" name="email" \>
                 return $return;
                 break;
 
-                case 'boot':    
-                echo 'testecho von RequestHandler->section=boot';
-                return $return['content'] ='return[content] von RequestHandler->section=boot';
-                exit;
-                break;
+                
+
             default:
                 echo "fail";
                 exit;
@@ -214,6 +214,11 @@ E-Mail          <input type="email" name="email" \>
         return $return;
     }
 
+    private function handleBoot($handle){
+        $return['sidebar'] = array(array("text"=>"Bootsidebar"));
+        $return['content'] = array(array("text"=>"Bootcontent"));
+        return $return;
+    }
 
     /*Ein Topic ist eine Schulungsart. Entweder wurden keine Parameter übergeben dann soll die ganze verfügbare Liste ausgegeben werden
     oder es wurde ein Parameter angegeben dann nur dieses Topic ausgeben.*/
