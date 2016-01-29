@@ -297,6 +297,17 @@ UPDATE `topic` SET `topic_description`='Topic Descpription 10 Hob i an Suri gwis
 
 ALTER TABLE `registration` CHANGE COLUMN `participant_email` `participant1_email` TEXT NULL DEFAULT NULL ;
 
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (1,'',0,0,NULL,'BPMspace','abc','partner1',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (2,'',0,0,NULL,'Orga 2','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (3,'',0,0,NULL,'Orga 3','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (4,'',0,0,NULL,'Orga 4','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (5,'',0,0,NULL,'Orga 5','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (6,'',0,0,NULL,'Orga 6','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (7,'',0,0,NULL,'Orga 7','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (8,'',0,0,NULL,'Orga 8','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (9,'',0,0,NULL,'Orga 9','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (10,'',0,0,NULL,'Orga 10','','',NULL,NULL);
+INSERT INTO `brand` (`brand_id`,`password`,`discount`,`super_brand`,`style`,`brand_name`,`accesstoken`,`login`,`brand_description`,`brand_description_footer`) VALUES (11,'',0,0,NULL,'Orga 11','','',NULL,NULL);
 
 
 
