@@ -294,4 +294,10 @@ UPDATE `topic` SET `topic_description`='Topic Descpription 7 ' WHERE `topic_id`=
 UPDATE `topic` SET `topic_description`='Topic Descpription 8 ' WHERE `topic_id`='8';
 UPDATE `topic` SET `topic_description`='Topic Descpription 9 ' WHERE `topic_id`='9';
 UPDATE `topic` SET `topic_description`='Topic Descpription 10 Hob i an Suri gwiss kloan anbandeln? Fünferl Biawambn a Prosit der Gmiadlichkeit so auszutzeln schüds nei luja, hod des is schee gar nia need ghupft wia gsprunga. Zua Wiesn gwihss, heid no a Maß hea Hendl. A ganze Hoiwe Leonhardifahrt sauba mi, kimmt zünftig moand Griasnoggalsubbm gwiss Klampfn woaß. Gfreit mi vasteh is Kuaschwanz Heimatland, gwihss: Hallelujah sog i, luja Kaiwe resch blärrd midanand spernzaln: Kaiwe nois resch naa hoam Weißwiaschd. Mamalad resch mechad ma. Ham ma nia nomoi nimma auffi gwihss. Maderln middn sauba Kirwa. Nix Gwiass woass ma ned wiavui fei Brotzeit umananda trihöleridi dijidiholleri af. Baamwach hogg di hera Leonhardifahrt Kirwa hoam Semmlkneedl di.' WHERE `topic_id`='10';
+
+ALTER TABLE `registration` CHANGE COLUMN `participant_email` `participant1_email` TEXT NULL DEFAULT NULL ;
+
+
+
+
 SET foreign_key_checks=1;
