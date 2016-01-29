@@ -7,6 +7,7 @@ ALTER TABLE `registration` CHANGE COLUMN `registration_id` `registration_id` INT
 
 --- davor unbedingt die Tabellen topic und topic_course leeren. Sonst müsste Copy&Paste klappen
 --- 1.Einstellung in Workbensch ändern: Preferences -> SQL-Editor -> "Safe Updates..." Haken rausgenommen
+--- reconnect MySQL Workbench
 
 --- 2. Key-Löschweitergabe
 ALTER TABLE `bpmspace_edums_v3`.`package` 
