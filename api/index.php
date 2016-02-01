@@ -13,6 +13,8 @@ const noLogin = "no Login parameters submitted, try '...EduMS/api/index.php/Part
 const helptext = "fail";
 
 
+
+
 $routes = getRoute();// .../api/index.php/x/y --> array('x','y')
 $response = array("respone" => "no data");
 
@@ -32,7 +34,7 @@ else{
     $user = $routes[0];
     $token = $routes[1];
     $handler = new RequestHandler($user,$token,$db);
-    $response = $handler->handle($routes);
+    $response = $handler->handle($routes);// 0 = Benutzer | 1 = Passwort | 2 = section
 }
 
 //Aufruf der Debug-Funktion durch '.../api/index.php/x/y?debug=18234'
@@ -50,7 +52,8 @@ if(!array_key_exists('topnav',$response)){
         array("text"=>"Anmeldung","path"=>"?navdest=signup"),
         array("text"=>"Pakete","path"=>"?navdest=packages"),
         array("text"=>"Themen","path"=>"?navdest=topics"),
-        array("text"=>"Boot","path"=>"?navdest=boot"));
+        array("text"=>"Boot","path"=>"?navdest=boot"),
+        array("text"=>"Monitor","path"=>"?navdest=monitor"));
 }
 if(!array_key_exists('footer',$response)){
     $response['footer'][0]['text']  = $config['text']['defaultfooter'];
@@ -62,6 +65,7 @@ if(!array_key_exists('nextEvents',$response)){
 
 //echo "Debug - print variable 'response' in JSON";
 echo json_encode($response);
+
 
 
 ?>
