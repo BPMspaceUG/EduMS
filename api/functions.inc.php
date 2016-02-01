@@ -14,6 +14,8 @@ function getRoute()
     /* Bsp (http://localhost:4040/EduMS/api/whatami.php/a/j?q=u):
     * SCRIPT_NAME /EduMS/api/whatami.php
     * REQUEST_URI /EduMS/api/whatami.php/a/j?q=u
+    
+    http://localhost:4040/EduMS-client/index.php/partner1/abc?navdest=topics&contentid=1
     */
     //explode splited URL bsp:'/EduMS/api/whatami.php' und gibt ein Array zurrück
     //array_slice 0,-1 entfernt letzten Eintrag in Array bsp:0 |1 EduMS |2 api |3 whatami.php -> 0 | 1 EduMs |2 api
@@ -37,8 +39,8 @@ function getRoute()
     //bsp:  0 | 1 whatami.php | 2 a | 3 j -> 0 a | 1 j
     foreach($routes as $route)
     {
-        //Wenn nicht leer UND '.php' nicht enthalten oder am Stringanfang ist
-        if(trim($route) != '' && strrpos(trim($route),'.php')==0)
+        //Wenn nicht leer UND '.php' nicht enthalten ist
+        if(trim($route) != '' && strrpos(trim($route),'.php')==0)// (0==false) -> true
             array_push($result, $route);
     }
 
