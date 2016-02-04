@@ -112,9 +112,10 @@ class RequestHandler
                 break;
 
             case 'boot':
-                $return['sidebar'] = array(array("text"=>"requ-handler>handleBoot()>sidebar."));
-                $return['content'] = file_get_contents('../../EduMS-client/boot.html');
-                $return['topics'] = $this->handleTopic(3);
+                //$return['sidebar'] = array(array("text"=>"requ-handler>handleBoot()>sidebar."));
+                //$return['content'] = file_get_contents('../../EduMS-client/boot.html');
+                //$return['topics'] = $this->handleTopic(3);
+                $return['a']= array('b' => 'b' );
                 return $return;
                 break;
 
@@ -128,81 +129,46 @@ class RequestHandler
                 break;
 
             case 'events':
-                /*
-                /events = Liste aller Events die freigegben sind
-                /events/id = Daten des Events
-                */
+                /*events = Liste aller Events die freigegben sind
+                /events/id = Daten des Events*/
                 return $this->handleEvents($handle);
                 break;
 
             case 'topics':
-                /*
-                /topics = Liste aller Topics
-                /topics/{id} = Daten eines Topics incl. events
-                */
+                /*topics = Liste aller Topics
+                /topics/{id} = Daten eines Topics incl. events*/
                 return $this->handleTopic($handle);
                 break;
 
             case 'package':
-                /*
-                 *
-                */
                 return $this->handlePackage($handle);
                 break;
 
 
             case 'css':
-                /*soll in die DB, zweck: dass jeder Kunde sein design ändern kann
-                 *
-                */
-                echo $css = '
-                        #seite {
-            
-        }
-        
-        #kopfbereich {
-           
-        }
+            /*soll in die DB, zweck: dass jeder Kunde sein design ändern kann*/
+                echo $css = file_get_contents('../custom/oldcss.css');
+            exit;
+            break;
 
-        #inhalt {
-            background-color: #FFAD39;
-        }
+            case 'scripte' : echo $scripte = file_get_contents('../custom/scripte.html');
+            exit; 
+            break;
 
-        #steuerung {
-            float: right;
-            
-        }
-
-        #fussbereich {
-            clear: both;
-        }
-        ';
-                exit;
-                break;
+            case 'cssSheets' : echo $cssSheets = file_get_contents('../custom/cssSheets.html');
+            exit; 
+            break;
 
             case "signup":
                 $return['content'] = array(
-                    array(
-                        "text"=>
-                            '
-<p>Kursanmeldung</p>
-<form method="POST" action form.php>
-Name          <input type="text" name="name" \>
-Vorname          <input type="text" name="vorname" \>
-E-Mail          <input type="email" name="email" \>
-</form>
-'
-                    )
+                    array("text"=>file_get_contents('../custom/signupcontent.html'))
                 );
                 return $return;
-                break;
-
-                
-
-            default:
-                echo "Requesthandler>handle>defaultRequest";
-                exit;
-                break;
+            break;
+        
+            default: echo "Requesthandler>handle>defaultRequest";
+            exit;
+            break;
 
         }
     }
@@ -301,7 +267,7 @@ E-Mail          <input type="email" name="email" \>
 
     /*Zweck: Rückgabe eines oder aller Topics aus der Datenbank*/
     private function getTopicList($id=-1){
-        $query = "SELECT * FROM `topic` WHERE `deprecated`=0";
+        $query = "SELECT * FROM `vtopic` WHERE `deprecated`=0";
         if($id!=-1){
             $query .= " AND topic_id='$id'";
         }
