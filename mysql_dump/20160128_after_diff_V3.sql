@@ -306,3 +306,35 @@ ALTER TABLE topic CHANGE COLUMN topic_description topic_description longtext,
                   CHANGE COLUMN deprecated deprecated tinyint(1) DEFAULT 0;
 
 SET foreign_key_checks=1;
+
+
+
+
+------------------------Added Views on 4.Feb.16
+---Ergänzung von tbl-Topic
+ALTER TABLE `topic` ADD `topicHeadline` TINYTEXT NOT NULL AFTER `topic_name`;
+ALTER TABLE `topic` ADD `topicImage` MEDIUMBLOB NULL DEFAULT NULL AFTER `sidebar_description`;
+
+---Ergänzung von tbl-Course
+ALTER TABLE `course` ADD `courseHeadline` TINYTEXT NOT NULL AFTER `course_name`;
+ALTER TABLE `course` ADD `courseImage` MEDIUMBLOB NULL DEFAULT NULL AFTER `course_description`;
+
+---Erzeugung der Views
+CREATE VIEW vBrand AS SELECT brand_id, super_brand, brand_name, brand_description, brand_description_footer FROM `brand`;
+CREATE VIEW vBrandLocation AS SELECT location_id, brand_id, brand_location_id FROM `brand_location`;
+CREATE VIEW vBrandTopic AS SELECT brand_id, topic_id, brand_topic_id FROM `brand_topic`;
+CREATE VIEW vCourse AS SELECT course_id, course_name, number_of_days, internet_course_article_id, min_participants, course_description, course_mail_desc, course_price, course_certificate_desc FROM `course` WHERE deprecated = 0;
+CREATE VIEW vEvent AS SELECT event_id, event_status_id, course_id, brand_id, start_date, finish_date, start_time, finish_time, inhouse, location_id, eventguaranteestatus FROM `event`;
+CREATE VIEW vlocation AS SELECT location_id, location_name, location_description, internet_location_name, internet_location_article_id, location_mail_desc FROM `location` WHERE deprecated = 0;
+CREATE VIEW vOrganization AS SELECT organization_id, organization_name, contact_url, address_line_1, address_line_2, city, state, zip, country FROM `organization`;
+CREATE VIEW vStatusEvent AS SELECT status_event_id, status_event FROM `status_event`;
+CREATE VIEW vStatusEventguarantee AS SELECT ID, eventguaranteestatus FROM `status_eventguarantee`;
+CREATE VIEW vStatusTrainer AS SELECT status_trainer_id, status_trainer FROM `status_trainer`;
+CREATE VIEW vTopic AS SELECT topic_id, topic_name, topicHeadline, topic_description, sidebar_description, topicImage, footer, trainer_id FROM `topic` WHERE deprecated = 0;
+CREATE VIEW vTopicCourse AS SELECT 'topic_course_id', 'topic_id', 'course_id', 'level', 'order' FROM `topic_course`;
+CREATE VIEW vTrainerEventAssignment AS SELECT event_id, trainer_id, trainer_status_id FROM `trainer_event_assignment`;
+
+---Es werden keine Views für folgende Tabellen erzeugt: 
+---> candidate_selection, contact_channel, feedback, gender, package, participant, participation,
+---> registration, registration_events, status_billing, status_buch, status_participation, status_sales, 
+---> status_sales_interests, trainer, trainer_course
