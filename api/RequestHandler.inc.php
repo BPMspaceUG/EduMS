@@ -119,14 +119,62 @@ class RequestHandler
                 return $return;
                 break;
 
-            case 'getTopics':
-                
+            case 'getTopics':                
                 return $this->getTopicList();
+                break;
+
+            case 'getCourses':                
+                return $this->getCourseList();
+                break;
+
+            case 'getBrand':
+                return $this->getBrandList();
+                break;
+
+  
+            case 'getBrandTopic':
+                return $this->getBrandTopicList();
+                break;
+            case 'getEvent':
+                return $this->getEventList();
+                break;
+
+
+
+            case 'getLocation':
+                return $this->getLocationList();
+                break;
+
+            case 'getOrganization':
+                return $this->getOraganizationList();
+                break;
+
+            case 'getStatusEvent':
+                return $this->getStatusEventList();
+                break;
+
+            case 'getStatusEventGuarantee':
+                return $this->getStatusEventGuaranteeList();
+                break;
+
+            case 'getStatusTrainer':
+                return $this->getStatusTrainerList();
+                break;
+
+            case 'getTrainerEventAssignment':
+                return $this->getTrainerEventAssignmentList();
+                break;
+
+
+
+            case 'getBrandLocation':
+                return $this->getBrandLocationList();
                 break;
 
             case 'monitor':
                 return $this->handleMonitor($handle);
                 break;
+
 
             case 'events':
                 /*events = Liste aller Events die freigegben sind
@@ -144,20 +192,6 @@ class RequestHandler
                 return $this->handlePackage($handle);
                 break;
 
-
-            case 'css':
-            /*soll in die DB, zweck: dass jeder Kunde sein design ändern kann*/
-                echo $css = file_get_contents('../custom/oldcss.css');
-            exit;
-            break;
-
-            case 'scripte' : echo $scripte = file_get_contents('../custom/scripte.html');
-            exit; 
-            break;
-
-            case 'cssSheets' : echo $cssSheets = file_get_contents('../custom/cssSheets.html');
-            exit; 
-            break;
 
             case "signup":
                 $return['content'] = array(
@@ -276,6 +310,41 @@ class RequestHandler
         return $return;
     }
 
+    private function getBrandList(){   
+        return $this->getResultArray("SELECT * FROM `vbrand`");
+    }
+     private function getBrandLocationList(){   
+        return $this->getResultArray("SELECT * FROM `vbrandlocation`");
+    }
+
+    private function getBrandTopicList(){   
+        return $this->getResultArray("SELECT * FROM `vbrandtopic`");
+    }
+    private function getOraganizationList(){   
+        return $this->getResultArray("SELECT * FROM `vorganization`");
+    }
+    private function getStatusEventList(){   
+        return $this->getResultArray("SELECT * FROM `vstatusevent`");
+    }    
+    private function getStatusEventGuaranteeList(){   
+        return $this->getResultArray("SELECT * FROM `vstatuseventguarantee`");
+    }
+    private function getStatusTrainerList(){   
+        return $this->getResultArray("SELECT * FROM `vstatustrainer`");
+    }
+    private function getTrainerEventAssignmentList(){   
+        return $this->getResultArray("SELECT * FROM `vtrainereventassignment`");
+    }
+
+
+    /*Eine CourseList ist die Liste aller möglichen Teilbereiche von Schulungen*/
+    private function getCourseList(){     
+        $query = "SELECT * FROM `vcourse`";
+        $return['courselist'] = $this->getResultArray($query);
+        return $return;
+    }
+
+    
 
     public function getNextEvents(){
         return $this->getEvents();
@@ -283,36 +352,21 @@ class RequestHandler
 
     /*Ein Event ist eine Schulung zu einen bestimmten Zeitpunkt und an einem bestimmten Ort*/
     private function getEvents($id=-1,$test=0){
-        $sql = "
-                SELECT * FROM `apieventdata`
-                WHERE test = '$test' ";
+        $sql = "SELECT * FROM `apieventdata` WHERE test = '$test' ";
         if($id!=-1){
             $sql .=  "AND course_id = $id";
         }
-        $sql .= "ORDER BY start_date
-                Limit 0,5";
+        $sql .= "ORDER BY start_date Limit 0,5";
 
         return $this->getResultArray($sql);
     }
 
 
-    /*Eine CourseList ist die Liste aller möglichen Teilbereiche von Schulungen*/
-    private function getCourseList(){
-        $return = array();
-        $sql = "SELECT * FROM `course` WHERE deprecated = 0";
-        $return['topiclist'] = $this->getResultArray($query);
-        $return['nextEvents'] = $this->getAllEvents();
-        return $return;
-    }
 
     /*Jeder Kurs ist einem Topic (einer Schulung) zugeordnet. Jeder Kurs hat seine eigene ID*/
     private function getCoursecById($id){
         $return = array();
-        $query = "SELECT * FROM `course`
-                WHERE
-                    deprecated = 0 AND
-                    course_id = $id
-                    ";
+        $query = "SELECT * FROM `course` WHERE deprecated = 0 AND course_id = $id";
         $return['topic'] = $this->getResultArray($query);
         $return['nextEvents'] = $this->getEventsByTopic($id);
         return $return;
@@ -324,12 +378,8 @@ class RequestHandler
      * @return mixed
      */
     private function getEventsByTopic($id){
-        $query = "
-                SELECT * FROM `apieventdata`
-                WHERE test = 0 AND
-                  course_id = $id
-                ORDER BY start_date
-                Limit 0,5";
+        $query = " SELECT * FROM `apieventdata` WHERE test = 0 AND course_id = $id
+                ORDER BY start_date Limit 0,5";
         return $this->getResultArray($query);
     }
 
@@ -345,9 +395,7 @@ class RequestHandler
         if($result->num_rows>0){
             $query .= " WHERE location_id IN (SELECT location_id FROM `brand_location` WHERE brand_id = ".$this->userid.")";
         }
-        $query .= "
-                    ORDER BY start_date
-                    LIMIT 0,5";
+        $query .= " ORDER BY start_date LIMIT 0,5";
         return $this->getResultArray($query);
     }
 
@@ -430,7 +478,6 @@ class RequestHandler
 
     private function getEventList(){
         $query = "SELECT * FROM `event` WHERE start_date > NOW() AND inhouse = 0";
-        return $this->getResultArray($query);;
+        return $this->getResultArray($query);
     }
-
 }
