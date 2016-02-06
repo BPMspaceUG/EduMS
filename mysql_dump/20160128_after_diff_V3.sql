@@ -330,7 +330,7 @@ CREATE VIEW vOrganization AS SELECT organization_id, organization_name, contact_
 CREATE VIEW vStatusEvent AS SELECT status_event_id, status_event FROM `status_event`;
 CREATE VIEW vStatusEventguarantee AS SELECT ID, eventguaranteestatus FROM `status_eventguarantee`;
 CREATE VIEW vStatusTrainer AS SELECT status_trainer_id, status_trainer FROM `status_trainer`;
-CREATE VIEW vTopic AS SELECT topic_id, topic_name, topicHeadline, topic_description, sidebar_description, topicImage, footer, trainer_id FROM `topic` WHERE deprecated = 0;
+CREATE VIEW vTopic AS SELECT topic_id, deprecated, topic_name, topicHeadline, topic_description, sidebar_description, topicImage, footer, trainer_id FROM `topic` WHERE deprecated = 0;
 CREATE VIEW vTopicCourse AS SELECT 'topic_course_id', 'topic_id', 'course_id', 'level', 'order' FROM `topic_course`;
 CREATE VIEW vTrainerEventAssignment AS SELECT event_id, trainer_id, trainer_status_id FROM `trainer_event_assignment`;
 
