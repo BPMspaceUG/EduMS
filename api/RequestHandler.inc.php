@@ -138,11 +138,17 @@ class RequestHandler
             case 'getEvent':
                 return $this->getEventList();
                 break;
-
+            case 'getNextFiveEvents':
+                return $this->getNextFiveEvents();
+                break;
 
 
             case 'getLocation':
                 return $this->getLocationList();
+                break;
+
+            case 'getAllLocations':
+                return $this->getAllLocationsList();
                 break;
 
             case 'getOrganization':
@@ -310,13 +316,16 @@ class RequestHandler
         return $return;
     }
 
+    //alle DB-getter für view-AngularContoller
+    private function getAllLocationsList(){   
+        return $this->getResultArray("SELECT * FROM `vlocation`");
+    }
     private function getBrandList(){   
         return $this->getResultArray("SELECT * FROM `vbrand`");
     }
      private function getBrandLocationList(){   
         return $this->getResultArray("SELECT * FROM `vbrandlocation`");
     }
-
     private function getBrandTopicList(){   
         return $this->getResultArray("SELECT * FROM `vbrandtopic`");
     }
@@ -360,6 +369,10 @@ class RequestHandler
 
         return $this->getResultArray($sql);
     }
+    
+    private function getNextFiveEvents(){
+        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.all_events WHERE start_date > now() limit 5");
+    }
 
 
 
@@ -398,6 +411,9 @@ class RequestHandler
         $query .= " ORDER BY start_date LIMIT 0,5";
         return $this->getResultArray($query);
     }
+
+
+   
 
 
 
