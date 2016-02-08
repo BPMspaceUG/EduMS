@@ -127,6 +127,14 @@ class RequestHandler
                 return $this->getCourseList();
                 break;
 
+            case 'getFutureCourses':                
+                return $this->getFutureCourses();
+            break;
+
+            case 'countParticipantsOnEvent':                
+                return $this->countParticipantsOnEvent();
+            break;
+
             case 'getBrand':
                 return $this->getBrandList();
                 break;
@@ -343,6 +351,12 @@ class RequestHandler
     }
     private function getTrainerEventAssignmentList(){   
         return $this->getResultArray("SELECT * FROM `vtrainereventassignment`");
+    }
+    private function getFutureCourses(){   
+        return $this->getResultArray("SELECT * FROM `v_futurecourses`");
+    }    
+    private function countParticipantsOnEvent(){   
+        return $this->getResultArray("SELECT * FROM `v_countParticipantOnEvent`");
     }
 
 
