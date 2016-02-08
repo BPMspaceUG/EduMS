@@ -338,3 +338,257 @@ CREATE VIEW vTrainerEventAssignment AS SELECT event_id, trainer_id, trainer_stat
 ---> candidate_selection, contact_channel, feedback, gender, package, participant, participation,
 ---> registration, registration_events, status_billing, status_buch, status_participation, status_sales, 
 ---> status_sales_interests, trainer, trainer_course
+
+
+---View für die Anzahl an Participants bei einem Event
+USE `bpmspace_edums_v3`;
+CREATE  OR REPLACE VIEW `v_countParticipantOnEvent` AS SELECT event_id, count
+FROM participation
+GROUP BY event_id;
+
+---um 'nur noch x Plätze frei' anzuzeigen
+ALTER TABLE `bpmspace_edums_v3`.`event` ADD COLUMN `maxParticipants` INT NULL AFTER `mv_ned`;
+
+--- View mit den für einen Participant relevanten Courseinformationen zukünftiger Kurse
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `v_futurecourses` AS
+    SELECT 
+        `e`.`event_id` AS `event_id`,
+        `e`.`maxParticipants` AS `maxParticipants`,
+        `e`.`start_date` AS `start_date`,
+        `e`.`finish_date` AS `finish_date`,
+        `l`.`location_name` AS `location_name`,
+        `c`.`course_name` AS `course_name`,
+        `c`.`course_price` AS `course_price`,
+        `t`.`trainer_name` AS `trainer_name`,
+        `poe`.`count` AS `partOnEvent`
+    FROM
+        (((((`event` `e`
+        JOIN `location` `l`)
+        JOIN `course` `c`)
+        JOIN `trainer` `t`)
+        JOIN `trainer_event_assignment` `tea`)
+        JOIN `v_countparticipantonevent` `poe`)
+    WHERE
+        ((`e`.`location_id` = `l`.`location_id`)
+            AND (`e`.`course_id` = `c`.`course_id`)
+            AND (`tea`.`trainer_id` = `t`.`trainer_id`)
+            AND (`tea`.`event_id` = `e`.`event_id`)
+            AND (`poe`.`event_id` = `e`.`event_id`)
+            AND (`e`.`start_date` > NOW()))
+    ORDER BY `e`.`start_date`
+
+---Dummydaten
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='137';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='138';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='7' WHERE `event_id`='139';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='8' WHERE `event_id`='140';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='8' WHERE `event_id`='141';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='142';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='7' WHERE `event_id`='143';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='67' WHERE `event_id`='144';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='67' WHERE `event_id`='145';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='76' WHERE `event_id`='146';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='147';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='65' WHERE `event_id`='148';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='149';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='150';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='151';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='152';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='67' WHERE `event_id`='153';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='8' WHERE `event_id`='154';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='55' WHERE `event_id`='155';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='58' WHERE `event_id`='156';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='157';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='158';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='159';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='160';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='161';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='7' WHERE `event_id`='162';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='163';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='164';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='165';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='7' WHERE `event_id`='166';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='167';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='168';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='56' WHERE `event_id`='169';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='7' WHERE `event_id`='170';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='171';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='56' WHERE `event_id`='172';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='173';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='174';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='175';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='176';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='177';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='178';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='456' WHERE `event_id`='179';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='181';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='555' WHERE `event_id`='182';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='44' WHERE `event_id`='183';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='184';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='185';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='186';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='187';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='188';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='189';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='190';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='191';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='192';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='193';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='44' WHERE `event_id`='194';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='195';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='196';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='197';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='46' WHERE `event_id`='198';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='199';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='200';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='201';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='202';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='203';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='204';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='209';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='65' WHERE `event_id`='212';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='65' WHERE `event_id`='213';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='214';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='215';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='216';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='217';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='218';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='220';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='221';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='224';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='225';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='226';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='227';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='228';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='229';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='64' WHERE `event_id`='230';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='57' WHERE `event_id`='232';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='565' WHERE `event_id`='234';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='565' WHERE `event_id`='235';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='236';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4647' WHERE `event_id`='237';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='755' WHERE `event_id`='238';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='239';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='240';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='241';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='242';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='446' WHERE `event_id`='244';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='245';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='246';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='247';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='44' WHERE `event_id`='249';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='250';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='251';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='252';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6546' WHERE `event_id`='253';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='254';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='256';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='257';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='258';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='6' WHERE `event_id`='259';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='464' WHERE `event_id`='260';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='643534' WHERE `event_id`='261';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='545' WHERE `event_id`='262';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='453' WHERE `event_id`='263';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='43' WHERE `event_id`='264';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='33' WHERE `event_id`='265';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='266';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='267';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='268';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='269';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='270';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='345' WHERE `event_id`='271';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='272';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='273';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='274';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='345' WHERE `event_id`='275';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='276';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4534' WHERE `event_id`='277';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='278';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='345' WHERE `event_id`='279';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='280';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='282';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='345345' WHERE `event_id`='283';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='345' WHERE `event_id`='284';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='34' WHERE `event_id`='285';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='286';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='534543' WHERE `event_id`='287';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='288';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='289';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='33' WHERE `event_id`='290';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='291';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='345' WHERE `event_id`='292';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='293';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='43' WHERE `event_id`='294';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='295';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='43' WHERE `event_id`='296';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='297';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='43' WHERE `event_id`='298';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='299';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='300';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='302';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='304';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='305';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='43' WHERE `event_id`='306';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='307';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='53' WHERE `event_id`='308';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='310';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='311';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='313';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='314';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='315';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='316';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4' WHERE `event_id`='317';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='319';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='321';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='322';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='323';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='34' WHERE `event_id`='324';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='53' WHERE `event_id`='325';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='326';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='327';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='45' WHERE `event_id`='328';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='329';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='4262' WHERE `event_id`='330';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='2' WHERE `event_id`='332';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='275424' WHERE `event_id`='333';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='23453542' WHERE `event_id`='335';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='5' WHERE `event_id`='336';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='339';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='340';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='341';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='342';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='343';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='344';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='345';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='346';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='347';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='348';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='349';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='350';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='351';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='352';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='353';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='354';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='355';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='356';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='357';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='358';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='359';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='360';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='367';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='368';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='369';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='370';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='371';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='372';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='373';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='374';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='375';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='376';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='377';
+UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='378';
