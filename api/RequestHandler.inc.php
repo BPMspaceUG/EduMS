@@ -133,7 +133,7 @@ class RequestHandler
                 break;
 
             case 'getFutureCourses': return $this->getFutureCourses();
-            break;
+                break;
 
             case 'getNextFiveEvents': return $this->getNextFiveEvents();
                 break;
@@ -256,7 +256,7 @@ class RequestHandler
      * @return mixed
      */
     private function getPackageList($id=-1){
-        $query = "SELECT * FROM `package` WHERE TRUE";
+        $query = "SELECT * FROM `v_package` WHERE TRUE";
         if($id!=-1){
             $query .= " AND topic_id='$id'";
         }
@@ -274,7 +274,7 @@ class RequestHandler
     //alle DB-getter für view-AngularContoller
     /*Zweck: Rückgabe eines oder aller Topics aus der Datenbank*/
     private function getTopicList($id=-1){
-        $query = "SELECT * FROM `vtopic` WHERE `deprecated`=0";
+        $query = "SELECT * FROM `v_topic` WHERE `deprecated`=0";
         if($id!=-1){
             $query .= " AND topic_id='$id'";
         }
@@ -283,10 +283,10 @@ class RequestHandler
         return $return;
     }
     private function getAllLocationsList(){   
-        return $this->getResultArray("SELECT * FROM `vlocation` limit 25");
+        return $this->getResultArray("SELECT * FROM `v_location` limit 25");
     }
     private function getOraganizationList(){   
-        return $this->getResultArray("SELECT * FROM `vorganization` where organization_id = 1");
+        return $this->getResultArray("SELECT * FROM `v_organization` where organization_id = 1");
     }
     private function getFutureCourses(){   
         return $this->getResultArray("SELECT * FROM `v_futurecourses` limit 50");
@@ -295,10 +295,10 @@ class RequestHandler
         return $this->getResultArray("SELECT * FROM `v_topic_courseCourse` ");
     }
     private function getNextFiveEvents(){
-        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.all_events WHERE start_date > now() limit 5");
+        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.v_all_events WHERE start_date > now() limit 5");
     }    
     private function getAllNextEvents(){
-        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.all_events WHERE start_date > now() ");
+        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.v_all_events WHERE start_date > now() ");
     }
     /** 
     *Verarbeitet den Location-Handle. Wenn keine Location angegeben wird wird die Liste aller Locations angegeben
@@ -316,10 +316,10 @@ class RequestHandler
 
     private function getLocationList(){
         global $db;
-        $result = $db->query("SELECT * FROM `brand_location` WHERE brand_id = ".$this->userid);
-        $query = "SELECT distinct location_id, location_name, location_description FROM `apieventdata` WHERE location_description<>'' ";
+        $result = $db->query("SELECT * FROM `v_brand_location` WHERE brand_id = ".$this->userid);
+        $query = "SELECT distinct location_id, location_name, location_description FROM `v_apieventdata` WHERE location_description<>'' ";
         if($result->num_rows>0){
-            $query .= " AND location_id IN (SELECT location_id FROM `brand_location` WHERE brand_id = ".$this->userid.")";
+            $query .= " AND location_id IN (SELECT location_id FROM `v_brand_location` WHERE brand_id = ".$this->userid.")";
         }
         /* //!ÄNDERN! weil location_id nicht mehr in brand_topic vorhanden 
         $result = $db->query("SELECT * FROM `brand_topic_limit` WHERE brand_id = ".$this->userid);
@@ -333,17 +333,17 @@ class RequestHandler
         return $return;
     }
 
-        /**
+    /**
      * Gibt alle Zukünftigen Veranstaltungen eines Themas, welche nicht inhouse sind, aus.
      * @param $id Thema
      * @return mixed
      */
     private function getAllEvents(){
         global $db;
-        $result = $db->query("SELECT * FROM `brand_location` WHERE brand_id = ".$this->userid);
-        $query = "SELECT * FROM `apieventdata`";
+        $result = $db->query("SELECT * FROM `v_brand_location` WHERE brand_id = ".$this->userid);
+        $query = "SELECT * FROM `v_apieventdata`";
         if($result->num_rows>0){
-            $query .= " WHERE location_id IN (SELECT location_id FROM `brand_location` WHERE brand_id = ".$this->userid.")";
+            $query .= " WHERE location_id IN (SELECT location_id FROM `v_brand_location` WHERE brand_id = ".$this->userid.")";
         }
         $query .= " ORDER BY start_date LIMIT 0,5";
         return $this->getResultArray($query);
@@ -366,7 +366,7 @@ class RequestHandler
         //anhand des handles Location suchen
         if(sizeof($handle==1)){
             $return = array();
-            $query ="SELECT distinct location_id, location_name, location_description FROM `apieventdata` WHERE location_id = '".intval($handle[0])."'";
+            $query ="SELECT distinct location_id, location_name, location_description FROM `v_apieventdata` WHERE location_id = '".intval($handle[0])."'";
             $return['locations'] = $this->getResultArray($query);
             $return['nextEvents'] = $this->getEventsByLocationId(intval($handle[0]));
             return $return;
@@ -376,7 +376,7 @@ class RequestHandler
     /*Ein Event ist eine Schulung zu einen bestimmten Zeitpunkt und an einem bestimmten Ort*/
     //public function getNextEvents(){ return $this->getEvents()}; //clearflag
     private function getEvents($id=-1,$test=0){
-        $sql = "SELECT * FROM `apieventdata` WHERE test = '$test' ";
+        $sql = "SELECT * FROM `v_apieventdata` WHERE test = '$test' ";
         if($id!=-1){
             $sql .=  "AND course_id = $id";
         }
@@ -385,18 +385,18 @@ class RequestHandler
     }
     /*Eine CourseList ist die Liste aller möglichen Teilbereiche von Schulungen*/
     private function getCourseList(){     
-        $query = "SELECT * FROM `vcourse`";
+        $query = "SELECT * FROM `v_course`";
         $return['courselist'] = $this->getResultArray($query);
         return $return;
     }
     /* currently not in use getters
-    private function getBrandList(){ return $this->getResultArray("SELECT * FROM `vbrand`")};
-    private function getBrandLocationList(){return $this->getResultArray("SELECT * FROM `vbrandlocation`")};
-    private function getBrandTopicList(){return $this->getResultArray("SELECT * FROM `vbrandtopic`")};
-    private function getStatusEventList(){return $this->getResultArray("SELECT * FROM `vstatusevent`")};
-    private function getStatusEventGuaranteeList(){return $this->getResultArray("SELECT * FROM `vstatuseventguarantee`")};
-    private function getStatusTrainerList(){return $this->getResultArray("SELECT * FROM `vstatustrainer`")};
-    private function getTrainerEventAssignmentList(){return $this->getResultArray("SELECT * FROM `vtrainereventassignment`")};
+    private function getBrandList(){ return $this->getResultArray("SELECT * FROM `v_brand`")};
+    private function getBrandLocationList(){return $this->getResultArray("SELECT * FROM `v_brandlocation`")};
+    private function getBrandTopicList(){return $this->getResultArray("SELECT * FROM `v_brandtopic`")};
+    private function getStatusEventList(){return $this->getResultArray("SELECT * FROM `v_statusevent`")};
+    private function getStatusEventGuaranteeList(){return $this->getResultArray("SELECT * FROM `v_statuseventguarantee`")};
+    private function getStatusTrainerList(){return $this->getResultArray("SELECT * FROM `v_statustrainer`")};
+    private function getTrainerEventAssignmentList(){return $this->getResultArray("SELECT * FROM `v_trainereventassignment`")};
     private function countParticipantsOnEvent(){return $this->getResultArray("SELECT * FROM `v_countParticipantOnEvent`")};    
     private function getcoursebytopic(){return $this->getResultArray("SELECT * FROM `v_coursebytopic` ")};    
     */
@@ -430,7 +430,7 @@ class RequestHandler
     ###################################################################################################################
 
     private function getEventsByLocationId($id){
-        $query = "SELECT * FROM `apieventdata` WHERE location_id = '$id' LIMIT 0,5";
+        $query = "SELECT * FROM `v_apieventdata` WHERE location_id = '$id' LIMIT 0,5";
         return $this->getResultArray($query);
     }
 
@@ -451,7 +451,7 @@ class RequestHandler
     }
 
     private function getEventList(){
-        $query = "SELECT * FROM `event` WHERE start_date > NOW() AND inhouse = 0";
+        $query = "SELECT * FROM `v_event` WHERE start_date > NOW() AND inhouse = 0";
         return $this->getResultArray($query);
     }
 }
