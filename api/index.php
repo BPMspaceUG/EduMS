@@ -12,9 +12,6 @@ require_once 'functions.inc.php';
 const noLogin = "no Login parameters submitted, try '...EduMS/api/index.php/Partner1/abc'";
 const helptext = "fail";
 
-
-
-
 $routes = getRoute();// .../api/index.php/x/y --> array('x','y')
 $response = array("respone" => "no data");
 
@@ -46,17 +43,19 @@ if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
 }
 
 
-if(!array_key_exists('topnav',$response)){
-    $response['topnav']  = array(
-        array("text"=>"Standorte","path"=>"?navdest=locations"),
-        array("text"=>"Anmeldung","path"=>"?navdest=signup"),
-        array("text"=>"Pakete","path"=>"?navdest=packages"),
-        array("text"=>"Themen","path"=>"?navdest=topics"),
-        array("text"=>"Boot","path"=>"?navdest=boot"),
-        array("text"=>"Monitor","path"=>"?navdest=monitor"));
-}
-if(!array_key_exists('footer',$response)){
-    $response['footer'][0]['text']  = $config['text']['defaultfooter'];
+if (is_array($response)) {
+    if(!array_key_exists('topnav',$response)){
+        $response['topnav']  = array(
+            array("text"=>"Standorte","path"=>"?navdest=locations"),
+            array("text"=>"Anmeldung","path"=>"?navdest=signup"),
+            array("text"=>"Pakete","path"=>"?navdest=packages"),
+            array("text"=>"Themen","path"=>"?navdest=topics"),
+            array("text"=>"Boot","path"=>"?navdest=boot"),
+            array("text"=>"Monitor","path"=>"?navdest=monitor"));
+    }
+    if(!array_key_exists('footer',$response)){
+        $response['footer'][0]['text']  = $config['text']['defaultfooter'];
+    }
 }
 /*
 if(!array_key_exists('nextEvents',$response)){
