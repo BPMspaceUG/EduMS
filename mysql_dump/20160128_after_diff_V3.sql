@@ -592,3 +592,39 @@ UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='37
 UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='376';
 UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='377';
 UPDATE `bpmspace_edums_v3`.`event` SET `maxParicipants`='3' WHERE `event_id`='378';
+
+--- vereinheitlicht 
+UPDATE  bpmspace_edums_v3.event SET maxParticipants = 5;
+
+--- poe aus where entfernt
+DROP VIEW `bpmspace_edums_v3`.`v_futurecourses`
+
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `v_futurecourses` AS
+    SELECT 
+        `e`.`event_id` AS `event_id`,
+        `e`.`maxParticipants` AS `maxParticipants`,
+        `e`.`start_date` AS `start_date`,
+        `e`.`finish_date` AS `finish_date`,
+        `l`.`location_name` AS `location_name`,
+        `c`.`course_name` AS `course_name`,
+        `c`.`course_price` AS `course_price`,
+        `t`.`trainer_name` AS `trainer_name`,
+        `poe`.`count` AS `partOnEvent`
+    FROM
+        (((((`event` `e`
+        JOIN `location` `l`)
+        JOIN `course` `c`)
+        JOIN `trainer` `t`)
+        JOIN `trainer_event_assignment` `tea`)
+        JOIN `v_countparticipantonevent` `poe`)
+    WHERE
+        ((`e`.`location_id` = `l`.`location_id`)
+            AND (`e`.`course_id` = `c`.`course_id`)
+            AND (`tea`.`trainer_id` = `t`.`trainer_id`)
+            AND (`tea`.`event_id` = `e`.`event_id`)
+            AND (`e`.`start_date` > NOW()))
+    ORDER BY `e`.`start_date`
