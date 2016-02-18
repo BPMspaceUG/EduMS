@@ -106,105 +106,47 @@ class RequestHandler
              * /location = Liste aller Locations die freigegeben sind incl. events
              * /location/{id} = Location der id incl. events
              */
-            case 'location':
-                $return = $this->handleLocations($handle);
+            case 'location': $return = $this->handleLocations($handle);
                 return $return;
                 break;
 
-            case 'boot':
-                //$return['sidebar'] = array(array("text"=>"requ-handler>handleBoot()>sidebar."));
-                //$return['content'] = file_get_contents('../../EduMS-client/boot.html');
-                //$return['topics'] = $this->handleTopic(3);
-                $return['a']= array('b' => 'b' );
+            case 'boot': 
+                //require '../../EduMS-client/boot.html';
+                //include '../../EduMS-client/boot.html';
+                //file_get_contents('../../EduMS-client/boot.html');
+                //$return = array('content' => file_get_contents('../../EduMS-client/boot.html'));
+                $return = array('dummy für array_key_exists in /api/index' => '#workaround');
+                //$return = file_get_contents('../../EduMS-client/boot.html');
+                //echo <div ng-include='../../EduMS-client/boot.html'></div> //file_get_contents('../../EduMS-client/boot.html');
+                
                 return $return;
                 break;
 
-            case 'getTopics':                
-                return $this->getTopicList();
+            case 'getTopics': $response = array('topiclist' => $this->getTopicList(), 'topiccourseCourselist'  => $this->getTopiccourseCourse(), 'allNextEvents'  => $this->getAllNextEvents());               
+                return $response;
                 break;
 
-            case 'getCourses':                
-                return $this->getCourseList();
+            case 'getCourses': return $this->getCourseList();
                 break;
 
-            case 'getFutureCourses':                
-                return $this->getFutureCourses();
+            case 'getAllLocations': return $this->getAllLocationsList();
+                break;
+
+            case 'getFutureCourses': return $this->getFutureCourses();
             break;
 
-            case 'countParticipantsOnEvent':                
-                return $this->countParticipantsOnEvent();
+            case 'getNextFiveEvents': return $this->getNextFiveEvents();
+                break;
+
+            case 'getOrganization': return $this->getOraganizationList();
+                break;
+
+
+
+
+            //cleanflag
+            case 'countParticipantsOnEvent': return $this->countParticipantsOnEvent();
             break;
-
-            case 'getBrand':
-                return $this->getBrandList();
-                break;
-
-  
-            case 'getBrandTopic':
-                return $this->getBrandTopicList();
-                break;
-            case 'getEvent':
-                return $this->getEventList();
-                break;
-            case 'getNextFiveEvents':
-                return $this->getNextFiveEvents();
-                break;
-
-
-            case 'getLocation':
-                return $this->getLocationList();
-                break;
-
-            case 'getAllLocations':
-                return $this->getAllLocationsList();
-                break;
-
-            case 'getOrganization':
-                return $this->getOraganizationList();
-                break;
-
-            case 'getStatusEvent':
-                return $this->getStatusEventList();
-                break;
-
-            case 'getStatusEventGuarantee':
-                return $this->getStatusEventGuaranteeList();
-                break;
-
-            case 'getStatusTrainer':
-                return $this->getStatusTrainerList();
-                break;
-
-            case 'getTrainerEventAssignment':
-                return $this->getTrainerEventAssignmentList();
-                break;
-
-
-
-            case 'getBrandLocation':
-                return $this->getBrandLocationList();
-                break;
-
-            case 'monitor':
-                return $this->handleMonitor($handle);
-                break;
-
-
-            case 'events':
-                /*events = Liste aller Events die freigegben sind
-                /events/id = Daten des Events*/
-                return $this->handleEvents($handle);
-                break;
-
-            case 'topics':
-                /*topics = Liste aller Topics
-                /topics/{id} = Daten eines Topics incl. events*/
-                return $this->handleTopic($handle);
-                break;
-
-            case 'package':
-                return $this->handlePackage($handle);
-                break;
 
 
             case "signup":
@@ -213,10 +155,44 @@ class RequestHandler
                 );
                 return $return;
             break;
+
+            case 'topics': return $this->handleTopic($handle);
+            break;
         
             default: echo "Requesthandler>handle>defaultRequest";
             exit;
             break;
+            /* currently not in use Requests
+            case 'getcoursebytopic': return $this->getcoursebytopic();
+            break;            
+            case 'getTopiccourseCourse': return $this->getTopiccourseCourse();
+            break;
+            case 'getBrand': return $this->getBrandList();
+                break;  
+            case 'getBrandTopic': return $this->getBrandTopicList();
+                break;
+            case 'getEvent': return $this->getEventList();
+                break;
+            case 'getLocation': return $this->getLocationList();
+                break;
+            case 'getStatusEvent': return $this->getStatusEventList();
+                break;
+            case 'getStatusEventGuarantee': return $this->getStatusEventGuaranteeList();
+                break;
+            case 'getStatusTrainer': return $this->getStatusTrainerList();
+                break;
+            case 'getTrainerEventAssignment': return $this->getTrainerEventAssignmentList();
+                break;
+            case 'getBrandLocation': return $this->getBrandLocationList();
+                break;
+            case 'monitor': return $this->handleMonitor($handle);
+                break; 
+            case 'events': return $this->handleEvents($handle);
+                break;  
+            case 'package': return $this->handlePackage($handle);
+                break;
+        */
+
 
         }
     }
@@ -232,27 +208,6 @@ class RequestHandler
         return $return;
     }
 
-    private function handleBoot(){
-
-        //echo $return['topics'];
-        return ;//$return;
-    }
-
-    /*Ein Topic ist eine Schulungsart. Entweder wurden keine Parameter übergeben dann soll die ganze verfügbare Liste ausgegeben werden
-    oder es wurde ein Parameter angegeben dann nur dieses Topic ausgeben.*/
-    private function handleTopic($handle){
-
-        $parameters = sizeof($handle); //wie viele Parameter wurden übergeben? sizeof=count
-        if($parameters==0){ //api/usr/token/topics/
-            return $this->getTopicList(); //done
-        }
-        elseif($parameters == 1){ //api/usr/token/topics/12345
-            $param = intval($handle[0]);//Zwang zu Integer
-            return $this->getTopicList($param);
-        }
-
-        //@TODO
-    }
 
     private function handleMonitor($handle){
 
@@ -266,8 +221,6 @@ class RequestHandler
             //$param = intval($handle[0]);//Zwang zu Integer
             //return $this->getTopicList($param);
         }
-
-        //@TODO
     }
 
     /*Ein Package ist eine frei kofigurierbare Sammlung von von Schulungen und Kursen*/
@@ -289,8 +242,6 @@ class RequestHandler
             $return['sidebar'] = array(array("text"=>"Der Standard ISO 27000 beschäftigt sich mit der Einführung von den Mindestanforderungen an und dem Risikomanagement bei einem Informationssicherheitsmanagementsystem (ISMS) einer IT Organisation."));
             return $return;
         }
-
-        //@TODO
     }
 
 
@@ -313,6 +264,14 @@ class RequestHandler
         return $return;
     }
 
+
+
+
+
+
+
+
+    //alle DB-getter für view-AngularContoller
     /*Zweck: Rückgabe eines oder aller Topics aus der Datenbank*/
     private function getTopicList($id=-1){
         $query = "SELECT * FROM `vtopic` WHERE `deprecated`=0";
@@ -323,127 +282,28 @@ class RequestHandler
         $return['nextEvents'] = $this->getEvents();
         return $return;
     }
-
-    //alle DB-getter für view-AngularContoller
     private function getAllLocationsList(){   
-        return $this->getResultArray("SELECT * FROM `vlocation`");
-    }
-    private function getBrandList(){   
-        return $this->getResultArray("SELECT * FROM `vbrand`");
-    }
-     private function getBrandLocationList(){   
-        return $this->getResultArray("SELECT * FROM `vbrandlocation`");
-    }
-    private function getBrandTopicList(){   
-        return $this->getResultArray("SELECT * FROM `vbrandtopic`");
+        return $this->getResultArray("SELECT * FROM `vlocation` limit 25");
     }
     private function getOraganizationList(){   
-        return $this->getResultArray("SELECT * FROM `vorganization`");
-    }
-    private function getStatusEventList(){   
-        return $this->getResultArray("SELECT * FROM `vstatusevent`");
-    }    
-    private function getStatusEventGuaranteeList(){   
-        return $this->getResultArray("SELECT * FROM `vstatuseventguarantee`");
-    }
-    private function getStatusTrainerList(){   
-        return $this->getResultArray("SELECT * FROM `vstatustrainer`");
-    }
-    private function getTrainerEventAssignmentList(){   
-        return $this->getResultArray("SELECT * FROM `vtrainereventassignment`");
+        return $this->getResultArray("SELECT * FROM `vorganization` where organization_id = 1");
     }
     private function getFutureCourses(){   
-        return $this->getResultArray("SELECT * FROM `v_futurecourses`");
+        return $this->getResultArray("SELECT * FROM `v_futurecourses` limit 50");
     }    
-    private function countParticipantsOnEvent(){   
-        return $this->getResultArray("SELECT * FROM `v_countParticipantOnEvent`");
+    private function getTopiccourseCourse(){   
+        return $this->getResultArray("SELECT * FROM `v_topic_courseCourse` ");
     }
-
-
-    /*Eine CourseList ist die Liste aller möglichen Teilbereiche von Schulungen*/
-    private function getCourseList(){     
-        $query = "SELECT * FROM `vcourse`";
-        $return['courselist'] = $this->getResultArray($query);
-        return $return;
-    }
-
-    
-
-    public function getNextEvents(){
-        return $this->getEvents();
-    }
-
-    /*Ein Event ist eine Schulung zu einen bestimmten Zeitpunkt und an einem bestimmten Ort*/
-    private function getEvents($id=-1,$test=0){
-        $sql = "SELECT * FROM `apieventdata` WHERE test = '$test' ";
-        if($id!=-1){
-            $sql .=  "AND course_id = $id";
-        }
-        $sql .= "ORDER BY start_date Limit 0,5";
-
-        return $this->getResultArray($sql);
-    }
-    
     private function getNextFiveEvents(){
         return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.all_events WHERE start_date > now() limit 5");
+    }    
+    private function getAllNextEvents(){
+        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.all_events WHERE start_date > now() ");
     }
-
-
-
-    /*Jeder Kurs ist einem Topic (einer Schulung) zugeordnet. Jeder Kurs hat seine eigene ID*/
-    private function getCoursecById($id){
-        $return = array();
-        $query = "SELECT * FROM `course` WHERE deprecated = 0 AND course_id = $id";
-        $return['topic'] = $this->getResultArray($query);
-        $return['nextEvents'] = $this->getEventsByTopic($id);
-        return $return;
-    }
-
-    /**
-     * Gibt alle Zukünftigen Veranstaltungen eines Themas, welche nicht inhouse sind, aus.
-     * @param $id Thema
-     * @return mixed
-     */
-    private function getEventsByTopic($id){
-        $query = " SELECT * FROM `apieventdata` WHERE test = 0 AND course_id = $id
-                ORDER BY start_date Limit 0,5";
-        return $this->getResultArray($query);
-    }
-
-    /**
-     * Gibt alle Zukünftigen Veranstaltungen eines Themas, welche nicht inhouse sind, aus.
-     * @param $id Thema
-     * @return mixed
-     */
-    private function getAllEvents(){
-        global $db;
-        $result = $db->query("SELECT * FROM `brand_location` WHERE brand_id = ".$this->userid);
-        $query = "SELECT * FROM `apieventdata`";
-        if($result->num_rows>0){
-            $query .= " WHERE location_id IN (SELECT location_id FROM `brand_location` WHERE brand_id = ".$this->userid.")";
-        }
-        $query .= " ORDER BY start_date LIMIT 0,5";
-        return $this->getResultArray($query);
-    }
-
-
-   
-
-
-
-    ###################################################################################################################
-    ####################### Definition der Helper-Funktionen
-    ############################################## Location
-    ###################################################################################################################
-
-
-
-    /**
-     * Verarbeitet den Location-Handle
-     * Wenn keine Location angegeben wird wird die Liste aller Locations angegeben
-     * @param $handle
-     * @return array
-     */
+    /** 
+    *Verarbeitet den Location-Handle. Wenn keine Location angegeben wird wird die Liste aller Locations angegeben
+    * @param $handle
+    * @return array */
     private function handleLocations($handle){
         global $db;
         if(sizeof($handle)==0){
@@ -473,6 +333,35 @@ class RequestHandler
         return $return;
     }
 
+        /**
+     * Gibt alle Zukünftigen Veranstaltungen eines Themas, welche nicht inhouse sind, aus.
+     * @param $id Thema
+     * @return mixed
+     */
+    private function getAllEvents(){
+        global $db;
+        $result = $db->query("SELECT * FROM `brand_location` WHERE brand_id = ".$this->userid);
+        $query = "SELECT * FROM `apieventdata`";
+        if($result->num_rows>0){
+            $query .= " WHERE location_id IN (SELECT location_id FROM `brand_location` WHERE brand_id = ".$this->userid.")";
+        }
+        $query .= " ORDER BY start_date LIMIT 0,5";
+        return $this->getResultArray($query);
+    }
+
+    /*Ein Topic ist eine Schulungsart. Entweder wurden keine Parameter übergeben dann soll die ganze verfügbare Liste ausgegeben werden
+    oder es wurde ein Parameter angegeben dann nur dieses Topic ausgeben.*/
+    private function handleTopic($handle){
+
+        $parameters = sizeof($handle); //wie viele Parameter wurden übergeben? sizeof=count
+        if($parameters==0){ //api/usr/token/topics/
+            return $this->getTopicList(); //done
+        }
+        elseif($parameters == 1){ //api/usr/token/topics/12345
+            $param = intval($handle[0]);//Zwang zu Integer
+            return $this->getTopicList($param);
+        }
+    }
     private function getLocationInformation($handle){
         //anhand des handles Location suchen
         if(sizeof($handle==1)){
@@ -484,6 +373,61 @@ class RequestHandler
         }
         return array("location"=>"Munich","description"=>"München ist die schönste Stadt der Welt");
     }
+    /*Ein Event ist eine Schulung zu einen bestimmten Zeitpunkt und an einem bestimmten Ort*/
+    //public function getNextEvents(){ return $this->getEvents()}; //clearflag
+    private function getEvents($id=-1,$test=0){
+        $sql = "SELECT * FROM `apieventdata` WHERE test = '$test' ";
+        if($id!=-1){
+            $sql .=  "AND course_id = $id";
+        }
+        $sql .= "ORDER BY start_date Limit 0,5";
+        return $this->getResultArray($sql);
+    }
+    /*Eine CourseList ist die Liste aller möglichen Teilbereiche von Schulungen*/
+    private function getCourseList(){     
+        $query = "SELECT * FROM `vcourse`";
+        $return['courselist'] = $this->getResultArray($query);
+        return $return;
+    }
+    /* currently not in use getters
+    private function getBrandList(){ return $this->getResultArray("SELECT * FROM `vbrand`")};
+    private function getBrandLocationList(){return $this->getResultArray("SELECT * FROM `vbrandlocation`")};
+    private function getBrandTopicList(){return $this->getResultArray("SELECT * FROM `vbrandtopic`")};
+    private function getStatusEventList(){return $this->getResultArray("SELECT * FROM `vstatusevent`")};
+    private function getStatusEventGuaranteeList(){return $this->getResultArray("SELECT * FROM `vstatuseventguarantee`")};
+    private function getStatusTrainerList(){return $this->getResultArray("SELECT * FROM `vstatustrainer`")};
+    private function getTrainerEventAssignmentList(){return $this->getResultArray("SELECT * FROM `vtrainereventassignment`")};
+    private function countParticipantsOnEvent(){return $this->getResultArray("SELECT * FROM `v_countParticipantOnEvent`")};    
+    private function getcoursebytopic(){return $this->getResultArray("SELECT * FROM `v_coursebytopic` ")};    
+    */
+    
+    /*Jeder Kurs ist einem Topic (einer Schulung) zugeordnet. Jeder Kurs hat seine eigene ID*/
+    /* currently not in use
+    private function getCoursecById($id){
+        $return = array();
+        $query = "SELECT * FROM `course` WHERE deprecated = 0 AND course_id = $id";
+        $return['topic'] = $this->getResultArray($query);
+        $return['nextEvents'] = $this->getEventsByTopic($id);
+        return $return;
+    }*/
+
+    /**Gibt alle Zukünftigen Veranstaltungen eines Themas, welche nicht inhouse sind, aus.
+     * @param $id Thema
+     * @return mixed*/
+    /* currently not in use
+    private function getEventsByTopic($id){
+        $query = " SELECT * FROM `apieventdata` WHERE test = 0 AND course_id = $id
+                ORDER BY start_date Limit 0,5";
+        return $this->getResultArray($query);
+    }*/
+   
+
+
+
+    ###################################################################################################################
+    ####################### Definition der Helper-Funktionen
+    ############################################## Location
+    ###################################################################################################################
 
     private function getEventsByLocationId($id){
         $query = "SELECT * FROM `apieventdata` WHERE location_id = '$id' LIMIT 0,5";
