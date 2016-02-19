@@ -56,7 +56,7 @@ class RequestHandler
      */
     private function validateCredentials($userid,$token){
         global $db;
-        $sql = "SELECT * FROM `brand`
+        $sql = "SELECT * FROM `v_brand`
                   WHERE accesstoken = '".$db->real_escape_string($token)."' AND
                   login = '".$db->real_escape_string($userid)."'";
         $result = $db->query($sql);
