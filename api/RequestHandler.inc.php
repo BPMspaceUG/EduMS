@@ -115,9 +115,27 @@ class RequestHandler
                 //include '../../EduMS-client/boot.html';
                 //file_get_contents('../../EduMS-client/boot.html');
                 //$return = array('content' => file_get_contents('../../EduMS-client/boot.html'));
-                $return = array('dummy für array_key_exists in /api/index' => '#workaround');
                 //$return = file_get_contents('../../EduMS-client/boot.html');
                 //echo <div ng-include='../../EduMS-client/boot.html'></div> //file_get_contents('../../EduMS-client/boot.html');
+
+
+            $return = array(
+                'script'=>file_get_contents('../custom/scripte.html'),
+                'controller'=>file_get_contents('../controllers/initAppAndCredents.js').file_get_contents('../controllers/organizationCtrl.js').file_get_contents('../controllers/navCtrl.js').file_get_contents('../controllers/modalCtrl.js'),
+                'css'=>file_get_contents('../custom/3.3.6 bootstrap.min.css').file_get_contents('../custom/cssSheets.html'),
+                'directive'=>file_get_contents('../directives/lawdata.js'),
+                'ct'=>file_get_contents('../boot.html'));
+
+
+                //$return['script'] = file_get_contents('../custom/scripte.html');
+                //$return['controller'] = file_get_contents('../controllers/initAppAndCredents.js');
+                //$return['css'] = file_get_contents('../custom/3.3.6 bootstrap.min.css');
+                //$return['css'] .= file_get_contents('../custom/cssSheets.html');
+                //$return['controller'] .= file_get_contents('../controllers/organizationCtrl.js');
+                //$return['controller'] .= file_get_contents('../controllers/navCtrl.js');
+                //$return['controller'] .= file_get_contents('../controllers/modalCtrl.js');
+                //$return['directive'] = file_get_contents('../directives/lawdata.js');
+                //$return['ct'] = file_get_contents('../boot.html');
                 
                 return $return;
                 break;
@@ -140,7 +158,6 @@ class RequestHandler
 
             case 'getOrganization': return $this->getOraganizationList();
                 break;
-
 
 
 
