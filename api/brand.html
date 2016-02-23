@@ -1,4 +1,3 @@
-Hi from boot.html
 <div class="container-fluid" >
 	<div class="row">
 		<!----header-->
@@ -195,67 +194,7 @@ Hi from boot.html
 								</h3>
 								<p>die nächsten 5 Kurse</p>
 								<!-- Sidebar-Template in navCtrl: -->
-								<right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>
-
-								<Sidebar-Template aus Bootstrapexample:  table class="table table-condensed">
-									<tbody >
-
-										
-      									<table  ng-repeat="e in nextEvents"  width="100%">
-        									<tr>				
-        										<td width="80%" >
-        											<hr>
-        											<h3>{{e.course_name}} {{e.start_date}}</h3>
-        										</td>
-        										<td width="20%">													
-													<span class="fa-stack"> 
-														<i class="fa fa-circle fa-stack-2x"></i> 
-														<i class="fa fa-info fa-stack-1x fa-inverse"></i>
-													</span> 
-													<span class="fa-stack"> 
-														<i class="fa fa-circle fa-stack-2x"></i> 
-														<i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i>
-													</span>
-												</td>        										
-											</tr>
-											<tr>
-												<td>
-													<button type="button" class="btn btn-success btn-block">
-														<span> Termingarantie: {{e.eventguaranteestatus}}</span>
-												</td>
-											</tr>
-  										</table>
-
-									
-										<tr>
-											<td>
-												<button type="button"
-													class="btn btn-succes btn-block btn-sucsess-outline">
-													<i class="text-danger"><strong>nur noch 1 Platz</strong></i>
-												</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>
-												<button type="button" class="btn btn-danger btn-block">Warteliste</button>
-											</td>
-										</tr>
-	
-										<tr>
-											<td>
-												<button type="button" class="btn btn-succes btn-block btn-sucsess-outline">
-													<i class="text-warning"><strong>nur noch 3 Plätze</strong></i>
-											</td>
-										</tr>
-										<tr>
-										<tr>
-											<td>
-												<button type="button" class="btn btn-primary btn-block">Termin</button>
-											</td>
-										</tr>
-										<tr>
-									</tbody>
+								<right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>								
 								</table>								
 							</div>
 

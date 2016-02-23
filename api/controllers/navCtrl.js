@@ -42,6 +42,7 @@ app.controller('navCtrl', ['$scope','$http', function ($scope, $http) {
 /*TOPICS-------------------------------------------------------------------------------------------*/
 	$http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getTopics')
 	.then(function(response) {//wenn angeforderte Daten empfangen wurden...
+		console.log(response.data.topiclist.topiclist)
 		$scope.topics = response.data.topiclist.topiclist; //Navigation
 		$scope.topiccourseCourse = Object.keys(response.data.topiccourseCourselist)
 		.map(function (key) {return response.data.topiccourseCourselist[key]}); //Topic-Course Panel
