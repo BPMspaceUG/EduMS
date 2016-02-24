@@ -1,32 +1,28 @@
 <?php
-/**
- * API für rein lesenden Zugriff
- * User: cwalonka
- * Date: 04.10.15
- * Time: 12:39
- */
+/*Activate the server, split url, start requesthandler*/
 require_once 'RequestHandler.inc.php';
 require_once '../../DB_config/login_credentials_DB_bpmspace_edums_API.inc.php';
 require_once 'functions.inc.php';
 
 const noLogin = "no Login parameters submitted, try '...EduMS/api/index.php/Partner1/abc'";
-const helptext = "fail";
 
+/*Split the url in its routing parts*/
 $routes = getRoute();// .../api/index.php/x/y --> array('x','y')
 $response = array("respone" => "no data");
 
 if(sizeof($routes)<2){ 
     echo noLogin;
+    file_put_contents('failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nnoLogin/fail request: ".$routes."\n-----------\n", FILE_APPEND | LOCK_EX);
     exit;
 }
-//Start incl. LogIn
+//minimal valid request
 elseif(sizeof($routes)<3){
     $user = $routes[0];
     $token = $routes[1];
     $handler = new RequestHandler($user,$token,$db);
     $response = $handler->showStartPage();
 }
-//Aufruf mit topnav-Ziel
+//extended request
 else{
     $user = $routes[0];
     $token = $routes[1];
@@ -34,7 +30,7 @@ else{
     $response = $handler->handle($routes);// 0 = Benutzer | 1 = Passwort | 2 = section
 }
 
-//Aufruf der Debug-Funktion durch '.../api/index.php/x/y?debug=18234'
+//Call a debug-funktion with the url-ending:'.../api/index.php/x/y?debug=1'
 if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
     echo "<pre>";
     //echo "Debug - print variable 'response':\n";
@@ -42,7 +38,7 @@ if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
     echo "<hr>JSON<br>";
 }
 
-
+/*Generate a default navigation*/
 if (is_array($response)) {
     if(!array_key_exists('topnav',$response)){
         $response['topnav']  = array(
@@ -56,14 +52,7 @@ if (is_array($response)) {
         $response['footer'][0]['text']  = $config['text']['defaultfooter'];
     }
 }
-/*
-if(!array_key_exists('nextEvents',$response)){
-    $response['nextEvents'] = $handler->getNextEvents();
-}*/
 
-//echo "Debug - print variable 'response' in JSON";
+/*Finally send a JSON-encoded, handled response.*/
 echo json_encode($response);
-
-
-
 ?>

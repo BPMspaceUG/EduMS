@@ -6,7 +6,7 @@ Die Templates rightBarCourseByTopic und rightBarCourseAll zeigen die nächsten c
 Die lorem function erzeugt Dummytext.
 
 ------------------------------------------------------------------------------------------------------------------------------
-DB-Views: 	|	`all_events`							|`v_futurecourses` 						|`v_topic_coursecourse` 		
+DB-Views: 	|	`v_all_events`							|`v_futurecourses` 						|`v_topic_coursecourse` 		
 ------------------------------------------------------------------------------------------------------------------------------
 $scope		|	.allNextEvents**++						|++topiccourseCourselist++				|++topiclist++			
 ------------------------------------------------------------------------------------------------------------------------------

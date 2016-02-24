@@ -1,14 +1,24 @@
 <?php
 class RequestHandler 
 {
-    /*Allgemeines Konzept: Jede Ressource bekommt eine Handlefunction diese definiert ob ein Defaultwert oder Parametergebundener Wert zurrück gegeben
-    werden soll. Der Handle ruft eine Getfunction auf. Die Getfunction definiert ein spezifisches Query und ruft getResultArray auf. getResultArray
-    führt ein beliebiges Query aus und gibt das Ergebnis zurrück.*/
-    private $userid = -1;    private $token = -1;    private $validLogin = false;    private $db;    private $discount = 0;
+    /*
+    Overview - Übersicht
+    Eng: For every in the index.php receaved request a requesthandler is called. 
+        After validating the user/token, the in the url requested view, controllers and data will collected
+        to send it to the browser.
 
+    Deu/Ger: Die index.php leitet alle Anfragen in diesen Requesthandler.
+        Nach einer User/Token-Prüfung werden die in der url geforderten Views, Crontroller und Daten bereitgestellt
+        um sie an den Browser zu senden. 
+    */
+        
+    private $userid = -1;    private $token = -1;    private $validLogin = false;    private $db;
+
+    /** Handles SQL-querys and returnes the resultdata.
+    * - On debug -> show the the query
+    * - On fail -> log infodata */
     private function getResultArray($query){
         global $db; 
-        /*Zweck: Ausgabe einer Debugvariante der Seite*/
         if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
             echo "<pre><hr>Query:<br>";
             var_dump($query);
@@ -19,26 +29,28 @@ class RequestHandler
         while ($row = $result->fetch_assoc()) {
             $results_array[] = $row;
         }
+        if((count($results_array)<1)){ //evtl. obsolet
+            file_put_contents('failQueryLog.txt', date("d.m.Y - H:i:s",time())."\nQuery: ".$query."\nResult: ".$results_array."\n-----------\n", FILE_APPEND | LOCK_EX);
+        }
         return $results_array;
     }
  
+    /*The constructor initializes the database and the usercontext*/
     public function __construct($userid, $token, $db)
     {
         $this->db = $db;
         $this->validLogin=$this->validateCredentials($userid,$token);
     }
 
-    /* Validates the Login of an User -> return true/false */
+    /** Validates the receaved login-credentials of an User
+    * - expect userId and token in tbl brand-> return true/false 
+    * - on fail-> add info to a Logfile */
     private function validateCredentials($userid,$token){
         global $db;
-        //var_dump($token);
-        //var_dump($userid);
         $sql = "SELECT * FROM `v_brand` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
         $result = $db->query($sql);
-        //var_dump($sql);
         if($result->num_rows>0){
-            $result = $this->discount = $result->fetch_array();
-            $this->discount = $result['discount'];
+            $result = $result->fetch_array();
             $this->userid = $result['brand_id'];
             return true;
         }
@@ -58,28 +70,28 @@ class RequestHandler
         return $result;
     }
 
-    /* Switches between the URL-called functions -  return array|bool|mixed|mysqli_result  */
+    /* Handles the receaved route-request.
+    * - On Login-fail exit the handle and responde fail
+    * - Case and route the $route to its specific functions
+    * - return array|bool|mixed|mysqli_result  */
     public function handle($route){
         if(!$this->validLogin){
-            return array ("response"=>"invalidCredentials");
+            return array ("response"=>"fail: invalidCredentials");
         }
         
-        //Beispiel uri -> $route: .../api/index.php/Benutzername/Passwort/section?a=A&b=B
+        //Example URI -> $route: .../api/index.php/Benutzername/Passwort/section?a=A&b=B
         $bname = $route[0];
         $pw = $route[1];
-        $route = $this->rmFirstParam($route); //lösche Benutzername
-        $route = $this->rmFirstParam($route); //lösche Passwort
-        $section = $route[0]; // $section = 'section'
+        $route = $this->rmFirstParam($route); //delete username
+        $route = $this->rmFirstParam($route); //delete token
+        $section = $route[0]; // $section = destinypoint
         $handle = $this->rmFirstParam($route); //$handle = array('A','B')
+
         switch($section){
-            /*
-             * Handles all Requests for Locations
-             * /location = Liste aller Locations die freigegeben sind incl. events
-             * /location/{id} = Location der id incl. events
-             */
             case 'location': $return = $this->handleLocations($handle);
                 return $return;
                 break;
+            //default view for a brand 
             case 'brand': 
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
@@ -90,6 +102,25 @@ class RequestHandler
                 'ct'=>file_get_contents('brand.html'));                
                 return $return;
                 break;
+
+            //show Data in an Administrative mode
+            case 'monitor': 
+                $return = array(
+                'script'=>file_get_contents('custom/scripte.html'),
+                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', []); bname = '".$bname."', pw = '".$pw."';</script>".
+                file_get_contents('controllers/monitorCtrl.js'),
+                'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css'),
+                'directive'=>file_get_contents('directives/monitorDir.js'),
+                'ct'=>file_get_contents('monitor.html').handleMonitor($handle));   
+                return $return;
+                break;             
+            //show all Data for handleMonitor
+            case 'all': 
+                $return = array('get...' => 'all the usefull Administrative data getters');
+                return $return;
+                break;
+
+            //database getters
             case 'getTopics': $response = array('topiclist' => $this->getTopicList(), 'topiccourseCourselist'  => $this->getTopiccourseCourse(), 'allNextEvents'  => $this->getAllNextEvents());               
                 return $response;
                 break;
@@ -103,46 +134,49 @@ class RequestHandler
                 break;
             case 'getOrganization': return $this->getOraganizationList();
                 break;
+
+            //cleanflag bzw. replace durch singnup template/directive
             case "signup":
                 $return['content'] = array( array("text"=>file_get_contents('../custom/signupcontent.html')) );
                 return $return;
             break;
-            case 'topics': return $this->handleTopic($handle);
-            break;
         
-            default: echo "Defaultrequest aus: Requesthandler -> handle -> defaultRequest";
+            default: echo "Defaultrequest from: Requesthandler -> handle -> defaultRequest.";
+                echo "There is no '".$section."' avaliable try http://localhost:4040/EduMS-client/index.php?navdest=brand";
+                file_put_contents('failsectionLog.txt', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
             exit;
             break;
         }
     }
-    ###################################################################################################################
-    ####################### Definition der Handles
-    ###################################################################################################################
+
+
+    /*Definition of special handling functions.*/
+    //cleanflag
     public function showStartPage(){
         $return['sidebar'] = array(array("text"=>"Requesthandler -> function showStartpage() -> sidebar"));
         $return['content'] = array(array("text"=>"Requesthandler -> function showStartpage() -> content"));
         return $return;
     }
+
+    /*Choose by URL($handle) what data the monitor have to responde*/
     private function handleMonitor($handle){
-        $parameters = sizeof($handle); //wie viele Parameter wurden übergeben? sizeof=count
-        if($parameters==0){ //api/usr/token/monitor
-            $out = array();
-            $out['topics'] = $this->getTopicList(); //done
+        //wie viele Parameter wurden übergeben? sizeof=count
+        $out = array();
+        if(sizeof($handle)==0){ //api/usr/token/monitor---
+            $out['monitor'] = $this->getAll(); //Monitor everything
             return $out;
         }
-        elseif($parameters == 1){ //api/usr/token/monitor/var+?
-            //$param = intval($handle[0]);//Zwang zu Integer
-            //return $this->getTopicList($param);
+        /*If receaved a specific Monitor, responde data for every specification*/
+        else{ 
+            for ($i=0; $i < sizeof($handle); $i++) { 
+                $out[$handle[i]] = $this->handle($handle); //response[handle-1,(..),handle-n]=Data               
+            }
+            return $out;
         }
     }
 
-    ###################################################################################################################
-    ####################### Definition der Helper-Funktionen
-    ############################################## Topic
-    ###################################################################################################################
-
-    //alle DB-getter für view-AngularContoller
-    /*Zweck: Rückgabe eines oder aller Topics aus der Datenbank*/
+    
+    /*Definition of all getters for the database*/
     private function getTopicList($id=-1){
         $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic` WHERE `deprecated`=0");
         return $return;
@@ -165,44 +199,13 @@ class RequestHandler
     private function getAllNextEvents(){
         return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.v_all_events WHERE start_date > now() ");
     }
-
-    /*Ein Topic ist eine Schulungsart. Entweder wurden keine Parameter übergeben dann soll die ganze verfügbare Liste ausgegeben werden
-    oder es wurde ein Parameter angegeben dann nur dieses Topic ausgeben.*/
-    private function handleTopic($handle){
-        $parameters = sizeof($handle); //wie viele Parameter wurden übergeben? sizeof=count
-        if($parameters==0){ //api/usr/token/topics/
-            return $this->getTopicList(); //done
-        }
-        elseif($parameters == 1){ //api/usr/token/topics/12345
-            $param = intval($handle[0]);//Zwang zu Integer
-            return $this->getTopicList($param);
-        }
-    }
-
-    /*Eine CourseList ist die Liste aller möglichen Teilbereiche von Schulungen*/
+    /*The courselist contains all not deprecated couses */
     private function getCourseList(){     
         $query = "SELECT * FROM `v_course`";
         $return['courselist'] = $this->getResultArray($query);
         return $return;
     }
-    ###################################################################################################################
-    ####################### Definition der Helper-Funktionen
-    ############################################## Location
-    ###################################################################################################################
 
-    private function handleEvents($handle){
-        if(sizeof($handle)==0){
-            return $this->getEventList();
-        }
-        else{
-            if($handle[0]=='location'){
-                return $this->getEventList($handle[1]);
-            }
-            elseif($handle[0]=='limit'){
-            }
-            return $this->getEventList();
-        }
-    }
 }
 
 
