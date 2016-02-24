@@ -1,7 +1,10 @@
 <script  type="text/javascript">
 
 /*
-Der Controller navCtrl fordert über den $http-service JSON-Datensätze DB-Views und reorganisiert sie in $scope.
+Eng: The controller navCtrl uses the $http-service to get JSON-datasets from DB-Views and reorganize them in $scope.
+The templates rightBar-X show the next courses in context of the selected topic. Also there is a lorem fuction for dummytext.
+
+Deu/Ger: Der Controller navCtrl fordert über den $http-service JSON-Datensätze DB-Views und reorganisiert sie in $scope.
 Die Templates rightBarCourseByTopic und rightBarCourseAll zeigen die nächsten courses in Abhängigkeit des ausgewählten Topics an.
 Die lorem function erzeugt Dummytext.
 
@@ -35,11 +38,14 @@ FROM `course` WHERE deprecated = 0
 
 */
 
-/*Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular definiert*/
+/*Controllers define and handle an Angular area
+Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular definiert*/
 app.controller('navCtrl', ['$scope','$http', function ($scope, $http) {
 
-//Der $http.get-service läd Ressourcen nach 
-/*TOPICS-------------------------------------------------------------------------------------------*/
+
+/*TOPICS-------------------------------------------------------------------------------------------
+getTopics -> (getTopicList, getTopiccourseCourse, getAllNextEvents)
+Define navbar-, nested panels- and rightBar-arrays*/
 	$http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getTopics')
 	.then(function(response) {//wenn angeforderte Daten empfangen wurden...
 		console.log(response.data.topiclist.topiclist)
@@ -62,7 +68,7 @@ app.controller('navCtrl', ['$scope','$http', function ($scope, $http) {
 		console.log('ResponseData von getTopics: (Auskommentiert)')//console.log(response.data)
 
 
-		if ($scope.topics.length>8) {$scope.topics = $scope.topics.slice(0,8)};//limit to 5 to prevent overload
+		if ($scope.topics.length>8) {$scope.topics = $scope.topics.slice(0,8)};//limit to 8 to prevent overload
 			//HTML5 3.2.3.1: Das id-Attribut darf kein Leerzeichen enthalten deshalb wird der topic_name nach name_raw kopiert u. anschließend die Leerzeichen entfernt
 			for (var i = 0; i < $scope.topics.length; i++) {
 				$scope.topics[i].topic_name_raw = $scope.topics[i].topic_name;			
@@ -158,13 +164,36 @@ template:'<div class="list-group">\
 		
 		'<div  ng-show="e.btnRegister">\
 			<form class="form-horizontal">\
-	  		<div class="form-group">\
-	    		<label for="inputName{{e.sysName}}">Name</label>\
-	    		<input type="text" class="form-control" id="inputName{{e.sysName}}" placeholder="nur 1 Namensfeld?">\
-	  		</div>\
-	  		<div class="form-group">\
-	    		<label for="inputEmail{{e.sysName}}">Email</label>\
-	    		<input type="email" class="form-control" id="inputEmail{{e.sysName}}" placeholder="Validität.prüfen@????.TLD">\
+	  		<div class="form-group has-success">\
+	    		<!--label for="inputName{{e.sysName}}">Name</label>\
+	    		<input type="text" class="form-control" id="inputName{{e.sysName}}" placeholder="nur 1 Namensfeld?"-->\
+				<div class="row" style="margin-top: 2px;">\
+				 <div class="col-md-2"></div>\
+				  <div class="col-md-4">\
+				    <div class="input-group">\
+				      <input type="text" class="form-control" id="inputName{{e.sysName}}" placeholder="Vorname">\
+				    </div>\
+				  </div>\
+				  <div class="col-md-4">\
+				    <div class="input-group">\
+				      <input type="text" class="form-control" id="inputFamName{{e.sysName}}" placeholder="Nachname">\
+				    </div>\
+				  </div>\
+				</div>\
+	    		<!--label for="inputEmail{{e.sysName}}">Email</label-->\
+	    		<div class="row" style="margin-top: 2px;">\
+	    		<div class="col-md-2"></div>\
+				  	<div class="col-md-4">\
+					  	<div class="input-group">\
+		    				<input type="anzahl" class="form-control" id="inputAnzahl{{e.sysName}}" placeholder="Teilnehmerzahl">\
+		    			</div>\
+	    			</div>\
+	    			<div class="col-md-4">\
+		    			<div class="input-group">\
+		    				<input type="email" class="form-control" id="inputEmail{{e.sysName}}" placeholder="Kontakt E-Mail Adresse">\
+		    			</div>\
+	    			</div>\
+	    		</div>\
 	  		</div>\
 	  		<button type="submit" class="btn btn-default">Reservierungsanfrage Abschicken</button>\
 			</form>\
