@@ -132,7 +132,13 @@ Define navbar-, nested panels- and rightBar-arrays*/
 		}	
 	},function(response) {$scope.location = 'Fehler in locationCtrl-$http: '+response}
 	)
+$scope.reservateCourse = function(part) {
+	//var reserveInfo = document.getElementById($scope['inputNameId'+part]).mVorname
+	var reserveInfo = part
 
+	console.log('reservepush: '+ reserveInfo)
+	$http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', reserveInfo)
+}
 }])
 
 
@@ -160,47 +166,50 @@ template:'<div class="list-group">\
 		<h3>Start: {{e.start_date}} {{e.start_time}}</h3> \
 		<h3>Ende: {{e.finish_date}} {{e.finish_time}}</h3>\
 		<h3>Internet-Location-Name: {{e.internet_location_name}}</h3>\
-		</div>'+
-		
-		'<div  ng-show="e.btnRegister">\
-			<form class="form-horizontal">\
-	  		<div class="form-group has-success">\
-	    		<!--label for="inputName{{e.sysName}}">Name</label>\
-	    		<input type="text" class="form-control" id="inputName{{e.sysName}}" placeholder="nur 1 Namensfeld?"-->\
-				<div class="row" style="margin-top: 2px;">\
-				 <div class="col-md-2"></div>\
-				  <div class="col-md-4">\
-				    <div class="input-group">\
-				      <input type="text" class="form-control" id="inputName{{e.sysName}}" placeholder="Vorname">\
-				    </div>\
-				  </div>\
-				  <div class="col-md-4">\
-				    <div class="input-group">\
-				      <input type="text" class="form-control" id="inputFamName{{e.sysName}}" placeholder="Nachname">\
-				    </div>\
-				  </div>\
-				</div>\
-	    		<!--label for="inputEmail{{e.sysName}}">Email</label-->\
-	    		<div class="row" style="margin-top: 2px;">\
-	    		<div class="col-md-2"></div>\
-				  	<div class="col-md-4">\
-					  	<div class="input-group">\
-		    				<input type="anzahl" class="form-control" id="inputAnzahl{{e.sysName}}" placeholder="Teilnehmerzahl">\
-		    			</div>\
-	    			</div>\
-	    			<div class="col-md-4">\
-		    			<div class="input-group">\
-		    				<input type="email" class="form-control" id="inputEmail{{e.sysName}}" placeholder="Kontakt E-Mail Adresse">\
-		    			</div>\
-	    			</div>\
-	    		</div>\
-	  		</div>\
-	  		<button type="submit" class="btn btn-default">Reservierungsanfrage Abschicken</button>\
-			</form>\
+		</div>'+		
+			'<div  ng-show="e.btnRegister">\
+			<register-form></register-form>\
 		</div>'+
 	'</a>\
 </div>'
 
+	}
+});
+
+app.directive('registerForm', function() {//sideBarCourse = Directive Name
+	return{
+//Sidebarelement für allgemeine Kurse
+template:'<form name="formReg" class="form-horizontal" novalidate>\
+	  		<div class="form-group has-warning">\
+	  			<div class="row" style="margin-top: 2px;">\
+				 <div class="col-md-2">{{mVorname}} {{mFamName}}</div>\
+				  <div class="col-md-4">\
+				    <div class="input-group" class="form-input">\
+				      <input type="text" class="form-control" id="inputNameId{{e.sysName}}" placeholder="Vorname" name="inputNameName{{e.sysName}}" ng-model="mVorname">\
+				    </div>\
+				  </div>\
+				  <div class="col-md-4">\
+				    <div class="input-group" class="form-input">\
+				      <input type="text" class="form-control" id="inputFamNameId{{e.sysName}}" placeholder="Nachname" ng-model="mFamName">\
+				     	</div>\
+				  </div>\
+				</div>\
+	    		<div class="row" style="margin-top: 2px; ">\
+	    		<div class="col-md-2">{{mTeilnehmerZahl}} {{mAdresse}}</div>\
+				  	<div class="col-md-4">\
+					  	<div class="input-group" class="form-input">\
+		    				<input type="anzahl" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="Teilnehmerzahl" ng-model="mTeilnehmerZahl">\
+		    			</div>\
+	    			</div>\
+	    			<div class="col-md-4">\
+		    			<div class="input-group" class="form-input">\
+		    				<input type="email" class="form-control" id="inputEmailId{{e.sysName}}" placeholder="Kontakt E-Mail Adresse" ng-model="mAdresse">\
+		    			</div>\
+	    			</div>\
+	    		</div>\
+	  		</div>\
+	  		<input type="submit" ng-click="reservateCourse(e.sysName)" class="btn btn-default" value="Reservierungsanfrage Abschicken"/>\
+			</form>'
 	}
 });
 app.directive('rightBarCourseByTopic', function() {//sideBarCourse = Directive Name
