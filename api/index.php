@@ -8,7 +8,7 @@ const noLogin = "no Login parameters submitted, try '...EduMS/api/index.php/Part
 
 /*Split the url in its routing parts*/
 $routes = getRoute();// .../api/index.php/x/y --> array('x','y')
-$response = array("respone" => "no data");
+$response = array("response" => "no data");
 
 if(sizeof($routes)<2){ 
     echo noLogin;
@@ -46,7 +46,8 @@ if (is_array($response)) {
             array("text"=>"Anmeldung","path"=>"?navdest=signup"),
             array("text"=>"Pakete","path"=>"?navdest=packages"),
             array("text"=>"Themen","path"=>"?navdest=topics"),
-            array("text"=>"Brand","path"=>"?navdest=Brand"));
+            array("text"=>"Brand","path"=>"?navdest=Brand"),
+            array("text"=>"Monitor","path"=>"?navdest=Monitor"));
     }
     if(!array_key_exists('footer',$response)){
         $response['footer'][0]['text']  = $config['text']['defaultfooter'];
