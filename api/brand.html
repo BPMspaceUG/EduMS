@@ -198,16 +198,6 @@
 								</table>								
 							</div>
 
-							<div class="tab-pane" id="panel-preis-sidebar">
-								<right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>
-							</div>
-							<div class="tab-pane" id="panel-standort-sidebar">
-								<right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>
-							</div>
-							<div class="tab-pane" id="panel-sonstiges-sidebar">
-								<right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>
-							</div>
-
 							<div ng-repeat="tsb in topics"  class="tab-pane" id="panel-{{tsb.topic_name}}-sidebar" role="tabpanel">
 								<right-bar-course-by-topic ng-repeat="sbc in tsb.sideBarCourses"></right-bar-course-by-topic>
 							</div>				
