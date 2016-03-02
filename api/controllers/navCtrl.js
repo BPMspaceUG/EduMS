@@ -95,6 +95,8 @@ Define navbar-, nested panels- and rightBar-arrays*/
 							for (var k = 0; k < aNE.length; k++) {	//für alle allNextEvents-Einträge
 								if (tcC.tc_course_id == aNE[k].course_id) { //nur Events die zur aktuellen course_id passen
 									$scope.topics[i].sideBarCourses.push(aNE[k]) //befülle SideBar-Array
+									$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
+									.sysName=$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,'');
 								};								
 							};
 						};
@@ -175,7 +177,6 @@ template:'<div class="list-group">\
 
 	}
 });
-
 app.directive('registerForm', function() {//sideBarCourse = Directive Name
 	return{
 //Sidebarelement für allgemeine Kurse
@@ -212,14 +213,61 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
 			</form>'
 	}
 });
+
+
+
+
 app.directive('rightBarCourseByTopic', function() {//sideBarCourse = Directive Name
 	return{
-		template:'<div class="list-group"><a href="#" class="list-group-item active"><h3 class="list-group-item-heading">{{sbc.course_name}} '+
-		'<span class="label label-danger"> {{sbc.start_date}}</span></h3><div><button type="button" class="btn btn-info "><span class="fa-stack">'+
-		'<i class="fa fa-info fa-stack-1x fa-inverse"></i></span>Info</button> - <button type="button" class="btn btn-success">'+
-		'<span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i></span>reservieren</button></div></a></div>'
+		template:'<div class="list-group"><a class="list-group-item active"><h3 class="list-group-item-heading">{{sbc.course_name}}\
+		<span class="label label-danger"> {{sbc.start_date}}\
+		 </span></h3><div><button type="button" class="btn btn-info" ng-click= "sbc.btnInfo=!sbc.btnInfo">\
+		 <span class="fa-stack"><i class="fa fa-info fa-stack-1x fa-inverse"></i></span>Info</button> - <button type="button" class="btn btn-success" ng-model="reservate" ng-click= "sbc.btnRegister=!sbc.btnRegister">\
+		 <span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i></span>reservieren</button></div><div ng-show="sbc.btnInfo">\
+		 <h3>Start: {{sbc.start_date}} {{sbc.start_time}}</h3>\
+		 <h3>Ende: {{sbc.finish_date}} {{sbc.finish_time}}</h3>\
+		 <h3>Internet-Location-Name: {{sbc.internet_location_name}}\
+		 </h3></div><div ng-show="sbc.btnRegister">\
+		 <register-form-two></register-form-two></div></a></div>'
 	}
 });
+app.directive('registerFormTwo', function() {//sideBarCourse = Directive Name
+	return{
+//Sidebarelement für allgemeine Kurse
+template:'<form name="formReg" class="form-horizontal" novalidate>\
+	  		<div class="form-group has-warning">\
+	  			<div class="row" style="margin-top: 2px;">\
+				 <div class="col-md-2">{{mVorname}} {{mFamName}}</div>\
+				  <div class="col-md-4">\
+				    <div class="input-group" class="form-input">\
+				      <input type="text" class="form-control" id="inputNameId{{sbc.sysName}}" placeholder="Vorname" name="inputNameName{{sbc.sysName}}" ng-model="mVorname">\
+				    </div>\
+				  </div>\
+				  <div class="col-md-4">\
+				    <div class="input-group" class="form-input">\
+				      <input type="text" class="form-control" id="inputFamNameId{{sbc.sysName}}" placeholder="Nachname" ng-model="mFamName">\
+				     	</div>\
+				  </div>\
+				</div>\
+	    		<div class="row" style="margin-top: 2px; ">\
+	    		<div class="col-md-2">{{mTeilnehmerZahl}} {{mAdresse}}</div>\
+				  	<div class="col-md-4">\
+					  	<div class="input-group" class="form-input">\
+		    				<input type="anzahl" class="form-control" id="inputAnzahlId{{sbc.sysName}}" placeholder="Teilnehmerzahl" ng-model="mTeilnehmerZahl">\
+		    			</div>\
+	    			</div>\
+	    			<div class="col-md-4">\
+		    			<div class="input-group" class="form-input">\
+		    				<input type="email" class="form-control" id="inputEmailId{{sbc.sysName}}" placeholder="Kontakt E-Mail Adresse" ng-model="mAdresse">\
+		    			</div>\
+	    			</div>\
+	    		</div>\
+	  		</div>\
+	  		<input type="submit" ng-click="reservateCourse(sbc.sysName)" class="btn btn-default" value="Reservierungsanfrage Abschicken"/>\
+			</form>'
+	}
+});
+
 
 /*Dummytextgenerator
 * max = Zahl der Rückgabewörter
