@@ -143,7 +143,7 @@ class RequestHandler
                     'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation. \
                     Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,\
                     dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).';
-                imap_mail($to, $subject, $message);
+                mail($to, $subject, $message);
                 file_put_contents('reserveLog.txt', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
                 return $return;
             break;
