@@ -1,5 +1,5 @@
+UPDATE `brand` SET `brand_name`=str_random('Cccccc(4)');
 UPDATE `brand` SET `brand_name`='BPMspace' WHERE `brand_id`='1';
-UPDATE `brand` SET `brand_name`=str_random('Cccccc(4)') WHERE `brand_id`!='1';
 UPDATE `brand` SET `brand_name`=CONCAT( `brand_name`," ID ", `brand_id`,"");
 UPDATE brand SET `accesstoken`=(SELECT uuid());
 UPDATE brand SET `accesstoken`=(md5(accesstoken));
@@ -84,9 +84,9 @@ UPDATE organization SET country=str_random('[Austria|Germany|Germany|Germany|Swi
 
 
 UPDATE participant SET date_of_birth="";
-UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]D');
-UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]D') WHERE date_of_birth='0000-00-00';
-UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]D') WHERE date_of_birth='0000-00-00';
+UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]d-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]d');
+UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]d-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]d') WHERE date_of_birth='0000-00-00';
+UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]d-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]d') WHERE date_of_birth='0000-00-00';
 
 UPDATE participant SET titel=str_random('Cc(3)') where titel!="";
 UPDATE participant SET last_name=str_random('Cc{5}c(6)');
@@ -120,7 +120,6 @@ UPDATE `participation` SET comment=Replace(str_random_lipsum(10,7,NULL),'.','') 
 UPDATE `participation` SET URL_invoice=str_random('[http|https]://www.c{4}c(15).[com|de|org|net]') where URL_invoice !='';
 UPDATE `participation` SET invoice_info=Replace(str_random_lipsum(10,7,NULL),'.','') where invoice_info!='';
 UPDATE `registration` SET customer_id=str_random('Ddd[3]') where customer_id !='';
-UPDATE `registration` SET package=str_random('[package I|package II|package III|package IV|package V]') where package=!'';
 UPDATE `registration` SET customer_id=str_random('Cc{5}c(6)') where customer_id !='';
 UPDATE `registration` SET email_contact_person=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where email_contact_person !='';
 UPDATE `registration` SET company=str_random('Cccccc(5)') where company !='';
@@ -138,3 +137,10 @@ UPDATE `registration` SET participant3_email=str_random('c{3}c(5)[.|_]c{8}c(8)@[
 UPDATE `registration` SET additional_information=Replace(str_random_lipsum(10,7,NULL),'.','') where additional_information!='';
 UPDATE `registration` SET postcode=str_random('d{5}') where postcode !='';
 UPDATE `registration` SET package=str_random('[package I|package II|package III|package IV|package V]') where package!='';
+
+
+UPDATE `trainer` SET trainer_name=str_random('Cc{3}c(3) Cc{4}c(5)');
+UPDATE `trainer` SET email_address=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"');
+UPDATE `trainer` SET phone_number=str_random('[+49|+49|+43|+49|+41] d{8}');
+UPDATE `trainer` SET trainer_hash=(SELECT uuid());
+UPDATE `trainer` SET trainer_hash=(md5(trainer_hash));
