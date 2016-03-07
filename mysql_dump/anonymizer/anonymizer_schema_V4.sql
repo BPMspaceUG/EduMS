@@ -18,10 +18,8 @@ UPDATE brand SET discount=str_random('bD') WHERE brand_id!=event_partner_id;
 UPDATE brand SET brandImage='<img class="" src="http://dummyimage.com/200x200/';
 UPDATE brand SET brandImage=CONCAT(`brandImage`,str_random('XXXXXX'),"/",str_random('XXXXXX'),".jpg&text=",`brand_name`);
 
-
 UPDATE `contact_channel` SET contact_name= CONCAT("contact channel with ID ", `contact_channel_id`);
 UPDATE `contact_channel` SET contact_description= CONCAT("<p>",str_random_lipsum(20,10,NULL),"</p>");
-
 
 UPDATE topic SET topicName=str_random('Cccccc(5)');
 UPDATE topic SET `topicHeadline`= CONCAT("TOPIC with ID ",`topic_id`);
@@ -29,7 +27,6 @@ UPDATE topic SET `topicDescription`= CONCAT("<h2>Topic description from topic wi
 UPDATE topic SET `topicDescriptionFooter`= CONCAT("<h2>FOOTER Topic description from topic with ID ", topic_id, "</h2><p>",str_random_lipsum(11,6,NULL),"</p>");
 UPDATE topic SET `topicDescriptionSidebar`= CONCAT("<h2>SIDEBAR Topic description from topic with ID ", topic_id, "</h2><p>",str_random_lipsum(13,9,NULL),"</p>");
 UPDATE topic SET topicImage="data:image/svg+xml;charset=utf-8,<svg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'800'%20height%3D'800'><rect%20width%3D'100%25'%20height%3D'100%25'%20fill%3D'grey'%2F><text%20x%3D'400'%20y%3D'155'%20font-size%3D'20'%20font%3D'Verdana%2C%20sans-serif'%20fill%3D'white'%20text-anchor%3D'middle'>training%20scheme%20800%20x%20800<%2Ftext><%2Fsvg>";
-
 
 UPDATE course SET course_name=concat('Training ',course_id) where test!='1' AND deprecated='1';
 UPDATE course SET course_name=concat('Exam ',course_id) where test='1' AND deprecated='1';
@@ -74,7 +71,6 @@ UPDATE organization SET organization_name=CONCAT(str_random('Cccccc(5)')," ",org
 UPDATE organization SET contact_url=str_random('[http|https]://www.') where  contact_url !='';
 UPDATE organization SET contact_url=CONCAT(contact_url,Replace(organization_name,' ','')) where contact_url  !='';
 UPDATE organization SET contact_url=CONCAT(contact_url,str_random('.[com|de|org|net]')) where contact_url  !='';
-
 UPDATE organization SET address_line_1=str_random('Cc{5}[street|lane|road|park] d{1}d(2)'); 
 UPDATE organization SET address_line_2=Replace(str_random_lipsum(3,0,NULL),'.','') where address_line_2 !='';
 UPDATE organization SET city=str_random('Cccccc(5)') where  city !='';
@@ -87,7 +83,6 @@ UPDATE participant SET date_of_birth="";
 UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]d-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]d');
 UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]d-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]d') WHERE date_of_birth='0000-00-00';
 UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]d-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]d') WHERE date_of_birth='0000-00-00';
-
 UPDATE participant SET titel=str_random('Cc(3)') where titel!="";
 UPDATE participant SET last_name=str_random('Cc{5}c(6)');
 UPDATE participant SET first_name=str_random('Cc{3}c(4)');
@@ -103,8 +98,6 @@ UPDATE participant SET city=str_random('Cccccc(5)') where city !='';
 UPDATE participant SET state=Replace(str_random_lipsum(2,1,NULL),'.','') where  state !='';
 UPDATE participant SET zip=str_random('d{5}') where zip !='';
 UPDATE participant SET country=str_random('[Austria|Germany|Germany|Germany|Switzerland]') where country !='';
-
-
 UPDATE participant SET place_of_birth=str_random('Cccccc(5)') where place_of_birth !='';
 UPDATE participant SET contact_channel_data='';
 UPDATE participant SET sales_history='';
@@ -119,8 +112,9 @@ UPDATE `participation` SET reason_for_cancel=Replace(str_random_lipsum(5,3,NULL)
 UPDATE `participation` SET comment=Replace(str_random_lipsum(10,7,NULL),'.','') where comment!='';
 UPDATE `participation` SET URL_invoice=str_random('[http|https]://www.c{4}c(15).[com|de|org|net]') where URL_invoice !='';
 UPDATE `participation` SET invoice_info=Replace(str_random_lipsum(10,7,NULL),'.','') where invoice_info!='';
+
 UPDATE `registration` SET customer_id=str_random('Ddd[3]') where customer_id !='';
-UPDATE `registration` SET customer_id=str_random('Cc{5}c(6)') where customer_id !='';
+UPDATE `registration` SET contact_person=str_random('Cc{5}c(6)') where contact_person !='';
 UPDATE `registration` SET email_contact_person=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where email_contact_person !='';
 UPDATE `registration` SET company=str_random('Cccccc(5)') where company !='';
 UPDATE `registration` SET street=str_random('Cc{5}[street|lane|road|park] d{1}d(2)') where street !=''; 
