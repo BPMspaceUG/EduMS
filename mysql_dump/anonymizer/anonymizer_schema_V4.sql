@@ -84,9 +84,9 @@ UPDATE organization SET country=str_random('[Austria|Germany|Germany|Germany|Swi
 
 
 UPDATE participant SET date_of_birth="";
-UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|2|2]D');
-UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|2|2]D') WHERE date_of_birth='0000-00-00';
-UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|2|2]D') WHERE date_of_birth='0000-00-00';
+UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]D');
+UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]D') WHERE date_of_birth='0000-00-00';
+UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|1|2]D') WHERE date_of_birth='0000-00-00';
 
 UPDATE participant SET titel=str_random('Cc(3)') where titel!="";
 UPDATE participant SET last_name=str_random('Cc{5}c(6)');
