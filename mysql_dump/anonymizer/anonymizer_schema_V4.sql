@@ -144,3 +144,49 @@ UPDATE `trainer` SET email_address=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yah
 UPDATE `trainer` SET phone_number=str_random('[+49|+49|+43|+49|+41] d{8}');
 UPDATE `trainer` SET trainer_hash=(SELECT uuid());
 UPDATE `trainer` SET trainer_hash=(md5(trainer_hash));
+
+
+UPDATE `status_billing` SET `status_billing`='paid' WHERE `status_billing_id`='4';
+UPDATE `status_billing` SET `status_billing`='payable' WHERE `status_billing_id`='3';
+UPDATE `status_billing` SET `status_billing`='billed' WHERE `status_billing_id`='2';
+UPDATE `status_billing` SET `status_billing`='controlled' WHERE `status_billing_id`='6';
+UPDATE `status_billing` SET `status_billing`='to be billed' WHERE `status_billing_id`='1';
+UPDATE `status_billing` SET `status_billing`='to be controlled' WHERE `status_billing_id`='5';
+
+UPDATE `status_event` SET `status_event`='completed' WHERE `status_event_id`='5';
+UPDATE `status_event` SET `status_event`='offered' WHERE `status_event_id`='7';
+UPDATE `status_event` SET `status_event`='finished' WHERE `status_event_id`='4';
+UPDATE `status_event` SET `status_event`='planned' WHERE `status_event_id`='2';
+UPDATE `status_event` SET `status_event`='new' WHERE `status_event_id`='1';
+UPDATE `status_event` SET `status_event`='canceled' WHERE `status_event_id`='6';
+UPDATE `status_event` SET `status_event`='unknown' WHERE `status_event_id`='8';
+UPDATE `status_event` SET `status_event`='prepared' WHERE `status_event_id`='3';
+
+UPDATE `status_eventguarantee` SET `eventguaranteestatus`='none' WHERE `ID`='1';
+UPDATE `status_eventguarantee` SET `eventguaranteestatus`='only 1 place free' WHERE `ID`='4';
+UPDATE `status_eventguarantee` SET `eventguaranteestatus`='only 3 places free' WHERE `ID`='3';
+UPDATE `status_eventguarantee` SET `eventguaranteestatus`='guaranteed' WHERE `ID`='2';
+UPDATE `status_eventguarantee` SET `eventguaranteestatus`='waiting list' WHERE `ID`='5';
+
+UPDATE `status_participation` SET `status_participation`='accepted' WHERE `status_participation_id`='3';
+UPDATE `status_participation` SET `status_participation`='participated successfully' WHERE `status_participation_id`='4';
+UPDATE `status_participation` SET `status_participation`='participated not successfully' WHERE `status_participation_id`='5';
+UPDATE `status_participation` SET `status_participation`='new' WHERE `status_participation_id`='1';
+UPDATE `status_participation` SET `status_participation`='registered' WHERE `status_participation_id`='2';
+UPDATE `status_participation` SET `status_participation`='reserved' WHERE `status_participation_id`='7';
+UPDATE `status_participation` SET `status_participation`='canceled' WHERE `status_participation_id`='6';
+UPDATE `status_participation` SET `status_participation`='waiting list' WHERE `status_participation_id`='8';
+
+UPDATE `status_sales` SET `status_sales`='Major customer' WHERE `status_sales_id`='7';
+UPDATE `status_sales` SET `status_sales`='Interested participant' WHERE `status_sales_id`='1';
+UPDATE `status_sales` SET `status_sales`='Pipeline major customer' WHERE `status_sales_id`='5';
+UPDATE `status_sales` SET `status_sales`='Pipeline participant' WHERE `status_sales_id`='3';
+UPDATE `status_sales` SET `status_sales`='participant' WHERE `status_sales_id`='2';
+UPDATE `status_sales` SET `status_sales`='Transition major customer' WHERE `status_sales_id`='6';
+UPDATE `status_sales` SET `status_sales`='Transition participant' WHERE `status_sales_id`='4';
+UPDATE `status_sales` SET `status_sales`='Partner' WHERE `status_sales_id`='9';
+
+UPDATE `status_trainer` SET `status_trainer`='invited' WHERE `status_trainer_id`='1';
+UPDATE `status_trainer` SET `status_trainer`='informed' WHERE `status_trainer_id`='3';
+UPDATE `status_trainer` SET `status_trainer`='accepted' WHERE `status_trainer_id`='2';
+UPDATE `status_trainer` SET `status_trainer`='disinvited' WHERE `status_trainer_id`='5';
