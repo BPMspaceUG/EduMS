@@ -66,21 +66,22 @@ UPDATE `gender` SET `gender`='Mr.' WHERE `gender_id`='2';
 
 UPDATE location SET location_name=str_random('Cccccc(5)');
 UPDATE location SET internet_location_name=location_name; 
-UPDATE location SET internet_location_article_id="1";
-UPDATE location SET location_description=CONCAT("<h2>Location description from Location with ID ", location_id, "</h2><p>",str_random_lipsum(24,14,NULL),"</p><p>",str_random_lipsum(24,17,NULL),"</p>");
-UPDATE location SET location_mail_desc=CONCAT("<h2>MAIL Location description from Location with ID ", location_id, "</h2><p>",str_random_lipsum(12,5,NULL),"</p><p>",str_random_lipsum(14,3,NULL),"</p>");
+UPDATE location SET internet_location_article_id="-1";
+UPDATE location SET location_description=CONCAT("<h2>Location description from Location with ID ", location_id, "</h2><p>",str_random_lipsum(24,14,NULL),"</p><p>",str_random_lipsum(24,17,NULL),"</p>") where location_description !='';
+UPDATE location SET location_mail_desc=CONCAT("<h2>MAIL Location description from Location with ID ", location_id, "</h2><p>",str_random_lipsum(12,5,NULL),"</p><p>",str_random_lipsum(14,3,NULL),"</p>") where location_mail_desc !='';
 
 UPDATE organization SET organization_name=CONCAT(str_random('Cccccc(5)')," ",organization_id);
-UPDATE organization SET contact_url=str_random('[http|https]://www.');
-UPDATE organization SET contact_url=CONCAT(contact_url,Replace(organization_name,' ',''));
-UPDATE organization SET contact_url=CONCAT(contact_url,str_random('.[com|de|org|net]'));
+UPDATE organization SET contact_url=str_random('[http|https]://www.') where  contact_url !='';
+UPDATE organization SET contact_url=CONCAT(contact_url,Replace(organization_name,' ','')) where contact_url  !='';
+UPDATE organization SET contact_url=CONCAT(contact_url,str_random('.[com|de|org|net]')) where contact_url  !='';
 
 UPDATE organization SET address_line_1=str_random('Cc{5}[street|lane|road|park] d{1}d(2)'); 
-UPDATE organization SET address_line_2=Replace(str_random_lipsum(3,0,NULL),'.','');
-UPDATE organization SET city=str_random('Cccccc(5)');
-UPDATE organization SET state=Replace(str_random_lipsum(2,1,NULL),'.','');
-UPDATE organization SET zip=str_random('d{5}-d{4}');
-UPDATE organization SET country=str_random('[Austria|Germany|Germany|Germany|Switzerland]');
+UPDATE organization SET address_line_2=Replace(str_random_lipsum(3,0,NULL),'.','') where address_line_2 !='';
+UPDATE organization SET city=str_random('Cccccc(5)') where  city !='';
+UPDATE organization SET state=Replace(str_random_lipsum(2,1,NULL),'.','') where state  !='';
+UPDATE organization SET zip=str_random('d{5}}') where zip  !='';
+UPDATE organization SET country=str_random('[Austria|Germany|Germany|Germany|Switzerland]') where country !='';
+
 
 UPDATE participant SET date_of_birth="";
 UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9|10|11|12]-[0|2|2]D');
@@ -90,25 +91,50 @@ UPDATE participant SET date_of_birth=str_random('19[6|7|8|9]D-[1|2|3|4|5|6|7|8|9
 UPDATE participant SET titel=str_random('Cc(3)') where titel!="";
 UPDATE participant SET last_name=str_random('Cc{5}c(6)');
 UPDATE participant SET first_name=str_random('Cc{3}c(4)');
-UPDATE participant SET email_address=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"');
+UPDATE participant SET email_address=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where email_address !='';
 UPDATE participant SET email_address_2=str_random('c{3}c(5)[.|_]c{8}c(8)@c{4}c(3).[com|de|co.uk|fr|org|net]') where email_address_2!="";
-UPDATE participant SET phone_business=str_random('[+49|+49|+43|+49|+41] d{8}');
-UPDATE participant SET phone_private=str_random('[0011|+49|+43|+49|+41] d{8}');
-UPDATE participant SET phone_mobile=str_random('[0011|+49||+49|+41] d{8}');
-UPDATE participant SET phone_fax=str_random('[0011|+49|+43|+49|+41] d{8}');
+UPDATE participant SET phone_business=str_random('[+49|+49|+43|+49|+41] d{8}') where  phone_business!="";
+UPDATE participant SET phone_private=str_random('[+491|+49|+43|+49|+41] d{8}') where   phone_private!="";
+UPDATE participant SET phone_mobile=str_random('[+49|+49||+49|+41] d{8}') where   phone_mobile!="";
+UPDATE participant SET phone_fax=str_random('[+49|+49|+43|+49|+41] d{8}') where  phone_fax!="";
 UPDATE participant SET address_line_1=str_random('Cc{5}[street|lane|road|park] d{1}d(2)'); 
-UPDATE participant SET address_line_2=Replace(str_random_lipsum(3,0,NULL),'.','');
-UPDATE participant SET city=str_random('Cccccc(5)');
-UPDATE participant SET state=Replace(str_random_lipsum(2,1,NULL),'.','');
-UPDATE participant SET zip=str_random('d{5}-d{4}');
-UPDATE participant SET country=str_random('[Austria|Germany|Germany|Germany|Switzerland]');
+UPDATE participant SET address_line_2=Replace(str_random_lipsum(3,0,NULL),'.','') where address_line_2!="";
+UPDATE participant SET city=str_random('Cccccc(5)') where city !='';
+UPDATE participant SET state=Replace(str_random_lipsum(2,1,NULL),'.','') where  state !='';
+UPDATE participant SET zip=str_random('d{5}') where zip !='';
+UPDATE participant SET country=str_random('[Austria|Germany|Germany|Germany|Switzerland]') where country !='';
 
-UPDATE participant SET place_of_birth=str_random('Cccccc(5)');
+
+UPDATE participant SET place_of_birth=str_random('Cccccc(5)') where place_of_birth !='';
 UPDATE participant SET contact_channel_data='';
 UPDATE participant SET sales_history='';
 UPDATE participant SET data_history='';
-UPDATE participant SET joomla_id=str_random('Ddddd');
-UPDATE participant SET joomla_email=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"');
+UPDATE participant SET joomla_id=str_random('Ddddd') where joomla_id !='';
+UPDATE participant SET joomla_email=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where joomla_email !='';
 UPDATE participant SET joomla_sync_history='';
 UPDATE participant SET mail_history='';
 UPDATE participant SET history_data='';
+
+UPDATE `participation` SET reason_for_cancel=Replace(str_random_lipsum(5,3,NULL),'.','') where reason_for_cancel!='';
+UPDATE `participation` SET comment=Replace(str_random_lipsum(10,7,NULL),'.','') where comment!='';
+UPDATE `participation` SET URL_invoice=str_random('[http|https]://www.c{4}c(15).[com|de|org|net]') where URL_invoice !='';
+UPDATE `participation` SET invoice_info=Replace(str_random_lipsum(10,7,NULL),'.','') where invoice_info!='';
+UPDATE `registration` SET customer_id=str_random('Ddd[3]') where customer_id !='';
+UPDATE `registration` SET package=str_random('[package I|package II|package III|package IV|package V]') where package=!'';
+UPDATE `registration` SET customer_id=str_random('Cc{5}c(6)') where customer_id !='';
+UPDATE `registration` SET email_contact_person=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where email_contact_person !='';
+UPDATE `registration` SET company=str_random('Cccccc(5)') where company !='';
+UPDATE `registration` SET street=str_random('Cc{5}[street|lane|road|park] d{1}d(2)') where street !=''; 
+UPDATE `registration` SET city=str_random('Cccccc(5)') where city !='';
+UPDATE `registration` SET country=str_random('[Austria|Germany|Germany|Germany|Switzerland]') where  country !='';
+UPDATE `registration` SET phone_day=str_random('[+49|+49|+43|+49|+41] d{8}') where  phone_day !='';
+UPDATE `registration` SET phone_mobile=str_random('[+49|+49|+43|+49|+41] d{8}') where  phone_mobile !='';
+UPDATE `registration` SET participant1_name=str_random('Cc{5}c(6)') where  participant1_name !='';
+UPDATE `registration` SET participant1_email=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where participant1_email !='';
+UPDATE `registration` SET participant2_name=str_random('Cc{5}c(6)') where  participant2_name !='';
+UPDATE `registration` SET participant2_email=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"') where  participant2_email !='';
+UPDATE `registration` SET participant3_name=str_random('Cc{5}c(6)') where  participant3_name  !='' ;
+UPDATE `registration` SET participant3_email=str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"')where  participant3_email !='';
+UPDATE `registration` SET additional_information=Replace(str_random_lipsum(10,7,NULL),'.','') where additional_information!='';
+UPDATE `registration` SET postcode=str_random('d{5}') where postcode !='';
+UPDATE `registration` SET package=str_random('[package I|package II|package III|package IV|package V]') where package!='';
