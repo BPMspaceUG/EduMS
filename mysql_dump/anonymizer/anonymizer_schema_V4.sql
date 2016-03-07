@@ -188,5 +188,5 @@ UPDATE `status_sales` SET `status_sales`='Partner' WHERE `status_sales_id`='9';
 
 UPDATE `status_trainer` SET `status_trainer`='invited' WHERE `status_trainer_id`='1';
 UPDATE `status_trainer` SET `status_trainer`='informed' WHERE `status_trainer_id`='3';
-UPDATE `status_trainer` SET `status_trainer`='accepted' WHERE `status_trainer_id`='2';
-UPDATE `status_trainer` SET `status_trainer`='disinvited' WHERE `status_trainer_id`='5';
+UPDATE `status_trainer` SET `status_trainer`='accepted' WHERE `status_trainer_id`='2'; 
+UPDATE `status_trainer` SET `status_trainer`='disinvited' WHERE `status_trainer_id`='5'; 
