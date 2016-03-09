@@ -1,3 +1,18 @@
+<!-- <v-vier-brand></v-vier-brand> -->
+<script type="text/ng-template" id="prizelistitem.html">
+<tr>
+ 	<td>
+ 		<h3>
+ 			<button type="button" class="btn btn-info btn-lg">Nr({{$index +1}}) Eine {{c.course_name}} Schulung findet ab einer Teilnehmerzahl von {{c.min_participants}} statt. Sie dauert im Regelfall {{c.course_name}} Tage.</button>
+ 		</h3>
+ 	</td>
+ 	<td>
+ 		<span class="label label-success ">Price: {{courseFormatingFunction({c.coursePrice})}}</span>
+ 	</td>
+</tr>
+</script>
+
+
 <div class="container-fluid" >
 	<div class="row">
 		<!----header-->
@@ -49,34 +64,64 @@
 						</li>
 					</ul>
 
-
 					<div class="tab-content">						
 						<div ng-repeat="t in topics" class="tab-pane" id="panel-{{t.topic_name}}">
 							<div class="col-md-12 well well-lg">
 							<h2>{{t.topic_name_raw}}</h2>
 								<div id="section{{t.topic_nr}}">
-									<h4>{{t.topic_description}}</h4>
+
+									<!-- <h4><div compile="t.topicDescription">{{t.topicDescription}}</div></h4> -->
+									<!-- <div ng-controller="ngBindHtmlCtrl"><topic-description ng-bind-html="t.topicDescription" compile-template></topic-description></div>
+									<div ng-controller="ngBindHtmlCtrl"><div ng-bind-html="t.topicDescription" compile-template></div></div> -->
+									<div ng-controller="ngBindHtmlCtrl"><div ng-bind-html="t.topicDescription"></div></div>
+<!-- 									<div compile="topics.0.topicDescription"></div>
+									<div compile="topics[0].topicDescription"></div>
+									<div compile="topics.topicDescription"></div>
+									<div compile="t.topicDescription"></div> -->
 								</div>
 								<nav class="navbar navbar-default">
 									<div class="container-fluid">
+
+
+
+
 										<div ng-repeat="ct in topiccourseCourse">
 											<ul class="nav navbar-nav">
 												<div ng-if="t.topic_id ==  ct.topic_id" >
-													<h3> - {{ct.courseHeadline}} -<small>  {{ct.number_of_days}} Tage</small></h3>
+													<div ng-repeat="c in courses">														
+														<div ng-if="c.course_id ==  ct.course_id" >
+														<h3>Kursnummer: {{c.course_id}} - Name: {{c.course_name}}</h3>
+														<h4>Min. Teilnehmerzahl: {{c.min_participants}} - Dauer: {{c.number_of_days}} Tage</h4>
+														<p>Kursbeschreibung: {{c.courseDescription}}</p>
+														</div>
+													</div>													
+												</div>
+											</ul>
+										</div>
+
+
+										<!-- <div ng-repeat="ct in topiccourseCourse">
+											<ul class="nav navbar-nav">
+												<div ng-if="t.topic_id ==  ct.topic_id" >
+													<h3> - {{ct.course_name}} -<small>  {{ct.number_of_days}} Tage</small></h3>
 													<div class="list-group-item-heading">
 													
 													</div>
 													<li class="list-group-item">
 													Name: {{ct.course_name }}</br>
-													Beschreibung: {{ct.course_description }}
-													C-ID: {{ct.topic_course_id }}
-													C-Image: {{ct.courseImage }}
+													Beschreibung: {{ct.courseDescription }}
 													 
 													</li>
 													<li class="list-group-item">Preis: {{ct.course_price}}</li>
 												</div>
 											</ul>
-										</div>
+										</div> -->
+
+
+
+
+
+
 									</div>
 								</nav>
 							</div>
@@ -86,9 +131,9 @@
 							<h2>Einzelpreise und Pakete</h2>
 							<table class="table">
 								<tbody>
-									<tr ng-repeat="c in courses">
-										<td><h3><button type="button" class="btn btn-info btn-lg">Nr({{$index +1}}) Name: {{c.course_name}}</button></h3></td><td><span class="label label-success ">Price: {{c.course_price}}</span></td>
-									</tr>
+									<course-prize-list course-object="course" course-formating-function="formatierterPreis(price)" ng-repeat="course in courselist"></course-prize-list>	
+									<div course-prize-list></div>
+									<div class="course-prize-list"></div>
 								</tbody>
 							</table>
 						</div>
@@ -98,7 +143,9 @@
 							<table class="table">
 								<tbody>
 									<tr ng-repeat="l in location">
-										<td>- {{l.location_name}} </td><td> Description: {{l.location_description}}</td>
+										<td>- {{l.name}} </td>
+										<td> Description: {{l.description}}</td>
+										<td> Teilnehmerkapazität: {{l.locationMaxPart}}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -160,13 +207,8 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div>
-					<div  ng-controller="organizationCtrl" class="col-md-12 well well-lg" id="container-footer">
-
-						<h4>Brand Infos: {{organization[0].address_line_1 }} {{organization[0].address_line_2 }} {{organization[0].city }}
-							{{organization[0].contact_url }} {{organization[0].country }} {{organization[0].organization_id }}
-							{{organization[0].organization_name }} {{organization[0].zip }} ~~~
+					<div   class="col-md-12 well well-lg" id="container-footer">
+						<h4>{{brandinfo.brand_name}}: {{brandinfo.brandDescriptionFooter}} ~~~
 							container-footer - statischer Inhalt (unabhängig vom Menüpunkt) der aus EduMS geladen wird</h4>
 					</div>
 				</div>

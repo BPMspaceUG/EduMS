@@ -16,7 +16,7 @@ app.controller('modalCtrl', ['$scope','$http', function ($scope, $http) {
 		delete response.data.footer;
 		delete response.data.topnav;
 		$scope.futureCourses = Object.keys(response.data).map(function (key) {return response.data[key]});
-		console.log($scope.futureCourses)
+		//console.log($scope.futureCourses)
 	},function(response) {$scope.courses = 'Fehler in courseCtrl-$http: '+response}
 	)	
 
@@ -26,7 +26,7 @@ app.controller('modalCtrl', ['$scope','$http', function ($scope, $http) {
 		delete $scope.nextEvents.footer;
 		delete $scope.nextEvents.topnav;
 		
-		console.log('Event: '+$scope.nextEvents.length); console.log($scope.nextEvents);
+		//console.log('Event: '+$scope.nextEvents.length); console.log($scope.nextEvents);
 		/*course_id: "103",	course_name: "ISO 27001 Foundation",	event_id: "3893",	event_status_id: "2",
 		eventguaranteestatus: "1",	finish_date: "2016-02-16",	finish_time: "17:00:00",	internet_course_article_id: "736",
 		internet_location_article_id: "0",	internet_location_name: "Ogoxuhap Edahuy-Liwoweraqinu",	start_date: "2016-02-15"
