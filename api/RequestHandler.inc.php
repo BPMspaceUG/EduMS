@@ -47,7 +47,7 @@ class RequestHandler
     * - on fail-> add info to a Logfile */
     private function validateCredentials($userid,$token){
         global $db;
-        $sql = "SELECT * FROM `v_brand` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
+        $sql = "SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
         $result = $db->query($sql);
         if($result->num_rows>0){
             $result = $result->fetch_array();
@@ -107,21 +107,18 @@ class RequestHandler
             case 'monitor': 
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
-                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', []); bname = '".$bname."', pw = '".$pw."';</script>".
-                file_get_contents('controllers/monitorCtrl.js'),
+                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>",
                 'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css'),
-                'directive'=>file_get_contents('directives/monitorDir.js'),
-                'ct'=>file_get_contents('monitor.html').handleMonitor($handle));   
+                'directive'=>file_get_contents('directives/monitor.js'),
+                'ct'=>file_get_contents('monitor.html'));   
                 return $return;
                 break;             
             //show all Data for handleMonitor
-            case 'all': 
-                $return = array('get...' => 'all the usefull Administrative data getters');
-                return $return;
+            case 'getMonitor': return $this->getMonitor();
                 break;
 
             //database getters
-            case 'getTopics': $response = array('topiclist' => $this->getTopicList(), 'topiccourseCourselist'  => $this->getTopiccourseCourse(), 'allNextEvents'  => $this->getAllNextEvents());               
+            case 'getTopics': $response = array('topiclist' => $this->vTopicNotdepercated(), 'topiccourseCourselist'  => $this->vTopiccourseNotdepercatedlevelnotzero(), 'eventcourselocationFuture'  => $this->vEventcourselocationFuturepublicnotdepercatednotstornonotnew());               
                 return $response;
                 break;
             case 'getCourses': return $this->getCourseList();
@@ -132,7 +129,10 @@ class RequestHandler
                 break;
             case 'getNextFiveEvents': return $this->getNextFiveEvents();
                 break;
-            case 'getOrganization': return $this->getOraganizationList();
+            
+
+            //returns: brandinfo topiclist topiccourselist courselist eventlist 
+            case 'getBrandInfo': return $this->getbrandtopics($bname);
                 break;
 
             case "reserve":
@@ -166,7 +166,7 @@ class RequestHandler
     }
 
     /*Choose by URL($handle) what data the monitor have to responde*/
-    private function handleMonitor($handle){
+    private function handleMonitor($handle=array('a' => 'default' )){
         //wie viele Parameter wurden übergeben? sizeof=count
         $out = array();
         if(sizeof($handle)==0){ //api/usr/token/monitor---
@@ -182,34 +182,96 @@ class RequestHandler
         }
     }
 
-    
+    //vTopicNotdepercated vTopiccourseNotdepercatedlevelnotzero vEventcourselocationFuturepublicnotdepercatednotstornonotnew
     /*Definition of all getters for the database*/
-    private function getTopicList($id=-1){
-        $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic` WHERE `deprecated`=0");
+    //topic_id  deprecated  topicName   topicHeadline   topicDescription    topicDescriptionSidebar topicImage  footer  responsibleTrainer_id
+    private function vTopicNotdepercated($id=-1){
+        $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic_notdepercated`");
         return $return;
     }
-    private function getAllLocationsList(){   
+    /*private function getAllLocationsList(){   
         return $this->getResultArray("SELECT * FROM `v_location` limit 25");
-    }
-    private function getOraganizationList(){   
-        return $this->getResultArray("SELECT * FROM `v_organization` where organization_id = 1");
-    }
+    }*/
+    
     private function getFutureCourses(){   
-        return $this->getResultArray("SELECT * FROM `v_futurecourses` limit 50");
+        return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
     }    
-    private function getTopiccourseCourse(){   
-        return $this->getResultArray("SELECT * FROM `v_topic_courseCourse` ");
+    private function vTopiccourseNotdepercatedlevelnotzero(){ 
+    //topic_course_id   topic_id    topicName   course_id   course_name level   rank  
+        return $this->getResultArray("SELECT * FROM `v_topiccourse_notdepercatedlevelnotzero` ");
     }
     private function getNextFiveEvents(){
-        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.v_all_events WHERE start_date > now() limit 5");
+    //event_id    start_date  finish_date start_time  finish_time course_id   course_name test    coursedeprecated    courseMaxParticipants   
+    //location_id location_name   internet_location_name  location_description    locationMaxParticipants event_status_id eventguaranteestatus    eventinhouse
+        return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew`  limit 5");
     }    
-    private function getAllNextEvents(){
-        return $this->getResultArray("SELECT * FROM bpmspace_edums_v3.v_all_events WHERE start_date > now() ");
+    private function vEventcourselocationFuturepublicnotdepercatednotstornonotnew(){
+        //event_id  start_date  finish_date start_time  finish_time course_id   course_name test    coursedeprecated    courseMaxParticipants   location_id location_name   internet_location_name  
+        //location_description    locationMaxParticipants event_status_id eventguaranteestatus    eventinhouse
+        return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` ");
     }
     /*The courselist contains all not deprecated couses */
     private function getCourseList(){     
-        $query = "SELECT * FROM `v_course`";
+        $query = "SELECT * FROM `v_course_notdepercated`";
+        //course_id course_name number_of_days  internet_course_article_id  min_participants    courseHeadline  courseDescription   courseDescriptionMail   coursePrice courseDescriptionCertificate
         $return['courselist'] = $this->getResultArray($query);
+        return $return;
+    }
+
+    private function getbrandtopics($brandname){
+        $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
+        
+        //Hole Brandinfo
+        file_put_contents('getBrandLog.txt', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
+        
+        $brandId = $return['brandinfo'][0]['brand_id'];//$return['brandInfo']['brand_id'];
+
+        //Hole Topics zu Brand
+        $topicsInBrand = $this->getResultArray("SELECT `topic_id` FROM `v_brandtopic` WHERE brand_id = '".$brandId."'");
+
+        $queryTopics='';
+        $rootquery = 'SELECT * FROM `v_topic_notdepercated` WHERE';
+            foreach ($topicsInBrand as $val) {
+                $queryTopics .= ' or topic_id = '.implode($val);
+            }
+        $queryTopics = substr($queryTopics,3,strlen($queryTopics));        
+        $return['topiclist'] = $this->getResultArray($rootquery.$queryTopics);
+
+        //Hole Course zu den Topics
+        $queryCourses='';
+        $rootquery = 'SELECT * FROM `v_topiccourse_notdepercatedlevelnotzero` WHERE';
+            foreach ($topicsInBrand as $val) {
+                $queryCourses .= ' or topic_id = '.implode($val);
+            }
+        $queryCourses = substr($queryCourses,3,strlen($queryCourses));
+        $return['topiccourselist'] = $this->getResultArray($rootquery.$queryCourses);
+        
+        $queryCourses='';
+        $rootquery = 'SELECT * FROM `v_course_notdepercated` WHERE ';        
+        for ($i=0; $i < count($return['topiccourselist']); $i++) {                     
+            $queryCourses .= ' or course_id = '.$return['topiccourselist'][$i]['course_id'];
+        }
+        $queryCourses = substr($queryCourses,3,strlen($queryCourses));
+        $return['courselist'] = $this->getResultArray($rootquery.$queryCourses);
+
+        //Hole Events zu Courses
+        $return['eventlist'] = $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` WHERE ".$queryCourses);
+        
+        return $return;
+    }
+
+ 
+    private function getMonitor(){ 
+        $tables = array('v_topic_notdepercated',
+            'v_eventcourselocation_futurepublicnotdepercatednotstornonotnew',
+            'v_topiccourse_notdepercatedlevelnotzero',
+            'v_course_notdepercated','v_brand__notdepercated_loginnotempty_accesstokennotempty', 'v_brandtopic', 
+            'v_participationevent_count_futurepublicnotstornonotnew', 
+            'v_statusevent', 'v_statuseventguarantee', 'v_statustrainer', 'v_testcourse');
+        for ($i=0; $i < count($tables); $i++) { 
+            $query = "SELECT * FROM ".$tables[$i]." limit 1";
+            $return[$tables[$i]] = $this->getResultArray($query);
+          }  
         return $return;
     }
 
@@ -231,7 +293,7 @@ class RequestHandler
             /* currently not in use Requests
             case 'getcoursebytopic': return $this->getcoursebytopic();
             break;            
-            case 'getTopiccourseCourse': return $this->getTopiccourseCourse();
+            case 'vTopiccourseNotdepercatedlevelnotzero': return $this->vTopiccourseNotdepercatedlevelnotzero();
             break;
             case 'getBrand': return $this->getBrandList();
                 break;  
