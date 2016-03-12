@@ -1,12 +1,8 @@
-<!--div ng-controller='compileCtrl'><compile-directive></compile-directive></div> 
-<compile-directive></compile-directive-->
 <div ng-controller="monitorCtrl">
 <div ng-repeat="tbl in tabellen">
 	<hr/>
-	<h4>Tabelle: {{tbl.name}}</h4>
-	<!--h3>Info: {{tbl.info}}</h3-->
-
-	<!-- <form>
+	<h3  style="color:green">Tabelle: {{tbl.name}}</h3>
+	<!--<form>
 		<h4>Form:</h4>
 		<div class="form-group">
 			<div class="input-group">
@@ -14,43 +10,26 @@
 				<input type="text" placeholder="search" ng-model="tblsearch">
 			</div>      
 		</div>
-	</form> -->
-
+	</form>  -->
 	<table class="table table-responsive table-hover table-striped" style="width: 98%;">
 		<thead>
-		<!-- <h4>thead: </h4> -->
 			<tr>
-				<th ng-repeat="head in tbl.header">
-					<a href="#" ng-click="sortType = 'tbl'; sortReverse = !sortReverse">{{head}}
+				<th ng-repeat="head in tbl.header" style="color:blue">{{head}}
+					<!-- <a href="#" ng-click="sortType = 'tbl'; sortReverse = !sortReverse">{{head}}
 						<span ng-show="sortType == 'head' && !sortReverse" class="fa fa-caret-down"></span>
 						<span ng-show="sortType == 'head' && sortReverse" class="fa fa-caret-up"></span>						
-					</a>
+					</a>  -->
 				</th>				
 			</tr>
 		</thead>
-
-
 		<tbody>
-			<!-- <h4>tbody: </h4> -->
-			<tr ng-repeat="row in tbl.rows | orderBy:sortType:sortReverse | filter:tblsearch">
-				<td ng-repeat="col in row"><div class="ng-compile{{col}}" class="ng-compile({{col}})" ng-compile $compile>{{col}}</div></td>
+			<tr ng-repeat="row in tbl.rows ">
+				<td ng-repeat="col in row">
+					<h5  ng-bind-html="col"></h5>
+				</td>
 			</tr>
 		</tbody>
 	</table>
-
 </div>
 </div>
-
-<!--default-table>
-	<h3>default-table</h3>
-</default-table>
-<default-min-table>
-	<h3>default-min-table</h3>
-</default-min-table>
-<default-table-element>
-	<h3>default-table-element</h3>
-</default-table-element>
-<armor regins rollins rainbows class="btn btn-default">Acess the armor</armor>
-<cpp-directive>Acess the armor</cpp-directive-->
-
 

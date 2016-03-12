@@ -95,7 +95,7 @@ class RequestHandler
             case 'brand': 
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
-                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', []); bname = '".$bname."', pw = '".$pw."';</script>".
+                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".
                 file_get_contents('controllers/organizationCtrl.js').file_get_contents('controllers/navCtrl.js').file_get_contents('controllers/modalCtrl.js'),
                 'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css').file_get_contents('custom/cssSheets.html'),
                 'directive'=>file_get_contents('directives/lawdata.js'),
@@ -256,6 +256,7 @@ class RequestHandler
 
         //Hole Events zu Courses
         $return['eventlist'] = $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` WHERE ".$queryCourses);
+        $return['coursetotestlist'] = $this->getResultArray("SELECT * FROM `v_testcourse`");
         
         return $return;
     }
@@ -265,9 +266,9 @@ class RequestHandler
         $tables = array('v_topic_notdepercated',
             'v_eventcourselocation_futurepublicnotdepercatednotstornonotnew',
             'v_topiccourse_notdepercatedlevelnotzero',
-            'v_course_notdepercated','v_brand__notdepercated_loginnotempty_accesstokennotempty', 'v_brandtopic', 
+            'v_course_notdepercated', 'v_testcourse','v_brand__notdepercated_loginnotempty_accesstokennotempty', 'v_brandtopic', 
             'v_participationevent_count_futurepublicnotstornonotnew', 
-            'v_statusevent', 'v_statuseventguarantee', 'v_statustrainer', 'v_testcourse');
+            'v_statusevent', 'v_statuseventguarantee', 'v_statustrainer');
         for ($i=0; $i < count($tables); $i++) { 
             $query = "SELECT * FROM ".$tables[$i]." limit 1";
             $return[$tables[$i]] = $this->getResultArray($query);

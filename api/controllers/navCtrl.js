@@ -7,139 +7,71 @@ The templates rightBar-X show the next courses in context of the selected topic.
 Deu/Ger: Der Controller navCtrl fordert über den $http-service JSON-Datensätze DB-Views und reorganisiert sie in $scope.
 Die Templates rightBarCourseByTopic und rightBarCourseAll zeigen die nächsten courses in Abhängigkeit des ausgewählten Topics an.
 Die lorem function erzeugt Dummytext.
-
-------------------------------------------------------------------------------------------------------------------------------
-DB-Views: 	|	`v_all_events`							|`v_futurecourses` 						|`v_topic_coursecourse` 		
-------------------------------------------------------------------------------------------------------------------------------
-$scope		|	.allNextEvents**++						|++topiccourseCourselist++				|++topiclist++			
-------------------------------------------------------------------------------------------------------------------------------
-			|											|										|						
-Bsp.Daten	|	course_id: "103"						|$$hashKey: "object:295"				|$$hashKey: "object:263"
-			|	course_name: "ISO 27001 Foundation"		|courseHeadline: "course1 Headline"		|deprecated: "0"
-			|	event_id: "3893"						|courseImage: null						|footer: null
-			|	event_status_id: "2"					|course_description: "co(...) database"	|sideBarCourses: Array[0]
-			|	eventguaranteestatus: "1"				|course_id: "1"							|sidebar_description: null
-			|	finish_date: "2016-02-16"				|course_name: "course1"					|topicHeadline: ""
-			|	finish_time: "17:00:00"					|course_price: "1035"					|topicImage: null
-			|	internet_course_article_id: "736"		|number_of_days: "2"					|topic_description: "Topic(...)Schwoanshaxn."
-			|	internet_location_article_id: "0"		|tc_course_id: "1"						|topic_id: "1"
-			|	internet_location_name: "Ogox..inu"		|topic_id: "1"							|topicName: "Topic1"
-			|	start_date: "2016-02-15"				|										|topic_name_raw: "Topic 1"
-			|	start_time: "09:00:00"					|										|topic_nr: 0
-			|	test: "0"								|										|trainer_id: "14"
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
-/getCourses:
-SELECT course_id, course_name, number_of_days, internet_course_article_id, min_participants, course_description, 
-	course_mail_desc, course_price, course_certificate_desc 
-FROM `course` WHERE deprecated = 0
-------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------
-
 */
 
 /*Controllers define and handle an Angular area
 Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular definiert*/
-app.controller('ngBindHtmlCtrl', ['$scope','$http', '$sce', function ngBindHtmlCtrl($scope, $http, $sce) {
-$http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo').then(function(response) {
-
-			for (var i = 0; i < $scope.topics.length; i++) {
-				$scope.topics[i].topicDescription = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescription+'</div>')
-			}
-		})
-}])
 
 app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
+	//https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 	.then(function(response) {
-		
 
-		$scope.allBrand = response.data
-		console.log(response.data)
-		//brandinfo:	
-		/*accesstoken: "5b35716ce1ff524b662dfbb160e293a3"
-		brandDescription: "<h2>brand description from braest.</p>"
-		brandDescriptionFooter: "<h2>FOOTices pede morbi proin.</p>"
-		brandDescriptionSidebar: "<h2>SIDt felis mus saptis. Class.</p>"
-		brandHeadline: "Brand with ID 9"
-		brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9"
-		brand_id: "9"
-		brand_name: "Eqpajbuu ID 9"
-		branddeprecated: "0"
-		css-style: "<style> body {background-color: ;} h1 { color:DeepSkyBlue;} h2 { color:DeepPink; margin-left: ;} </style>"
-		discount: "7.00"
-		event_partner_id: "1"
-		login: "EqpajbuuID9"*/
+		//brandinfo:
+		/*accesstoken: "5b35793a3",brandDescription: "<h2>description</p>",brandDescriptionFooter: "<h2>FOOTices proin.</p>",brandDescriptionSidebar: "<h2>SIDt felis</p>",
+		brandHeadline: "Brand with ID 9",brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9",brand_id: "9",brand_name: "Eqpajbuu ID 9",
+		branddeprecated: "0",css-style: "<style> body {background-color: ;}</style>",discount: "7.00",event_partner_id: "1",login: "EqpajbuuID9"*/
 		$scope.brandinfo = response.data.brandinfo
+		$scope.brandinfo.brandDescription = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandDescription+'</div>')
+		$scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandDescriptionFooter+'</div>')
+		$scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandDescriptionSidebar+'</div>')
+		$scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandImage+'</div>')
 
-		//topiclist:
-		/*$$hashKey: "object:953"
-		deprecated: "0"
-		footer: "<h2>FOOTER Topic description from topic with ID 1</h2><p>Iaculis vel pharetra montes parturient penatibus inceptos ultrices ligula. At.</p>"
-		responsibleTrainer_id: "14"
-		topicDescription: "<h2>Topic description from topic with ID 1</h2><p>Dis ad malesuada laoreet pede aliquam dictum semper mollis. Malesuada sociis penatibus tellus habitant conubia non nunc habitant.</p><p>Elementum nunc ligula hendrerit laoreet at aptent auctor dolor. Inceptos montes morbi congue ultricies facilisis praesent phasellus facilisis libero fames dui conubia adipiscing. Mi litora primis et.</p><p>Conubia augue accumsan.</p>"
-		topicDescriptionSidebar: "<h2>SIDEBAR Topic description from topic with ID 1</h2><p>Ut vivamus condimentum neque nibh dis egestas molestie vestibulum. Ligula libero tempor.</p>"
-		topicHeadline: "TOPIC with ID 1"
-		topicImage: "data:image/svg+xml;charset=utf-8,<svg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'800'%20height%3D'800'><rect%20width%3D'100%25'%20height%3D'100%25'%20fill%3D'grey'%2F><text%20x%3D'400'%20y%3D'155'%20font-size%3D'20'%20font%3D'Verdana%2C%20sans-serif'%20fill%3D'white'%20text-anchor%3D'middle'>training%20scheme%20800%20x%20800<%2Ftext><%2Fsvg>"
-		topicName: "Pkhhoaged"
-		topic_id: "1"*/
+
+		//topiclist: 
+		/*$$hashKey: "object:953", deprecated: "0", footer: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
+		topicDescriptionSidebar: "<h2>with ID 1</h2>", topicHeadline: "TOPIC with ID 1", topicImage: "data:image/svg+xml;charset=utf-8,<svg><%2Fsvg>", topicName: "Pkhhoaged", topic_id: "1"*/
 		$scope.topics = response.data.topiclist
-
+			for (var i = 0; i < $scope.topics.length; i++) {
+				$scope.topics[i].footer = $sce.trustAsHtml('<div>'+$scope.topics[i].topicFooter+'</div>')
+				$scope.topics[i].topicDescription = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescription+'</div>')
+				$scope.topics[i].topicDescriptionSidebar = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescriptionSidebar+'</div>')
+				$scope.topics[i].topicImage = $sce.trustAsHtml('<div>'+$scope.topics[i].topicImage+'</div>')
+			}
 
 
 		//topiccourselist:
-		/*course_id: "43"
-		course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
-		level: "1"
-		rank: "1"
-		topicName: "Pkhhoaged"
-		topic_course_id: "43"
-		topic_id: "1"*/
-		$scope.topiccourseCourse = response.data.topiccourselist //Object.keys(response.data.topiccourselist)
-		//.map(function (key) {return response.data.topiccourselist[key]}); //Topic-Course Panel
+		/*course_id: "43", course_name: "Training 43 in Topic 1 - Level-Rank 1-1", level: "1", rank: "1", topicName: "Pkhhoaged", topic_course_id: "43", topic_id: "1"*/
+		$scope.topiccourseCourse = response.data.topiccourselist 
 
-		/*for (var i = 0; i < response.data.topiccourselist.length; i++) {			
-			for (var j = 0; j < response.data.courselist.length; j++) {
-				if (response.data.topiccourselist[i].course_id == response.data.courselist[j].course_id) {
-					$scope.topiccourseCourse[i].course_name = response.data.courselist[j].course_name
-					$scope.topiccourseCourse[i].number_of_days = response.data.courselist[j].number_of_days
-					$scope.topiccourseCourse[i].courseDescription = response.data.courselist[j].courseDescription
-				};				
-			};
-		};*/
-		
+
 		//courselist:
-		/*courseDescription: "<h2>Course desctae enim><p>Posuere pulvinar mus.</p>"
-		courseDescriptionCertificate: "<h2><strong>[$FIRSTNAME] [$NAME]</strong></h2> <p>has visisted the coATE] with the foll/li></ul>"
-		courseDescriptionMail: "<h2>Course description from conec.</p>"
-		courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1"
-		coursePrice: "1075"
-		course_id: "43"
-		course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
-		internet_course_article_id: "14"
-		min_participants: "3"
-		number_of_days: "3"*/
+		/*courseDescription: "<p>Posuere mus.</p>",	courseDescriptionCertificate: "<h2>adfadf</ul>", courseDescriptionMail: "<h2>Course description from conec.</p>"
+		courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1", coursePrice: "1075",	course_id: "43",  course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
+		internet_course_article_id: "14",min_participants: "3", number_of_days: "3"*/
 		$scope.courses = response.data.courselist;
+		for (var i = 0; i < $scope.courses.length; i++) {
+				$scope.courses[i].courseDescription = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescription+'</div>')
+				$scope.courses[i].courseDescriptionCertificate = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionCertificate+'</div>')
+				$scope.courses[i].courseDescriptionMail = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionMail+'</div>')
+			}
+
+		//coursetotestlist:
+		/*v_testcourse	-	course_id:1, test_id:44*/
+		$scope.courseToTest = response.data.coursetotestlist;
+
 
 		//eventlist:
-		/*courseMaxParticipants: "16"
-		course_id: "74"
-		course_name: "Training 74 in Topic 1 - Level-Rank 2-4"
-		coursedeprecated: "0"
-		event_id: "3873"
-		event_status_id: "2"
-		eventguaranteestatus: "2"
-		eventinhouse: "0"
-		finish_date: "2016-03-11"
-		finish_time: "17:00:00"
-		internet_location_name: "Koqlg"
-		locationMaxParticipants: "16"
-		location_description: "<h2>Location description from Locatos.</p>"
-		location_id: "177"
-		location_name: "Koqlg"
-		start_date: "2016-03-09"
-		start_time: "13:30:00"
-		test: "0"*/	
+		/*courseMaxParticipants: "16", course_id: "74", course_name: "Training 74 in Topic 1 - Level-Rank 2-4", coursedeprecated: "0", event_id: "3873", event_status_id: "2"
+		eventguaranteestatus: "2", eventinhouse: "0", finish_date: "2016-03-11", finish_time: "17:00:00", internet_location_name: "Koqlg", locationMaxParticipants: "16"
+		location_description: "<h2>Location description from Locatos.</p>", location_id: "177", location_name: "Koqlg", start_date: "2016-03-09", start_time: "13:30:00", test: "0"*/	
+		$scope.eventlist = response.data.eventlist
+		for (var i = 0; i < response.data.eventlist.length; i++) {
+				$scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.data.eventlist[i].location_description+'</div>')
+			}
+
 		$scope.allNextEvents = response.data.eventlist //Termine & Anmeldung Modal
 		$scope.nextEvents =  Object.keys(response.data.eventlist)
 		.map(function (key) {return response.data.eventlist[key]});
@@ -160,11 +92,83 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 				description : response.data.eventlist[i].location_description, 
 				locationMaxPart : response.data.eventlist[i].locationMaxParticipants
 			})
-			//console.log($scope.location[$scope.location.length -1])
 		}
 
 
-		
+		      var createCourseList = function (top,mn,cou, mnctt){
+		        for (var i = 0; i < top.length; i++) {//Jedes Topic bekommt eine Kursliste
+		          top[i].courseList = (function(){
+		                      var courseList = [];
+		                      for (var j = 0; j < mn.length; j++) {//gehe Topic-Course m:n Tabelle durch
+		                        if (mn[j].topic_id == top[i].topic_id) { //Wenn m:n-Eintrag = dem aktuellen Topic ist
+		                          for (var k = 0; k < cou.length; k++) {//gehe Kurstabelle durch
+		                            if(mn[j].course_id == cou[k].course_id){// Wenn m:n-Eintrag (T-C) = dem aktuellen Kurs ist
+		                            	//Zuteilung
+		                            	cou[k].level = mn[j].level //Anzeigereihenfolge in Panel
+		                            	cou[k].rank = mn[j].rank
+		                            	cou[k].sysName = cou[k].course_name.replace(/\W+/g,''); //PanelIds
+		                            	(function(){//Unterscheide Kurs und Test
+			                            	for (var l = 0; l < mnctt.length; l++) {
+		                            		//console.log('\nmnctt'+l+':')
+			                            		if (mnctt[l].course_id == cou[k].course_id) {
+		                            				// console.log('a')
+		                            				console.log(mnctt[l].course_id == cou[k].course_id)
+			                            			cou[k].test=0
+			                            			return
+			                            		}else if (mnctt[l].test_id == cou[k].course_id){
+			                            			cou[k].test=1
+		                            				// console.log('b')
+		                            				console.log(mnctt[l].test_id == cou[k].course_id)
+			                            			return
+			                            		}	
+			                            	};
+		                            		// console.log('No '+cou[k].course_id+' in testList')//{course_id: "25", test_id: "203"}
+		                            	})()
+// console.log('\nt'+i+' tcc'+j+' k'+k+'.test:'+cou[k].test)
+		                              		courseList.push(cou[k])
+		                            	/*if (cou[k].test != '0'){
+		                            	}else{
+		                            	}*/
+		                            }
+		                          };
+		                        };
+		                      };
+		                      return courseList})()
+		        };
+		      }
+			createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest)
+			 /*4.	In der topic Seite werden auch die Kurse angezeigt. Hier solltest Du ein Akkordeon verwenden. Kurs heading, Kurs 
+			 description, dazugehöriges Examen, dazugehörige Preistabelle, zusammengebaut aus beiden Kursteilen, also Prüfung und 
+			 Examen, sofern die Prüfung ein Examen hat. Dazu brauchst Du die 
+			 VIEWS `v_topiccourse_notdepercatedlevelnotzero`, `v_course_notdepercated` und `v_testcourse*/
+
+			 /*Tabelle: 
+Tabelle: v_course_notdepercated
+/*courseDescription: "<p>Posuere mus.</p>",	courseDescriptionCertificate: "<h2>adfadf</ul>", courseDescriptionMail: "<h2>Course description from conec.</p>"
+		courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1", coursePrice: "1075",	course_id: "43",  course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
+		internet_course_article_id: "14",min_participants: "3", number_of_days: "3"
+Tabelle: */
+			// console.log('\ncl: ')
+			// console.log($scope.topics[1].courseList)
+
+			var cereateEventList = function(top, eve){
+			  for (var i = 0; i < top.length; i++) {
+			  	top[i].eventList=[]
+			    for (var j = 0; j < top[i].courseList.length; j++) {
+			      for (var k = 0; k < eve.length; k++) {
+			        if (eve[k].course_id == top[i].courseList[j].course_id) {
+			          top[i].eventList.push(eve[k])
+			        };        
+			      };      
+			    };
+			  };
+			}
+			cereateEventList($scope.topics, $scope.eventlist)
+			 // console.log('\nel: ')
+			 // console.log($scope.topics[1].eventList)
+
+
+
 		//HTML5 3.2.3.1: Das id-Attribut darf kein Leerzeichen enthalten deshalb wird der topicName nach name_raw kopiert u. anschließend die Leerzeichen entfernt
 		for (var i = 0; i < $scope.topics.length; i++) {
 			$scope.topics[i].topic_name_raw = $scope.topics[i].topicName;			
@@ -174,21 +178,24 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 		/*Suche Kurse und weise sie den Topics zu. Suche events zu den Kursen der Topics und weise sie den Topics zu*/
 		var aNE=$scope.allNextEvents
 		for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
+			console.log('$scope.topics.length: '+$scope.topics.length)
 			var t=$scope.topics[i]
 			for (var j = 0; j < $scope.topiccourseCourse.length; j++) { //für alle topiccourCourse-Einträge
 				var tcC=$scope.topiccourseCourse[j]
+
 				//Wenn die topic_id des Elements aus der Topicliste == der topic_id des Elements aus der m:n-TopicCourses-Liste ist
 				//dann lege in der Topicliste ein Array für die Sidebarelemente an. 
 				//Vergleiche darauf hin die tc_course_id des TopicCourse Elements mit den course_id's aus der AllNextEvents-Liste.
 				//Wenn die id's identisch sind füge dem aktuellen SidebarArray das Event hinzu
 				if (t.topic_id == tcC.topic_id) {	//wenn ids gleich sind
 					if (!$scope.topics[i].sideBarCourses){$scope.topics[i].sideBarCourses=[]}//lege sidebarArray für topic an
-					if ($scope.topics[i].sideBarCourses.length<3) { //sidebar soll 5 elemente haben													
-						for (var k = 0; k < aNE.length; k++) {	//für alle allNextEvents-Einträge
-							if (tcC.tc_course_id == aNE[k].course_id) { //nur Events die zur aktuellen course_id passen
-								$scope.topics[i].sideBarCourses.push(aNE[k]) //befülle SideBar-Array
+						for (var k = 0; k < $scope.eventlist.length; k++) {	//für alle allNextEvents-Einträge											
+						if ($scope.topics[i].sideBarCourses.length<5) { //sidebar soll 5 elemente haben											
+							if (tcC.course_id == $scope.eventlist[k].course_id) { //nur Events die zur aktuellen course_id passen
+								$scope.topics[i].sideBarCourses.push($scope.eventlist[k]) //befülle SideBar-Array
 								$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
 								.sysName=$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,'');
+								console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
 							};								
 						};
 					};
@@ -197,14 +204,9 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 		};
 
 		//};
-		//console.log('fertiges $scope.topics: (Auskommentiert)');//console.log($scope.topics);	
+		console.log('fertiges $scope.topics: (Auskommentiert)');console.log($scope.topics);	
 		},function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
 	)
-
-
-	
-
-
 
 
 
@@ -220,39 +222,19 @@ $scope.reservateCourse = function(part) {
 
 
 
-
-/*this.scope.topics[1].topicDescription*/
-		//for (i=0;i<$scope.topics.length;i++) {
-		app.directive('topicDescription',  function($compile, $parse){
-		//console.log(topics[1].topicDescription)
-			return{
-				link: function(scope, element, attr){
-					var parsed = $parse(attr.topicDescription);
-					function getStringValue(){
-						return (parsed(scope) || '').toString();
-					}
-					scope.$watch(getStringValue, function(){
-						$compile(element, null, -9999)(scope);
-					})
-				}
-				/*restrict: 'AECM',
-				controller: 'navCtrl',
-				replace: true,
-				template: '<div ng-bind-html="topics[1].topicDescription" compile-template></div>'*/
-
-				/*'<div>a<div ng-include="\'t.topicDescription\'"></div>b<div ng-include="\'topics[1].topicDescription\'"></div>\
-				<div>c{{t.topicDescription}}**~~---d:{{topics[1].topicDescription}}</div>'+
-				
-				'e<div ng-bind-template="topics[1].topicDescription"></div>f<div ng-bind-template="{{$compile(t.topicDescription)}}">\
-				g</div><div ng-bind-template="\'topics[1].topicDescription\'"></div>'+
-
-				'G<div ng-bind-html="topics[1].topicDescription" compile-template></div>H<div ng-bind-html="{{t.topicDescription}}" compile-template>\
-				I</div><div ng-bind-html="t.topicDescription" compile-template></div>'+
-
-				'h<div ng-include="topics[1].topicDescription"></div>i<div ng-include="{{$compile(t.topicDescription)}}">\
-				j</div><div ng-include="\'topics[1].topicDescription\'"></div></div>'*///<h2>Topic description from topic with ID 1</h2><p>Dis ad malesuada laoreet conubia non nunc habitant.</p></div>'
+app.directive('topicDescription',  function($compile, $parse){
+	return{
+		link: function(scope, element, attr){
+			var parsed = $parse(attr.topicDescription);
+			function getStringValue(){
+				return (parsed(scope) || '').toString();
 			}
-		})
+			scope.$watch(getStringValue, function(){
+				$compile(element, null, -9999)(scope);
+			})
+		}
+	}
+})
 
 
 /*SIDEBARTEMPLATES-------------------------------------------------------------------------------------------*/	
@@ -342,9 +324,8 @@ app.directive('rightBarCourseByTopic', function() {//sideBarCourse = Directive N
 		 <register-form-two></register-form-two></div></a></div>'
 	}
 });
-app.directive('registerFormTwo', function() {//sideBarCourse = Directive Name
+app.directive('registerFormTwo', function() {
 	return{
-//Sidebarelement für allgemeine Kurse
 template:'<form name="formReg" class="form-horizontal" novalidate>\
 	  		<div class="form-group has-warning">\
 	  			<div class="row" style="margin-top: 2px;">\
@@ -379,26 +360,54 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
 	}
 });
 
-app.directive('coursePrizeList', function(){
+
+app.directive('testScopeWhole', function(){
 	return{
 		restrict: 'AECM',
-		template: '<tr>\
- 	<td>\
- 		<h3>\
- 			<button type="button" class="btn btn-info btn-lg">Nr({{$index +1}}) Eine {{course.course_name}} Schulung findet ab einer Teilnehmerzahl von {{course.min_participants}} statt. Sie dauert im Regelfall {{course.number_of_days}} Tage.</button>\
- 		</h3>\
- 	</td>\
- 	<td>\
- 		<span class="label label-success ">Price: </span>\
- 	</td>\
-</tr>',
+		template: '<tr><button type="button" class="btn btn-info btn-lg">Nr({{$index +1}}) Eine {{course.course_name}} {{courses}}</button></tr>',
 		replace: true,
 		scope:{
-			courselist: '='
+			courses: '@'
 			//courseFormatingFunction: '&'
 		}
 	}
 })
+
+app.service('courseService', function(){
+	var self = this
+	this.course = 'JSBootcamp'
+	this.coursenamelen = function(){
+		return self.course.length
+	}	
+})
+app.controller('courselistCtrl', ['courseService','$scope' ,function(courseService, $scope){
+console.log($scope.courseService = courseService.coursenamelen())
+}])
+app.directive('courseList', function(){
+	return{
+		template: '<div class="container" style="width: 98%;">\
+					  <div class="panel-group" id="t.topic_name_raw">\
+					    <div class="panel panel-default">\
+					      <div class="panel-heading with panel-primary">\
+					      <h3><a data-toggle="collapse" href="#{{c.sysName}}">{{c.courseHeadline}}</a></h3>\
+					      </div>\
+					      <div id="{{c.sysName}}"" class="panel-collapse collapse">\
+					        <div class="panel-body" ng-if="c.test=0">Kurs: {{c.courseHeadline}}{{c.courseDescription}}{{c.coursePrice}}{{c.number_of_days}}{{c.min_participants}}</div>\
+					        <div class="panel-body" ng-if="c.test=1"> \
+					        	<h3>Test: {{c.courseHeadline}}</h3>\
+					        	<div ng-bind-html="c.courseDescription"></div>\
+					        	<div ng-bind-html="c.courseDescriptionCertificate"></div>\
+					        	<h4 style="color:green">Preis: {{c.coursePrice}},00 €</h4>\
+					        	<h4 style="color:blue">Dauer: {{c.number_of_days}} Tage</h4>\
+					        	<h4 style="color:red">Mindestteilnehmerzahl: {{c.min_participants}} Personen</h4></div>\
+					      </div>\
+					    </div>\
+					  </div> \
+					</div>',
+		replace: true
+	}
+})
+
 
 
 
