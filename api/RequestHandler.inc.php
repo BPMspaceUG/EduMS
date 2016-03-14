@@ -52,6 +52,9 @@ class RequestHandler
         if($result->num_rows>0){
             $result = $result->fetch_array();
             $this->userid = $result['brand_id'];
+            $this->usercss = $result['css-style'];
+            
+            // var_dump($this->usercss);
             return true;
         }
         else{
@@ -96,9 +99,9 @@ class RequestHandler
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
                 'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".
-                file_get_contents('controllers/organizationCtrl.js').file_get_contents('controllers/navCtrl.js').file_get_contents('controllers/modalCtrl.js'),
-                'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css').file_get_contents('custom/cssSheets.html'),
-                'directive'=>file_get_contents('directives/lawdata.js'),
+                file_get_contents('controllers/navCtrl.js').file_get_contents('controllers/modalCtrl.js'),
+                'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css').file_get_contents('custom/cssSheets.html').$this->usercss,
+                'directive'=>file_get_contents('directives/lawdata.js').file_get_contents('directives/sidebarcourselist.js'),
                 'ct'=>file_get_contents('brand.html'));                
                 return $return;
                 break;
@@ -187,12 +190,15 @@ class RequestHandler
     //topic_id  deprecated  topicName   topicHeadline   topicDescription    topicDescriptionSidebar topicImage  footer  responsibleTrainer_id
     private function vTopicNotdepercated($id=-1){
         $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic_notdepercated`");
+        for ($i=0; $i < count($return['topiclist']) ; $i++) { 
+            if ($return['topiclist'][$i]['deprecated']!=0) {
+                file_put_contents('failTopicResponseLog.txt', date("d.m.Y - H:i:s",time())."\n$return\['topiclist'\]\[".$i."\] -> deprecatet is not 0 -> ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
+                unset($return['topiclist'][$i]);
+            }
+        }
         return $return;
     }
-    /*private function getAllLocationsList(){   
-        return $this->getResultArray("SELECT * FROM `v_location` limit 25");
-    }*/
-    
+
     private function getFutureCourses(){   
         return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
     }    
@@ -224,6 +230,9 @@ class RequestHandler
         //Hole Brandinfo
         file_put_contents('getBrandLog.txt', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
         
+        if ($return['brandinfo'][0]['branddeprecated']!=0) {//In case SQL fails exit
+            return $return['brandinfo'][0]['brandDescription'] = '- Forbidden - Please contact Admin';
+        }
         $brandId = $return['brandinfo'][0]['brand_id'];//$return['brandInfo']['brand_id'];
 
         //Hole Topics zu Brand
@@ -277,45 +286,3 @@ class RequestHandler
     }
 
 }
-
-
-
-
-
-    /* currently not in use getters
-    private function getBrandList(){ return $this->getResultArray("SELECT * FROM `v_brand`")};    private function getBrandLocationList(){return $this->getResultArray("SELECT * FROM `v_brandlocation`")};
-    private function getBrandTopicList(){return $this->getResultArray("SELECT * FROM `v_brandtopic`")};    private function getStatusEventList(){return $this->getResultArray("SELECT * FROM `v_statusevent`")};
-    private function getStatusEventGuaranteeList(){return $this->getResultArray("SELECT * FROM `v_statuseventguarantee`")};    private function getStatusTrainerList(){return $this->getResultArray("SELECT * FROM `v_statustrainer`")};
-    private function getTrainerEventAssignmentList(){return $this->getResultArray("SELECT * FROM `v_trainereventassignment`")};    private function countParticipantsOnEvent(){return $this->getResultArray("SELECT * FROM `v_countParticipantOnEvent`")};    
-    private function getcoursebytopic(){return $this->getResultArray("SELECT * FROM `v_coursebytopic` ")};    */
-
-
-
-            /* currently not in use Requests
-            case 'getcoursebytopic': return $this->getcoursebytopic();
-            break;            
-            case 'vTopiccourseNotdepercatedlevelnotzero': return $this->vTopiccourseNotdepercatedlevelnotzero();
-            break;
-            case 'getBrand': return $this->getBrandList();
-                break;  
-            case 'getBrandTopic': return $this->getBrandTopicList();
-                break;
-            case 'getEvent': return $this->getEventList();
-                break;
-            case 'getLocation': return $this->getLocationList();
-                break;
-            case 'getStatusEvent': return $this->getStatusEventList();
-                break;
-            case 'getStatusEventGuarantee': return $this->getStatusEventGuaranteeList();
-                break;
-            case 'getStatusTrainer': return $this->getStatusTrainerList();
-                break;
-            case 'getTrainerEventAssignment': return $this->getTrainerEventAssignmentList();
-                break;
-            case 'getBrandLocation': return $this->getBrandLocationList();
-                break;
-            case 'monitor': return $this->handleMonitor($handle);
-                break; 
-            case 'events': return $this->handleEvents($handle);
-                break;  
-        */
