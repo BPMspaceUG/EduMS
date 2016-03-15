@@ -42,9 +42,25 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 			}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		//topiccourselist:
 		/*course_id: "43", course_name: "Training 43 in Topic 1 - Level-Rank 1-1", level: "1", rank: "1", topicName: "Pkhhoaged", topic_course_id: "43", topic_id: "1"*/
 		$scope.topiccourseCourse = response.data.topiccourselist 
+
+		
 
 
 		//courselist:
@@ -56,11 +72,109 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 				$scope.courses[i].courseDescription = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescription+'</div>')
 				$scope.courses[i].courseDescriptionCertificate = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionCertificate+'</div>')
 				$scope.courses[i].courseDescriptionMail = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionMail+'</div>')
+				
+				if ($scope.courses[i].courseHeadline.length<2) {
+					$scope.courses[i].courseHeadline=$scope.courses[i].course_name
+					
+				};
 			}
 
 		//coursetotestlist:
 		/*v_testcourse	-	course_id:1, test_id:44*/
 		$scope.courseToTest = response.data.coursetotestlist;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//$scope.courseToTest:
+		/*v_testcourse	-	course_id:1, test_id:44*/
+
+		//$scope.topiccourseCourse:
+		/*course_id: "43", level: "1", rank: "1",  topic_course_id: "43", topic_id: "1"*/
+
+		//$scope.courses:
+		/*courseDescription: "<p>Posuere mus.</p>",	courseDescriptionCertificate: "<h2>adfadf</ul>", courseDescriptionMail: "<h2>Course description from conec.</p>"
+		courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1", coursePrice: "1075",	course_id: "43",  course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
+		internet_course_article_id: "14",min_participants: "3", number_of_days: "3"*/
+		// function defPrizeList (courses, ctoTest, level) {
+		// 	// console.log(level[1])//'\n l:'+l)
+		// 	pl=[],	maxlvl=1, maxrank=1;
+		// 	for (var t = 0; t < level.length; t++) {
+		// 		if (level[t].level>maxlvl) {maxlvl=level[t].level}
+		// 		if (level[t].rank>maxrank) {maxrank=level[t].rank}
+		// 	}
+		// console.log('max lvl & rank:'+maxlvl+' |'+maxrank)
+
+		// 	for (var l = 1; l < maxlvl; l++) {//4
+		// 		console.log('\n\n\n lvl'+l+' von '+maxlvl)
+		// 		// console.log(''++''++''++''++''++''++)
+		// 		for (var r = 1; r < maxrank; r++) {//5
+		// 			console.log('rank '+r+' von'+maxrank)
+		// 			if (!pl['level'+l]) {pl['level'+l]=[]}; 
+		// 			console.log('starte suche in lvlListe')
+		// 			for (var i = 0; i < level.length; i++) {						
+		// 				console.log('Eintrag '+i+' von'+level.length)
+		// 				//gehe der reihe nach alle level und ranks durch
+		// 				if(level[i].level==l && level[i].rank==r){
+		// 				console.log('Match bei '+i+', l&r:'+l+' '+r+'\n..starte courseSuche nach cid '+level[i].course_id)
+		// 				// console.log()						
+		// 				// console.log('Eintrag für l'+l+' r'+r)
+		// 					for (var j = 0; j < courses.length; j++) {
+		// 					// console.log('i:'+i+' l:'+l+' r:'+r+' j:'+j)
+		// 						if (courses[j].course_id == level[i].course_id) {
+		// 							console.log('add to l '+l+' r'+r)
+		// 							console.log(' courses['+j+']: ')
+		// 							console.log(courses[j])
+
+		// 							pl['level'+l].push( courses[j])
+		// 							/*if(!=test){
+
+		// 							}esle{
+
+		// 							}
+		// 						};
+								
+		// 					};
+		// 				}
+		// 			};
+		// 		}
+		// 	};
+		// 							return pl
+		// }
+		// console.log(defPrizeList($scope.courses, $scope.courseToTest, $scope.topiccourseCourse))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 		//eventlist:
@@ -90,13 +204,16 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 			$scope.location.push({id : response.data.eventlist[i].location_id, 
 				name : response.data.eventlist[i].location_name,
 				description : response.data.eventlist[i].location_description, 
-				locationMaxPart : response.data.eventlist[i].locationMaxParticipants
+				locationMaxPart : response.data.eventlist[i].locationMaxParticipants,
+				width: (function(){return Math.round((100*i)/response.data.eventlist.length)})()
 			})
 		}
 
 
+		      	pl=[];
 		      var createCourseList = function (top,mn,cou, mnctt){
 		        for (var i = 0; i < top.length; i++) {//Jedes Topic bekommt eine Kursliste
+				// pl[i]=[]
 		          top[i].courseList = (function(){
 		                      var courseList = [];
 		                      for (var j = 0; j < mn.length; j++) {//gehe Topic-Course m:n Tabelle durch
@@ -107,24 +224,20 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 		                            	cou[k].level = mn[j].level //Anzeigereihenfolge in Panel
 		                            	cou[k].rank = mn[j].rank
 		                            	cou[k].sysName = cou[k].course_name.replace(/\W+/g,''); //PanelIds
-		                            	(function(){//Unterscheide Kurs und Test
-			                            	for (var l = 0; l < mnctt.length; l++) {
-		                            		//console.log('\nmnctt'+l+':')
-			                            		if (mnctt[l].course_id == cou[k].course_id) {
-		                            				// console.log('a')
-		                            				console.log(mnctt[l].course_id == cou[k].course_id)
-			                            			cou[k].test=0
-			                            			return
-			                            		}else if (mnctt[l].test_id == cou[k].course_id){
-			                            			cou[k].test=1
-		                            				// console.log('b')
-		                            				console.log(mnctt[l].test_id == cou[k].course_id)
-			                            			return
-			                            		}	
-			                            	};
-		                            		// console.log('No '+cou[k].course_id+' in testList')//{course_id: "25", test_id: "203"}
-		                            	})()
+		                            	cou[k].test=(function() {for (var m = 0; m < mnctt.length; m++) {	if (cou[k].course_id==mnctt[m].test_id) {return 1}} return 0})()
+		                            	cou[k].test_id=(function() {for (var m = 0; m < mnctt.length; m++) {	if (cou[k].course_id==mnctt[m].course_id) {return mnctt[m].test_id}} return false})()
 // console.log('\nt'+i+' tcc'+j+' k'+k+'.test:'+cou[k].test)
+
+	                              		pl.push({name: cou[k].course_name,
+	                              			    sysname: cou[k].sysName,
+	                              			    level: cou[k].level,
+	                              			    rank: cou[k].rank,
+	                              			    test: cou[k].test,
+	                              			    test_id: cou[k].test_id,
+	                              			    price: cou[k].coursePrice,
+	                              				topic: i})
+
+
 		                              		courseList.push(cou[k])
 		                            	/*if (cou[k].test != '0'){
 		                            	}else{
@@ -133,24 +246,57 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 		                          };
 		                        };
 		                      };
+		                      // console.log(top[i].testblock)
 		                      return courseList})()
 		        };
 		      }
 			createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest)
-			 /*4.	In der topic Seite werden auch die Kurse angezeigt. Hier solltest Du ein Akkordeon verwenden. Kurs heading, Kurs 
-			 description, dazugehöriges Examen, dazugehörige Preistabelle, zusammengebaut aus beiden Kursteilen, also Prüfung und 
-			 Examen, sofern die Prüfung ein Examen hat. Dazu brauchst Du die 
-			 VIEWS `v_topiccourse_notdepercatedlevelnotzero`, `v_course_notdepercated` und `v_testcourse*/
 
-			 /*Tabelle: 
-Tabelle: v_course_notdepercated
-/*courseDescription: "<p>Posuere mus.</p>",	courseDescriptionCertificate: "<h2>adfadf</ul>", courseDescriptionMail: "<h2>Course description from conec.</p>"
-		courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1", coursePrice: "1075",	course_id: "43",  course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
-		internet_course_article_id: "14",min_participants: "3", number_of_days: "3"
-Tabelle: */
-			// console.log('\ncl: ')
-			// console.log($scope.topics[1].courseList)
 
+				/*gehe courseliste durch
+					wenn kurs: ordne Kurs seiner Gruppe zu
+						gehe coursliste durch
+							wenn kurs.test_id == courseliste[j].course_id
+							hänge Kurs an ende an
+							hänge gruppensumme an ende an*/
+			$scope.pricelist=[]
+			var createPrizeList = function(pl){
+				for (var coursenr = 0; coursenr < pl.length; coursenr++) {
+						if(!$scope.pricelist[pl[coursenr].topic]){$scope.pricelist[pl[coursenr].topic]=[]}
+
+						var coursenow = pl[coursenr]
+
+						if(!$scope.pricelist[ coursenow.topic ][ coursenow.level ]){$scope.pricelist[ coursenow.topic ][ coursenow.level ]=[]}
+
+						if (coursenow.test==0) {
+							$scope.pricelist[ coursenow.topic ][ coursenow.level ].push(coursenow)
+						};
+				};
+				console.log($scope.pricelist)
+
+				for (var topicnr = 0; topicnr < $scope.pricelist.length; topicnr++) {
+					// console.log('a')
+					// console.log( $scope.pricelist.length)
+					for (var level = 0; level < $scope.pricelist[topicnr].length; level++) {
+					// 	console.log('b')
+					// console.log( $scope.pricelist[topicnr].length)
+					// console.log( level)
+					// console.log( $scope.pricelist[topicnr][level])
+					var price = 0
+					if (level>0) {
+						for (var coursenow = 0; coursenow < $scope.pricelist[topicnr][level].length; coursenow++) {
+							console.log(price = price + $scope.pricelist[topicnr][level][coursenow].price*1)
+						};						
+					$scope.pricelist[topicnr][level].price = price	
+					};
+					};
+				};				
+			} 
+			createPrizeList(pl)
+
+
+
+			/*search matches in course- and eventlist and push them to the Topic*/
 			var cereateEventList = function(top, eve){
 			  for (var i = 0; i < top.length; i++) {
 			  	top[i].eventList=[]
@@ -178,7 +324,7 @@ Tabelle: */
 		/*Suche Kurse und weise sie den Topics zu. Suche events zu den Kursen der Topics und weise sie den Topics zu*/
 		var aNE=$scope.allNextEvents
 		for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
-			console.log('$scope.topics.length: '+$scope.topics.length)
+			// console.log('$scope.topics.length: '+$scope.topics.length)
 			var t=$scope.topics[i]
 			for (var j = 0; j < $scope.topiccourseCourse.length; j++) { //für alle topiccourCourse-Einträge
 				var tcC=$scope.topiccourseCourse[j]
@@ -195,7 +341,7 @@ Tabelle: */
 								$scope.topics[i].sideBarCourses.push($scope.eventlist[k]) //befülle SideBar-Array
 								$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
 								.sysName=$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,'');
-								console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
+								// console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
 							};								
 						};
 					};
@@ -209,9 +355,10 @@ Tabelle: */
 	)
 
 
-
+/*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
+the responsible person in the Brand (DB-change -> registermail)*/
 $scope.reservateCourse = function(part) {
-	//var reserveInfo = document.getElementById($scope['inputNameId'+part]).mVorname
+	var reserveInfo = /*document.getElementById($scope['inputNameId'+part]).mVorname ||*/ 'Horst'
 	var reserveInfo = part
 
 	console.log('reservepush: '+ reserveInfo)
@@ -222,191 +369,8 @@ $scope.reservateCourse = function(part) {
 
 
 
-app.directive('topicDescription',  function($compile, $parse){
-	return{
-		link: function(scope, element, attr){
-			var parsed = $parse(attr.topicDescription);
-			function getStringValue(){
-				return (parsed(scope) || '').toString();
-			}
-			scope.$watch(getStringValue, function(){
-				$compile(element, null, -9999)(scope);
-			})
-		}
-	}
-})
 
 
-/*SIDEBARTEMPLATES-------------------------------------------------------------------------------------------*/	
-app.directive('rightBarCourseAll', function() {//sideBarCourse = Directive Name
-	return{
-//Sidebarelement für allgemeine Kurse
-template:'<div class="list-group">\
-	<a class="list-group-item active">\
-		<h3 class="list-group-item-heading">{{e.course_name}} \
-			<span class="label label-danger"> {{e.start_date}} </span>\
-		</h3>'+
-
-		'<div>\
-			<button type="button" class="btn btn-info" ng-click= "e.btnInfo=!e.btnInfo">\
-				<span class="fa-stack">\
-					<i class="fa fa-info fa-stack-1x fa-inverse"></i>\
-				</span>Info</button> - <button type="button" class="btn btn-success" ng-model="reservate" ng-click= "e.btnRegister=!e.btnRegister">\
-				<span class="fa-stack">\
-					<i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i>\
-				</span>reservieren</button>\
-		</div>'+
-
-		'<div  ng-show="e.btnInfo">\
-		<h3>Start: {{e.start_date}} {{e.start_time}}</h3> \
-		<h3>Ende: {{e.finish_date}} {{e.finish_time}}</h3>\
-		<h3>Internet-Location-Name: {{e.internet_location_name}}</h3>\
-		</div>'+		
-			'<div  ng-show="e.btnRegister">\
-			<register-form></register-form>\
-		</div>'+
-	'</a>\
-</div>'
-
-	}
-});
-app.directive('registerForm', function() {//sideBarCourse = Directive Name
-	return{
-//Sidebarelement für allgemeine Kurse
-template:'<form name="formReg" class="form-horizontal" novalidate>\
-	  		<div class="form-group has-warning">\
-	  			<div class="row" style="margin-top: 2px;">\
-				 <div class="col-md-2">{{mVorname}} {{mFamName}}</div>\
-				  <div class="col-md-4">\
-				    <div class="input-group" class="form-input">\
-				      <input type="text" class="form-control" id="inputNameId{{e.sysName}}" placeholder="Vorname" name="inputNameName{{e.sysName}}" ng-model="mVorname">\
-				    </div>\
-				  </div>\
-				  <div class="col-md-4">\
-				    <div class="input-group" class="form-input">\
-				      <input type="text" class="form-control" id="inputFamNameId{{e.sysName}}" placeholder="Nachname" ng-model="mFamName">\
-				     	</div>\
-				  </div>\
-				</div>\
-	    		<div class="row" style="margin-top: 2px; ">\
-	    		<div class="col-md-2">{{mTeilnehmerZahl}} {{mAdresse}}</div>\
-				  	<div class="col-md-4">\
-					  	<div class="input-group" class="form-input">\
-		    				<input type="anzahl" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="Teilnehmerzahl" ng-model="mTeilnehmerZahl">\
-		    			</div>\
-	    			</div>\
-	    			<div class="col-md-4">\
-		    			<div class="input-group" class="form-input">\
-		    				<input type="email" class="form-control" id="inputEmailId{{e.sysName}}" placeholder="Kontakt E-Mail Adresse" ng-model="mAdresse">\
-		    			</div>\
-	    			</div>\
-	    		</div>\
-	  		</div>\
-	  		<input type="submit" ng-click="reservateCourse(e.sysName)" class="btn btn-default" value="Reservierungsanfrage Abschicken"/>\
-			</form>'
-	}
-});
-
-
-
-
-app.directive('rightBarCourseByTopic', function() {//sideBarCourse = Directive Name
-	return{
-		template:'<div class="list-group"><a class="list-group-item active"><h3 class="list-group-item-heading">{{sbc.course_name}}\
-		<span class="label label-danger"> {{sbc.start_date}}\
-		 </span></h3><div><button type="button" class="btn btn-info" ng-click= "sbc.btnInfo=!sbc.btnInfo">\
-		 <span class="fa-stack"><i class="fa fa-info fa-stack-1x fa-inverse"></i></span>Info</button> - <button type="button" class="btn btn-success" ng-model="reservate" ng-click= "sbc.btnRegister=!sbc.btnRegister">\
-		 <span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i></span>reservieren</button></div><div ng-show="sbc.btnInfo">\
-		 <h3>Start: {{sbc.start_date}} {{sbc.start_time}}</h3>\
-		 <h3>Ende: {{sbc.finish_date}} {{sbc.finish_time}}</h3>\
-		 <h3>Internet-Location-Name: {{sbc.internet_location_name}}\
-		 </h3></div><div ng-show="sbc.btnRegister">\
-		 <register-form-two></register-form-two></div></a></div>'
-	}
-});
-app.directive('registerFormTwo', function() {
-	return{
-template:'<form name="formReg" class="form-horizontal" novalidate>\
-	  		<div class="form-group has-warning">\
-	  			<div class="row" style="margin-top: 2px;">\
-				 <div class="col-md-2">{{mVorname}} {{mFamName}}</div>\
-				  <div class="col-md-4">\
-				    <div class="input-group" class="form-input">\
-				      <input type="text" class="form-control" id="inputNameId{{sbc.sysName}}" placeholder="Vorname" name="inputNameName{{sbc.sysName}}" ng-model="mVorname">\
-				    </div>\
-				  </div>\
-				  <div class="col-md-4">\
-				    <div class="input-group" class="form-input">\
-				      <input type="text" class="form-control" id="inputFamNameId{{sbc.sysName}}" placeholder="Nachname" ng-model="mFamName">\
-				     	</div>\
-				  </div>\
-				</div>\
-	    		<div class="row" style="margin-top: 2px; ">\
-	    		<div class="col-md-2">{{mTeilnehmerZahl}} {{mAdresse}}</div>\
-				  	<div class="col-md-4">\
-					  	<div class="input-group" class="form-input">\
-		    				<input type="anzahl" class="form-control" id="inputAnzahlId{{sbc.sysName}}" placeholder="Teilnehmerzahl" ng-model="mTeilnehmerZahl">\
-		    			</div>\
-	    			</div>\
-	    			<div class="col-md-4">\
-		    			<div class="input-group" class="form-input">\
-		    				<input type="email" class="form-control" id="inputEmailId{{sbc.sysName}}" placeholder="Kontakt E-Mail Adresse" ng-model="mAdresse">\
-		    			</div>\
-	    			</div>\
-	    		</div>\
-	  		</div>\
-	  		<input type="submit" ng-click="reservateCourse(sbc.sysName)" class="btn btn-default" value="Reservierungsanfrage Abschicken"/>\
-			</form>'
-	}
-});
-
-
-app.directive('testScopeWhole', function(){
-	return{
-		restrict: 'AECM',
-		template: '<tr><button type="button" class="btn btn-info btn-lg">Nr({{$index +1}}) Eine {{course.course_name}} {{courses}}</button></tr>',
-		replace: true,
-		scope:{
-			courses: '@'
-			//courseFormatingFunction: '&'
-		}
-	}
-})
-
-app.service('courseService', function(){
-	var self = this
-	this.course = 'JSBootcamp'
-	this.coursenamelen = function(){
-		return self.course.length
-	}	
-})
-app.controller('courselistCtrl', ['courseService','$scope' ,function(courseService, $scope){
-console.log($scope.courseService = courseService.coursenamelen())
-}])
-app.directive('courseList', function(){
-	return{
-		template: '<div class="container" style="width: 98%;">\
-					  <div class="panel-group" id="t.topic_name_raw">\
-					    <div class="panel panel-default">\
-					      <div class="panel-heading with panel-primary">\
-					      <h3><a data-toggle="collapse" href="#{{c.sysName}}">{{c.courseHeadline}}</a></h3>\
-					      </div>\
-					      <div id="{{c.sysName}}"" class="panel-collapse collapse">\
-					        <div class="panel-body" ng-if="c.test=0">Kurs: {{c.courseHeadline}}{{c.courseDescription}}{{c.coursePrice}}{{c.number_of_days}}{{c.min_participants}}</div>\
-					        <div class="panel-body" ng-if="c.test=1"> \
-					        	<h3>Test: {{c.courseHeadline}}</h3>\
-					        	<div ng-bind-html="c.courseDescription"></div>\
-					        	<div ng-bind-html="c.courseDescriptionCertificate"></div>\
-					        	<h4 style="color:green">Preis: {{c.coursePrice}},00 €</h4>\
-					        	<h4 style="color:blue">Dauer: {{c.number_of_days}} Tage</h4>\
-					        	<h4 style="color:red">Mindestteilnehmerzahl: {{c.min_participants}} Personen</h4></div>\
-					      </div>\
-					    </div>\
-					  </div> \
-					</div>',
-		replace: true
-	}
-})
 
 
 
