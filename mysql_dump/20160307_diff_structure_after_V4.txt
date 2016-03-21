@@ -1,0 +1,5 @@
+ALTER TABLE `brand` 
+ADD COLUMN `imprint` LONGTEXT NULL AFTER `brandDescriptionSidebar`,
+ADD COLUMN `protection of data privacy` LONGTEXT NULL AFTER `imprint`,
+ADD COLUMN `terms and conditions` LONGTEXT NULL AFTER `protection of data privacy`,
+ADD COLUMN `email` VARCHAR(45) NULL AFTER `terms and conditions`;
