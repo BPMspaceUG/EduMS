@@ -18,7 +18,7 @@ app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $s
 	//https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 	.then(function(response) {
-
+		console.log(response)
 		//brandinfo:
 		/*accesstoken: "5b35793a3",brandDescription: "<h2>description</p>",brandDescriptionFooter: "<h2>FOOTices proin.</p>",brandDescriptionSidebar: "<h2>SIDt felis</p>",
 		brandHeadline: "Brand with ID 9",brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9",brand_id: "9",brand_name: "Eqpajbuu ID 9",
@@ -365,8 +365,24 @@ $scope.reservateCourse = function(part) {
 	$http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', reserveInfo)
 	$http.post('localhost:4041', reserveInfo)
 }
-}])
 
+
+/*ng-models for imputs*/
+$scope.rinfo={organisation : '', contactperson : '', contactpersonemail : '',
+					street : '', housenr : '', city : '',
+					zip : '', country : '', tel1 : '', 
+					telmobile : '', certificate : ''}
+/*add and remove Partitioner namefields*/
+$scope.reserveparticipants = [{name:'', sname:'', email:''}];
+$scope.addInput = function(){
+    $scope.reserveparticipants.push({name:'', sname:'', email:'', certificate:''});
+}
+$scope.removeInput = function(index){
+    $scope.reserveparticipants.splice(index,1);
+}
+
+
+}])
 
 
 

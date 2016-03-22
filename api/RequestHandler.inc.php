@@ -11,8 +11,9 @@ class RequestHandler
         Nach einer User/Token-Prüfung werden die in der url geforderten Views, Crontroller und Daten bereitgestellt
         um sie an den Browser zu senden. 
     */
-        
-    private $userid = -1;    private $token = -1;    private $validLogin = false;    private $db;
+
+
+    private $userid = -1;    private $token = -1;    private $validLogin = false;    private $db;  
 
     /** Handles SQL-querys and returnes the resultdata.
     * - On debug -> show the the query
@@ -30,7 +31,7 @@ class RequestHandler
             $results_array[] = $row;
         }
         if((count($results_array)<1)){ //evtl. obsolet
-            file_put_contents('failQueryLog.txt', date("d.m.Y - H:i:s",time())."\nQuery: ".$query."\nResult: ".$results_array."\n-----------\n", FILE_APPEND | LOCK_EX);
+            file_put_contents('logs/failQueryLog.txt', date("d.m.Y - H:i:s",time())."\nQuery: ".$query."\nResult: ".$results_array."\n-----------\n", FILE_APPEND | LOCK_EX);
         }
         return $results_array;
     }
@@ -45,6 +46,7 @@ class RequestHandler
     /** Validates the receaved login-credentials of an User
     * - expect userId and token in tbl brand-> return true/false 
     * - on fail-> add info to a Logfile */
+        
     private function validateCredentials($userid,$token){
         global $db;
         $sql = "SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
@@ -53,12 +55,20 @@ class RequestHandler
             $result = $result->fetch_array();
             $this->userid = $result['brand_id'];
             $this->usercss = $result['css-style'];
+
+             // create new directory with 744 permissions if it does not exist yet
+             // owner will be the user/group the PHP script is run under
+             if ( !file_exists('logs') ) {
+                 $oldmask = umask(0);  //when used in linux server  
+                 mkdir ('logs', 0744);
+             }
+             file_put_contents ('logs/metaLog.txt', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ');
             
             // var_dump($this->usercss);
             return true;
         }
         else{
-            file_put_contents('failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
+            file_put_contents('logs/failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
             return false;
         }
     }
@@ -121,7 +131,7 @@ class RequestHandler
                 break;
 
             //database getters
-            case 'getTopics': $response = array('topiclist' => $this->vTopicNotdepercated(), 'topiccourseCourselist'  => $this->vTopiccourseNotdepercatedlevelnotzero(), 'eventcourselocationFuture'  => $this->vEventcourselocationFuturepublicnotdepercatednotstornonotnew());               
+            case 'getTopics': $response = array('topiclist' => $this->vTopicNotdepercated(), 'topiccourseCourselist'  => $this->vTopiccourseNotdepercatedlevelnotzero(), 'eventcourselocationFuture'  => $this->vEventcourselocationFuturepublicnotdepercatednotstornonotnew());
                 return $response;
                 break;
             case 'getCourses': return $this->getCourseList();
@@ -147,13 +157,13 @@ class RequestHandler
                     Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,\
                     dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).';
                 mail($to, $subject, $message);
-                file_put_contents('reserveLog.txt', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/reserveLog.txt', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
                 return $return;
             break;
         
             default: echo "Defaultrequest from: Requesthandler -> handle -> defaultRequest.";
                 echo "There is no '".$section."' avaliable try http://localhost:4040/EduMS-client/index.php?navdest=brand";
-                file_put_contents('failsectionLog.txt', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/failsectionLog.txt', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
             exit;
             break;
         }
@@ -192,7 +202,7 @@ class RequestHandler
         $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic_notdepercated`");
         for ($i=0; $i < count($return['topiclist']) ; $i++) { 
             if ($return['topiclist'][$i]['deprecated']!=0) {
-                file_put_contents('failTopicResponseLog.txt', date("d.m.Y - H:i:s",time())."\n$return\['topiclist'\]\[".$i."\] -> deprecatet is not 0 -> ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/failTopicResponseLog.txt', date("d.m.Y - H:i:s",time())."\n$return\['topiclist'\]\[".$i."\] -> deprecatet is not 0 -> ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
                 unset($return['topiclist'][$i]);
             }
         }
@@ -228,7 +238,7 @@ class RequestHandler
         $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
         
         //Hole Brandinfo
-        file_put_contents('getBrandLog.txt', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
+        file_put_contents('logs/getBrandLog.txt', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
         
         if ($return['brandinfo'][0]['branddeprecated']!=0) {//In case SQL fails exit
             return $return['brandinfo'][0]['brandDescription'] = '- Forbidden - Please contact Admin';
