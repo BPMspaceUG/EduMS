@@ -3,14 +3,4 @@ ADD COLUMN `imprint` LONGTEXT NULL AFTER `brandDescriptionSidebar`,
 ADD COLUMN `protection of data privacy` LONGTEXT NULL AFTER `imprint`,
 ADD COLUMN `terms and conditions` LONGTEXT NULL AFTER `protection of data privacy`,
 ADD COLUMN `email` VARCHAR(99) NULL AFTER `terms and conditions`;
-RENAME table `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` to v_EventCourseLocation_FuturePublicNOTdepercatedNOTstornoNOTnew;
-RENAME table `v_participationevent_count_futurepublicnotstornonotnew` to v_ParticipationEvent_COUNT_FuturePublicNOTstornoNOTnew;
-RENAME table `v_testcourse` to v_TestCourse;
-RENAME table `v_topiccourse_notdepercatedlevelnotzero` to v_TopicCourse_NOTdepercatedLevelNOTzero;
-RENAME table `v_brandtopic` to v_brandTopic;
-RENAME table `v_brand__notdepercated_loginnotempty_accesstokennotempty` to v_brand__NOTdepercated_LoginNOTEMPTY_AccesstokenNOTEMPTY;
-RENAME table `v_course_notdepercated` to v_course_NOTdepercated;
-RENAME table `v_statusevent` to v_statusEvent;
-RENAME table `v_statuseventguarantee` to v_statusEventguarantee;
-RENAME table `v_statustrainer` to v_statusTrainer;
-RENAME table `v_topic_notdepercated` to v_topic_NOTdepercated;
+
