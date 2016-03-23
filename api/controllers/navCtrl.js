@@ -285,7 +285,7 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 					var price = 0
 					if (level>0) {
 						for (var coursenow = 0; coursenow < $scope.pricelist[topicnr][level].length; coursenow++) {
-							console.log(price = price + $scope.pricelist[topicnr][level][coursenow].price*1)
+							price = price + $scope.pricelist[topicnr][level][coursenow].price*1
 						};						
 					$scope.pricelist[topicnr][level].price = price	
 					};
