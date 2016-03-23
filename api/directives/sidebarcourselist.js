@@ -134,17 +134,17 @@ app.directive('courseList', function(){
 					  <div class="panel-group" id="t.topic_name_raw">\
 					    <div class="panel panel-default">\
 					      <div class="panel-heading with panel-primary">\
-					      <h3><a data-toggle="collapse" href="#{{c.sysName}}">{{c.courseHeadline}}</a></h3>\
+					      <h3><a data-toggle="collapse" href="#{{panelcourse.sysName}}">{{panelcourse.courseHeadline}}</a></h3>\
 					      </div>\
-					      <div id="{{c.sysName}}"" class="panel-collapse collapse">\
-					        <div class="panel-body" ng-if="c.test=0">Kurs: {{c.courseHeadline}}{{c.courseDescription}}{{c.coursePrice}}{{c.number_of_days}}{{c.min_participants}}</div>\
-					        <div class="panel-body" ng-if="c.test=1"> \
-					        	<h3>Test: {{c.courseHeadline}}</h3>\
-					        	<div ng-bind-html="c.courseDescription"></div>\
-					        	<div ng-bind-html="c.courseDescriptionCertificate"></div>\
-					        	<h4 style="color:green">Preis: {{c.coursePrice}},00 €</h4>\
-					        	<h4 style="color:blue">Dauer: {{c.number_of_days}} Tage</h4>\
-					        	<h4 style="color:red">Mindestteilnehmerzahl: {{c.min_participants}} Personen</h4></div>\
+					      <div id="{{panelcourse.sysName}}"" class="panel-collapse collapse">\
+					        <div class="panel-body" ng-if="panelcourse.test=0">Kurs: {{panelcourse.courseHeadline}}{{panelcourse.courseDescription}}{{panelcourse.coursePrice}}{{panelcourse.number_of_days}}{{panelcourse.min_participants}}</div>\
+					        <div class="panel-body" ng-if="panelcourse.test=1"> \
+					        	<h3>Test: {{panelcourse.courseHeadline}}</h3>\
+					        	<div ng-bind-html="panelcourse.courseDescription"></div>\
+					        	<div ng-bind-html="panelcourse.courseDescriptionCertificate"></div>\
+					        	<h4 style="color:green">Preis: {{panelcourse.coursePrice}},00 €</h4>\
+					        	<h4 style="color:blue">Dauer: {{panelcourse.number_of_days}} Tage</h4>\
+					        	<h4 style="color:red">Mindestteilnehmerzahl: {{panelcourse.min_participants}} Personen</h4></div>\
 					      </div>\
 					    </div>\
 					  </div> \
