@@ -1,6 +1,3 @@
-<!-- <v-vier-brand></v-vier-brand> -->
-<test-scope-whole></test-scope-whole>
-
 <div class="container-fluid" >
  <div class="row">
   <!----header-->
@@ -23,8 +20,8 @@
        </a>
       </li>
 
-      <li ng-repeat="t in topics">
-       <a href="#" data-toggle="tab" data-target="#panel-{{t.topic_name}},#panel-{{t.topic_name}}-sidebar">{{t.topic_name_raw}}</a>
+      <li ng-repeat="topic in topics">
+       <a href="#" data-toggle="tab" data-target="#panel-{{topic.topic_name}},#panel-{{topic.topic_name}}-sidebar">{{topic.topic_name_raw}}</a>
       </li>
       <li class="pull-right">
        <a href="#" data-toggle="tab" data-target="#panel-sonstiges,#panel-sonstiges-sidebar">sonstiges</a>
@@ -40,25 +37,14 @@
 
      <div class="tab-content">
      <div class="tab-pane active" id="panel-brand"><div ng-bind-html="brandinfo.brandDescription"></div></div>      
-      <div ng-repeat="t in topics" class="tab-pane" id="panel-{{t.topic_name}}">
+      <div ng-repeat="topicpanel in topics" class="tab-pane" id="panel-{{topicpanel.topic_name}}">
        <div class="col-md-12 well well-lg">
-       <h2>{{t.topicHeadline}}</h2>
-       <div ng-bind-html="t.topicDescription"></div>
-       <div ng-bind-html="t.topicImage"></div>
+       <h2>{{topicpanel.topicHeadline}}</h2>
+       <div ng-bind-html="topicpanel.topicDescription"></div>
+       <div ng-bind-html="topicpanel.topicImage"></div>
         <nav class="navbar navbar-default">
          <div class="container-fluid">
-          <course-list ng-repeat="c in t.courseList | orderBy:'+rank'| orderBy:'+level'"></course-list>
-          <!-- <div ng-repeat="ct in topiccourseCourse">
-           <div ng-if="t.topic_id ==  ct.topic_id" >
-            <div ng-repeat="c in courses">              
-             <div ng-if="c.course_id ==  ct.course_id" >
-             <h3>Kurs: {{c.courseHeadline}} - <small>Name: {{c.course_name}}</small></h3>
-             <div ng-bind-html="c.courseDescription"></div>
-             <h4>Min. Teilnehmerzahl: {{c.min_participants}} - Dauer: {{c.number_of_days}} Tage</h4>
-             </div>
-            </div>             
-           </div>
-          </div> -->
+          <course-list ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"></course-list>
          </div>
         </nav>
        </div>
@@ -67,13 +53,13 @@
       <div class="tab-pane" id="panel-preis">
        <h2>Einzelpreise und Pakete</h2>
 
-       <div ng-repeat="t in pricelist" class="tab-pane" >
-        <div class="col-md-12 well well-lg" ng-repeat="lvl in t" ng-if="lvl.length > 0">
-         <div ng-repeat="c in lvl">
-         <h3><font color="#660000"><b>name: {{c.name}}</b></font></h3>
-         <h4>|{{c.level}}|{{c.rank}}| <small class="text-success"> - {{c.price}},00 € -</small></h4>
-         <h4>Is test? {{c.test}} OR belogs to Test: {{c.test_id}} </h4>
-         <h4>Belongs to topic: {{c.topic}}</h4>
+       <div ng-repeat="pricetopic in pricelist" class="tab-pane" >
+        <div class="col-md-12 well well-lg" ng-repeat="lvl in pricetopic" ng-if="lvl.length > 0">
+         <div ng-repeat="courseprice in lvl">
+         <h3><font color="#660000"><b>name: {{courseprice.name}}</b></font></h3>
+         <h4>|{{courseprice.level}}|{{courseprice.rank}}| <small class="text-success"> - {{courseprice.price}},00 € -</small></h4>
+         <h4>Is test? {{courseprice.test}} OR belogs to Test: {{courseprice.test_id}} </h4>
+         <h4>Belongs to topic: {{courseprice.topic}}</h4>
          <h4>-</h4>         
          </div>
          <hr>         
@@ -93,11 +79,11 @@
 
       <div class="tab-pane" id="panel-standort">
        <p>Standortbeschreibung aus EduMS und dazugehörige Termine</p>
-       <div ng-repeat="l in location">        
-         <h2><font color="#660000"><b>{{l.name}} ~ </b><span class="badge">Teilnehmerkapazität: {{l.locationMaxPart}} Personen</span></font></h2>   
-         <div  ng-bind-html="l.description"></div>           
+       <div ng-repeat="loc in location">        
+         <h2><font color="#660000"><b>{{loc.name}} ~ </b><span class="badge">Teilnehmerkapazität: {{loc.locationMaxPart}} Personen</span></font></h2>   
+         <div  ng-bind-html="loc.description"></div>           
         <div class="progress">
-         <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{l.width}}%;">
+         <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{loc.width}}%;">
         </div>
        </div>       
        </table>
@@ -274,7 +260,7 @@
 
 
 
-
+<!-- 
 
 
 
@@ -293,7 +279,7 @@
        <div class="modal-body">
         <div class="well"  role="dialog" aria-labelledby="Anmeldung" aria-hidden="false">
 
-<!-- 
+
          <form>
           <div class="form-group">
            <div class="input-group">
@@ -364,7 +350,7 @@
 
            </div>      
           </div>
-         </form> -->
+         </form>
 
         </div>
 
@@ -484,8 +470,8 @@
         <div class="alert alert-info">
          <p>Liste aller zukünftigen Schulungstermine (<now()) - sortiert nach datum</p>
          <p>- vorgefilter</p>
-         <p>-- nach Topic wenn von topic Seite kommend</p>
-         <p>-- mit "nur Schulungen" = ohne prüfungtermine</p>
+         <p>_- nach Topic wenn von topic Seite kommend</p>
+         <p>_- mit "nur Schulungen" = ohne prüfungtermine</p>
          <p>
           Beispiel wie unter <a
           href="https://www.mitsm.de/mitsm/termine-anmeldung">mITSM
@@ -521,7 +507,7 @@
 
 
 
-
+ -->
 
 
 
