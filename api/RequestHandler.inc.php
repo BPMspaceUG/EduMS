@@ -52,24 +52,31 @@ class RequestHandler
         $sql = "SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
         $result = $db->query($sql);
         if($result->num_rows>0){
+
             $result = $result->fetch_array();
-            $this->userid = $result['brand_id'];
-            $this->usercss = $result['css-style'];
+            
+            if(isset($result['brand_id'])){ //If this is false, the $sql is invalid
+                $this->userid = $result['brand_id'];
+                $this->usercss = $result['css-style'];                
+                return true;
+            }else{
+                return 'forbidden';
+            // file_put_contents('logs/failLogInSQLqueryLog.txt', date("d.m.Y - H:i:s",time())."\nReceaved query: ".$sql."\n$result: ".$result."\n-----------\n", FILE_APPEND | LOCK_EX);
+            }
 
              // create new directory with 744 permissions if it does not exist yet
              // owner will be the user/group the PHP script is run under
-             if ( !file_exists('logs') ) {
-                 $oldmask = umask(0);  //when used in linux server  
-                 mkdir ('logs', 0744);
-             }
-             file_put_contents ('logs/metaLog.txt', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ');
+             // if ( !file_exists('logs') ) {
+             //     $oldmask = umask(0);  //when used in linux server  
+             //     mkdir ('logs', 0744);
+             // }
+             // file_put_contents ('metaLog.txt', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ', FILE_APPEND | LOCK_EX);
             
             // var_dump($this->usercss);
-            return true;
         }
         else{
-            file_put_contents('logs/failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
-            return false;
+            // file_put_contents('logs/failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
+            return 'forbidden';
         }
     }
 
@@ -153,9 +160,9 @@ class RequestHandler
                 $to      = 'cnu301@mitsm.de';
                 $subject = 'Reservierungsanfrage: Nachname Vorname, Courseabkürzung, Datum, Anzahl';
                 $message = 'Buttons für zusagen, ablehnen und erneut erinnern'.
-                    'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation. \
-                    Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,\
-                    dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).';
+                    'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation. '.
+                    'Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,'.
+                    'dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).';
                 mail($to, $subject, $message);
                 file_put_contents('logs/reserveLog.txt', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
                 return $return;
@@ -172,11 +179,7 @@ class RequestHandler
 
     /*Definition of special handling functions.*/
     //cleanflag
-    public function showStartPage(){
-        $return['sidebar'] = array(array("text"=>"Requesthandler -> function showStartpage() -> sidebar"));
-        $return['content'] = array(array("text"=>"Requesthandler -> function showStartpage() -> content"));
-        return $return;
-    }
+
 
     /*Choose by URL($handle) what data the monitor have to responde*/
     private function handleMonitor($handle=array('a' => 'default' )){
