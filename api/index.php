@@ -19,8 +19,9 @@ if(sizeof($routes)<2){
 elseif(sizeof($routes)<3){
     $user = $routes[0];
     $token = $routes[1];
+    $routes[2] = 'brand';
     $handler = new RequestHandler($user,$token,$db);
-    $response = $handler->showStartPage();
+    $response = $handler->handle($routes);
 }
 //extended request
 else{
@@ -42,10 +43,6 @@ if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
 if (is_array($response)) {
     if(!array_key_exists('topnav',$response)){
         $response['topnav']  = array(
-            array("text"=>"Standorte","path"=>"?navdest=locations"),
-            array("text"=>"Anmeldung","path"=>"?navdest=signup"),
-            array("text"=>"Pakete","path"=>"?navdest=packages"),
-            array("text"=>"Themen","path"=>"?navdest=topics"),
             array("text"=>"Brand","path"=>"?navdest=Brand"),
             array("text"=>"Monitor","path"=>"?navdest=Monitor"));
     }
