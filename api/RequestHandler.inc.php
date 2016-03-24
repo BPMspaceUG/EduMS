@@ -31,7 +31,7 @@ class RequestHandler
             $results_array[] = $row;
         }
         if((count($results_array)<1)){ //evtl. obsolet
-            file_put_contents('logs/failQueryLog.txt', date("d.m.Y - H:i:s",time())."\nQuery: ".$query."\nResult: ".$results_array."\n-----------\n", FILE_APPEND | LOCK_EX);
+            file_put_contents('logs/failQueryLog.log', date("d.m.Y - H:i:s",time())."\nQuery: ".$query."\nResult: ".$results_array."\n-----------\n", FILE_APPEND | LOCK_EX);
         }
         return $results_array;
     }
@@ -49,6 +49,7 @@ class RequestHandler
         
     private function validateCredentials($userid,$token){
         global $db;
+        $this->usercss = '<style> body {background-color: red;}</style>';
         $sql = "SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
         $result = $db->query($sql);
         if($result->num_rows>0){
@@ -56,12 +57,14 @@ class RequestHandler
             $result = $result->fetch_array();
             
             if(isset($result['brand_id'])){ //If this is false, the $sql is invalid
-                $this->userid = $result['brand_id'];
-                $this->usercss = $result['css-style'];                
+                $this->userid = $result['brand_id'];                
+                if(isset($result['css-style'])){ //If this is false, the $sql is invalid
+                    $this->usercss = $result['css-style'];
+                }    
                 return true;
             }else{
                 return 'forbidden';
-            // file_put_contents('logs/failLogInSQLqueryLog.txt', date("d.m.Y - H:i:s",time())."\nReceaved query: ".$sql."\n$result: ".$result."\n-----------\n", FILE_APPEND | LOCK_EX);
+            // file_put_contents('logs/failLogInSQLqueryLog.log', date("d.m.Y - H:i:s",time())."\nReceaved query: ".$sql."\n$result: ".$result."\n-----------\n", FILE_APPEND | LOCK_EX);
             }
 
              // create new directory with 744 permissions if it does not exist yet
@@ -70,12 +73,13 @@ class RequestHandler
              //     $oldmask = umask(0);  //when used in linux server  
              //     mkdir ('logs', 0744);
              // }
-             // file_put_contents ('metaLog.txt', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ', FILE_APPEND | LOCK_EX);
+             // file_put_contents ('metaLog.log', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ', FILE_APPEND | LOCK_EX);
             
             // var_dump($this->usercss);
         }
         else{
-            // file_put_contents('logs/failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
+            // file_put_contents('logs/failLogInLog.log', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
+            exit;
             return 'forbidden';
         }
     }
@@ -164,13 +168,13 @@ class RequestHandler
                     'Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,'.
                     'dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).';
                 mail($to, $subject, $message);
-                file_put_contents('logs/reserveLog.txt', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
                 return $return;
             break;
         
             default: echo "Defaultrequest from: Requesthandler -> handle -> defaultRequest.";
                 echo "There is no '".$section."' avaliable try http://localhost:4040/EduMS-client/index.php?navdest=brand";
-                file_put_contents('logs/failsectionLog.txt', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/failsectionLog.log', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
             exit;
             break;
         }
@@ -205,7 +209,7 @@ class RequestHandler
         $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic_notdepercated`");
         for ($i=0; $i < count($return['topiclist']) ; $i++) { 
             if ($return['topiclist'][$i]['deprecated']!=0) {
-                file_put_contents('logs/failTopicResponseLog.txt', date("d.m.Y - H:i:s",time())."\n$return\['topiclist'\]\[".$i."\] -> deprecatet is not 0 -> ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/failTopicResponseLog.log', date("d.m.Y - H:i:s",time())."\n$return\['topiclist'\]\[".$i."\] -> deprecatet is not 0 -> ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
                 unset($return['topiclist'][$i]);
             }
         }
@@ -241,7 +245,7 @@ class RequestHandler
         $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
         
         //Hole Brandinfo
-        file_put_contents('logs/getBrandLog.txt', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
+        file_put_contents('logs/getBrandLog.log', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
         
         if ($return['brandinfo'][0]['branddeprecated']!=0) {//In case SQL fails exit
             return $return['brandinfo'][0]['brandDescription'] = '- Forbidden - Please contact Admin';
