@@ -175,7 +175,7 @@
         </h3> 
 
          
-        <p>ie nächsten 5 Kurse</p>
+        <p>#Die nächsten 5 Kurse</p>
         <right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>        
                 
        </div>
@@ -211,298 +211,233 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="row" >
-
-   <div class="col-md-12">
-    <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-     <div class="modal-dialog">
-      <div class="modal-content ">
-
-       <div class="modal-header"><h4 class="modal-title" id="myModalLabel">Termine und Anmeldung</h4></div>
+ <div class="modal fade" id="modal-container-1" role="dialog" >
+   <div class="modal-dialog">
+     <div class="modal-content ">
 
        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X </button>
 
-
-       <div class="modal-body">
-        <div class="well"  role="dialog" aria-labelledby="Anmeldung" aria-hidden="false">
+       <div> <!-- afterbutton -->
 
 
-         <form>
-          <div class="form-group">
-           <div class="input-group">
+         <div class="modal-body" class="col-md-12">
 
-            <div class="row" class="col-lg-12">
-             <div class="col-lg-4">
-              <b>Firma: </b><input type="text" class="form-control" placeholder="Name Ihrer Firma" ng-model="rinfo.organisation">
-             </div>
-             <div class="col-lg-4">
-              <b>Ansprechpartner: </b><input type="text" class="form-control" placeholder="Name" ng-model="rinfo.contactperson">
-             </div>
-             <div class="col-lg-4">
-              <b>E-Mail: </b><input type="text" class="form-control" placeholder="E-Mail des Ansprechpartner" ng-model="rinfo.contactpersonemail">
-             </div>
-            </div>
-
-            <div class="row"  class="col-lg-12">
-             <h4>Adresse:</h4> 
-             <div class="col-lg-4">Straße / Hausnummer
-              <input type="text" class="form-control" placeholder="Straße" ng-model="rinfo.street" >
-              <input type="text" class="form-control" placeholder="Hausnummer" ng-model="rinfo.housenr" class="lg-1">
-             </div>
-             <div class="col-lg-4">
-              <b>Ort:</b><input type="text" class="form-control" placeholder="Ort" ng-model="rinfo.city">
-              <b>PLZ: </b><input type="text" class="form-control" placeholder="PLZ" ng-model="rinfo.zip">
-             </div>
-             <div class="col-lg-4">
-              <b>Land: </b><input type="text" class="form-control" placeholder="De" ng-model="rinfo.country">
-             </div>
-            </div>
-
-            <div class="row"  class="col-lg-12">
-             <div class="col-lg-6">
-              <b>Telefon: </b><input type="text" class="form-control" placeholder="" ng-model="rinfo.tel1">
-             </div>
-            </div>
-
-           
-            <div class="row"  class="col-lg-10">
-
-             <div class="col-lg-7" ng-repeat="r in reserveparticipants">
-
-              <div class="col-lg-11">
-               <input type="text" placeholder="Vorname des Teilnehmers" ng-model="r.name">
-               <input type="text" placeholder="Nachname des Teilnehmers" ng-model="r.sname">
-               <input type="text" placeholder="E-Mail des Teilnehmers" ng-model="r.email">	          	
-	             <input type="checkbox" ng-model="r.certificate">Anmeldung zur Prüfung</input>	            
-              </div>
-
-              <div class="col-lg-1">
-               <button class="btn btn-danger" ng-click="removeInput($index)">x</button>
-              </div>
-             </div>
-
-             <div class="col-lg-2">
-              <button class="btn btn-success" ng-click="addInput()">+ Teilnehmer</button>
-             </div>
-
-            </div>
+           <h2>Termine und Anmeldung</h2>
 
 
 
-            <div class="row" class="col-lg-10">
-              Zusätzliche Informationen: <input type="text" class="form-control" placeholder="Teilen Sie uns Ihre Fragen und Wünsche mit..." ng-model="">
-            </div> 
 
 
 
-           </div>      
-          </div>
-         </form>
-
-        </div>
-
-        <div>
-         <button type="button" class="btn btn-success pull-right fa-1x">
-          <i class="fa fa-arrow-circle-right"></i> Anmeldung
-         </button>
-        </div>
-
-        <br></br>
-
-        Defaultsuchfeldeingabe = Aktuelles Topic
-        <form>
-         <div class="form-group">
-          <div class="input-group">
-           <div class="input-group-addon"><i class="fa fa-search"></i></div>
-           <input type="text" class="form-control" placeholder="search in table" ng-model="eventsearch">
-          </div>      
-         </div>
-        </form>
-
-        <table class="table table-responsive table-hover table-striped" style="width: 98%;">
-         <thead>
-          <tr>
-           <th>
-            <i class="fa fa-cart-arrow-down fa-2x"></i>
-           </th>
-           <th>
-            <a href="#">
-             Status 
-            </a>
-           </th>
-           <th>
-            Anordnung Horizontal: [von/bis]| Name| Ort| Trainer| Preis 
-            <a href="#" ng-click="sortType = 'eventlist.start_date'; sortReverse = !sortReverse">
-             Von 
-             <span ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-down"></span>
-             <span ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-up"></span>
-            </a>
-           </th>
-           <th>
-            <a href="#" ng-click="sortType = 'finish_date'; sortReverse = !sortReverse">
-             Bis 
-             <span ng-show="sortType == 'finish_date' && !sortReverse" class="fa fa-caret-down"></span>
-             <span ng-show="sortType == 'finish_date' && sortReverse" class="fa fa-caret-up"></span>
-            </a>
-           </th>
-           <th>
-            <a href="#" ng-click="sortType = 'course_name'; sortReverse = !sortReverse">
-             Schulungsname 
-             <span ng-show="sortType == 'course_name' && !sortReverse" class="fa fa-caret-down"></span>
-             <span ng-show="sortType == 'course_name' && sortReverse" class="fa fa-caret-up"></span>
-            </a>
-           </th>
-           <th>
-            <a href="#" ng-click="sortType = 'maxParticipants'; sortReverse = !sortReverse">
-             MaxTeilnehmer 
-             <span ng-show="sortType == 'maxParticipants' && !sortReverse" class="fa fa-caret-down"></span>
-             <span ng-show="sortType == 'maxParticipants' && sortReverse" class="fa fa-caret-up"></span>
-            </a>
-           </th>
-
-           <th>
-            <a href="#" ng-click="sortType = 'location_name'; sortReverse = !sortReverse">
-             Schulungsort 
-             <span ng-show="sortType == 'location_name' && !sortReverse" class="fa fa-caret-down"></span>
-             <span ng-show="sortType == 'location_name' && sortReverse" class="fa fa-caret-up"></span>
-            </a>
-           </th>
-
-
-          </tr>
-         </thead>
-         <tbody>
-          {{futureCourses.leftSeats[3861]}}
-          <tr ng-repeat="fc in eventlist | orderBy:sortType:sortReverse | filter:eventsearch">
-
-           <td>ckBoxen zur Auswahl von Schulungen</td>
-           <td><i class="fa fa-square-o"></i></td>
-           <td>
-            Eventgaraniestatus_ID -> Status abfragen/ausgeben:
-            Farbegebung: Termin: orange; Termingarantie grün; Warteliste roter Rand; 3 Plätze frei rote Schrift & roter Rand 
-            <div ng-if="fc.event_status_id==1">
-             <button type="button" class="btn btn-danger btn-block">new</button>
-            </div>
-            <div ng-if="fc.event_status_id==2">
-             <button type="button" class="btn btn-success btn-block">planned</button>
-            </div>
-            <div ng-if="fc.event_status_id==3">
-             <button type="button" class="btn btn-success btn-block">prepared</button>
-            </div> 
-            <div ng-if="fc.event_status_id==7">
-             <button type="button" class="btn btn-danger btn-block">offered</button>
-            </div>
-            <div ng-if="fc.event_status_id==8">
-             <button type="button" class="btn btn-info btn-block">unknown</button>
-            </div>
-
-           </td>
-           <td>{{fc.start_date}}</td>
-           <td>{{fc.finish_date}}</td>
-           <td>{{fc.course_name}}</td>
-           <td>{{fc.courseMaxParticipants}}</td>
-           <td>{{fc.location_name}}</td>
-           Anordnung Vertikal: ([Schulung, darunter Prüfung][Preis-Mwst.] abschließend Summe) 
-          </tr>
 
 
 
-         </tbody>
-        </table>
-
-        <p>*) Alle Preise verstehen sich zzl. 19% MwSt.</p>
-        <p>**) Wir behalten uns vor, den Trainer auszutauschen</p>
 
 
-        <div class="alert alert-info">
-         <p>Liste aller zukünftigen Schulungstermine (<now()) - sortiert nach datum</p>
-         <p>- vorgefilter</p>
-         <p>_- nach Topic wenn von topic Seite kommend</p>
-         <p>_- mit "nur Schulungen" = ohne prüfungtermine</p>
-         <p>
-          Beispiel wie unter <a
-          href="https://www.mitsm.de/mitsm/termine-anmeldung">mITSM
-          Termine und Anmeldung</a><br></br> <a class="text-danger fa-2x"
-          href="http://schema.org/EducationEvent">WICHTIG muss
-          http://schema.org/EducationEvent unterstützen</a>
-         </p>
-        </div>
-
-       </div>
 
 
-       <div class="modal-footer">
 
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
-         schließen</button>
-         <button type="button" class="btn btn-success">
-          <i class="fa fa-arrow-circle-right"></i> Anmeldung
-         </button>
 
-        </div>
 
-       </div>
 
-      </div>
 
-     </div>
 
-    </div>
+           <div class="col-md-9">
+             <form>
+               <div class="input-group">
+                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                 <input type="text" class="form-control" placeholder="search in table" ng-model="tablesearch">
+               </div> 
+             </form>
 
-   </div>
+
+
+
+
+
+
+            <table ng-repeat="dropic in pricelist" 
+            class="table table-responsive table-hover table-striped" style="width: 98%;">
+              <thead>
+                <th><a href="#">Auswahl</a></th>
+
+                <th><a href="#" ng-click="sortType = 'finish_date'; sortReverse = !sortReverse">[von/bis]
+                 <span ng-show="sortType == 'start' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'start' && sortReverse" class="fa fa-caret-up"></span>
+                </a></th>
+                
+                <th>
+                <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                 Name
+                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+               </th>
+                
+                <th>
+                <a href="#" ng-click="sortType = 'location'; sortReverse = !sortReverse">
+                 Ort
+                 <span ng-show="sortType == 'location' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'location' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+               </th>
+                
+                <th>
+                <a href="#" ng-click="sortType = 'test'; sortReverse = !sortReverse">
+                 Trainer
+                 <span ng-show="sortType == 'test' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'test' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+               </th>
+
+                <th>
+                <a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse">
+                 Preis
+                 <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+               </th>
+
+                <!-- <th ng-repeat="head in ['Auswahl', '[von/bis]', 'Name', 'Ort', 'Trainer', 'Preis']">
+                <a href="#" ng-click="sortType = 'finish_date'; sortReverse = !sortReverse">{{head}}</a>
+               </th>
+               <th> -->
+
+              </thead>
+              <tbody ng-repeat="lvl in dropic">
+                <tr ng-repeat="x in lvl | orderBy:sortType:sortReverse | filter:tablesearch">
+                  <td><input type="checkbox" class="checkbox"></td>
+                  <td>{{x.start}}/{{x.finish}}</td>
+                  <td>{{x.name}}</td>
+                  <td>{{x.location}}</td>
+                  <td>{{x.trainer}}topics.trainerid?</td>
+                  <td>{{x.price}}</td>                  
+                </tr>
+              </tbody>
+            </table>
+            
+
+
+                    
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+           </div><!-- end md9 (table) -->
+
+
+           <div class="col-md-3">
+             <form>
+               <div class="form-group">
+                 <div class="input-group">
+
+                       <h4>Ansprechpartner</h4>
+                   <div class="col-md-12" >
+
+                     <div class="col-md-6">
+                       <input type="text" class="form-control" placeholder="Vorname" ng-model="rinfo.contactperson">
+                     </div>
+
+                     <div class="col-md-6">
+                       <input type="text" class="form-control" placeholder="Nachname">
+                     </div>
+                   </div>
+                   <div class="col-md-12">
+                   <div  style="margin-top: 5px;">
+                       <h4>Kontakt</h4>
+                   </div>
+
+                     <div class="col-md-6">
+                       <input type="text" class="form-control" placeholder="Firma" ng-model="rinfo.organisation">
+                     </div>
+
+                     <div class="col-md-6">
+                       <input type="text" class="form-control" placeholder="Email" ng-model="rinfo.contactpersonemail">
+                     </div>
+                   </div>
+
+                     <div class="col-md-12" style="margin-top: 5px;">
+                       <button class="btn btn-success btn-sm" ng-click="addInput()">+ Person</button>
+                     </div>
+                   <div class="col-md-12" ng-repeat="reserveparticipant in reserveparticipants">
+
+                     <div class="col-md-12">
+                     <div class="col-md-12"  style="margin-top: 2px;">
+                      <button class="btn btn-default btn-xs" ng-click="removeInput($index)">Teilnehmer entfernen</button>
+                     </div>
+                      <div class="col-md-8">
+                       <input class="form-control" type="text" placeholder="Vorname" ng-model="reserveparticipant.name">
+                      </div>
+                      <div class="col-md-8">
+                       <input class="form-control" type="text" placeholder="Nachname" ng-model="reserveparticipant.sname">
+                      </div>
+                     </div>
+
+                     <div class="col-md-12">
+                      <div class="col-md-8">
+                       <input class="form-control" type="text" placeholder="E-MaiL" ng-model="reserveparticipant.email">
+                      </div>
+                      <div class="col-md-10">
+                       <input type="checkbox" ng-model="reserveparticipant.certificate"> Anmeldung zur Prüfung</input> 
+                      </div>
+                     </div>
+
+                     </div>
+                   </div>
+                    <div class="col-md-12" style="margin-top: 5px;">
+                       <button class="btn btn-success btn-sm" ng-click="addInput()">+ Person</button>
+                     </div>
+                      <p>.</p>
+                    <h4>Anschrift </h4>                     
+                   <div class="col-md-12">
+                       
+                     <div class="col-md-8">
+                       <input type="text" class="form-control" placeholder="Straße" ng-model="rinfo.street">
+                     </div>
+
+                     <div class="col-md-3">
+                       <input type="text" class="form-control" placeholder="Nr." ng-model="rinfo.housenr">
+                     </div>
+                   </div>
+
+                   <div class="col-md-12">
+                     <div class="col-md-6">
+                       <input type="text" class="form-control" placeholder="PLZ" ng-model="rinfo.zip">
+                     </div>
+
+                     <div class="col-md-6">
+                       <input type="text" class="form-control" placeholder="Ort" ng-model="rinfo.city">
+                     </div>
+                   </div>
+                 </div>
+
+               </div>
+              </form>
+           </div>
+
+
+
+         </div><!-- end registerform -->
+
+
+
+       </div> <!-- end afterbutton -->
+
+
+
+     </div> <!-- end modal-content -->
+   </div> <!-- end modal-dialog-->
+ </div> <!-- modal fade -->
 
 
 
@@ -539,10 +474,7 @@
      <a href="https://jquery.com/download/">jQuery 2.2.1</a>
     </div>
    </div>
-
   </div>
 
- </div>
- </div>
 
-
+ </div>
