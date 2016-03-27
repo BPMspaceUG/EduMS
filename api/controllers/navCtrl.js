@@ -104,10 +104,22 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
   }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
  pl=[];
  ta=[];
 var createCourseList = function (top,mn,cou, mnctt){
-console.log(mnctt)
+// console.log(mnctt)
   for (var i = 0; i < top.length; i++) {//Jedes Topic bekommt eine Kursliste
     top[i].courseList = (function(){
         var courseList = [];
@@ -121,9 +133,9 @@ console.log(mnctt)
                cou[k].sysName = cou[k].course_name.replace(/\W+/g,''); //PanelIds
                cou[k].test=(function() {for (var m = 0; m < mnctt.length; m++) { if (cou[k].course_id==mnctt[m].test_id) {return 1}} return 0})()
                cou[k].test_id=(function() {
-               	for (var m = 0; m < mnctt.length; m++) {
-               		/*Ausgabe für darunterliegendes if.. console.log('cou['+k+'].course_id: '+cou[k].course_id+', mnctt['+m+'].course_id: '+ mnctt[m].course_id);*/ 
-               		if (cou[k].course_id==mnctt[m].course_id) {return mnctt[m].test_id}} return false})()
+                for (var m = 0; m < mnctt.length; m++) {
+                 /*Ausgabe für darunterliegendes if.. console.log('cou['+k+'].course_id: '+cou[k].course_id+', mnctt['+m+'].course_id: '+ mnctt[m].course_id);*/ 
+                 if (cou[k].course_id==mnctt[m].course_id) {return mnctt[m].test_id}} return false})()
 
 // console.log('\nt'+i+' tcc'+j+' k'+k+'.test:'+cou[k].test)
 // console.log('test: '+cou[k].test+', testID: '+cou[k].test_id)
@@ -141,16 +153,17 @@ console.log(mnctt)
                       start: cou[k].start_date,
                       finish: cou[k].finish_date,
                    topic: i})
-
-                   ta.push({name: cou[k].course_name,
+                 // verwendet in createanotherlist 
+                   ta.push({name: top[i].topicName+' - '+cou[k].course_name,
                       sysname: cou[k].sysName,
+                      course_id: cou[k].course_id,
                       test: cou[k].test,
                       test_id: cou[k].test_id,
                       price: cou[k].coursePrice,
-                      location: '',
-                      start: '',
-                      finish: '',
-                      trainer: '',
+                      location: cou[k].location_name,
+                      start: cou[k].start_date,
+                      finish: cou[k].finish_date,
+                      trainer: 'Anonym',
                    topic: i})
 
                   courseList.push(cou[k])
@@ -165,25 +178,70 @@ console.log(mnctt)
         return courseList})()
   };
 }
-createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest, response.data.eventlist)
+createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest)
 
 
-    /*gehe courseliste durch
-     wenn kurs: ordne Kurs seiner Gruppe zu
-      gehe coursliste durch
-       wenn kurs.test_id == courseliste[j].course_id
-       hänge Kurs an ende an
-       hänge gruppensumme an ende an*/
+
+
+
    $scope.datesandreserve=[]
-   var createModalList = function( events){
-   	//(function() {for (var m = 0; m < events.length; m++) { if (cou[k].course_id==events[m].course_id) {return events[m].location_name}}})()
-    for (var coursenr = 0; coursenr < ta.length; coursenr++) {console.log(ta[coursenr])}
+   //deprecated (ersetzt durch createanotherlist) -> cleanflag
+   var createModalList = function(eventlist){
+ //ta = Termine und Anmeldung
+ // console.log('\neventlist:')
+ // console.log(eventlist[k])
+    for (var i = 0; i < eventlist.length; i++) {
+     // console.log('\nta.length:')
+  // console.log(ta.length)
+     for (var j = 0; j < eventlist.length; j++) {//first search the course 
+
+      //If a event for the course exist
+      if (eventlist[i].course_id==eventlist[j].course_id) {
+
+       //If event is not a test
+       if(eventlist[i].test!=1){
+        //add course
+        $scope.datesandreserve.push(eventlist[j])
+        // console.log('eventlist[j]')
+        // console.log(eventlist[j])
+
+        //find next test for event
+        for (var k = 0; k < eventlist.length; k++) {
+         if(eventlist[j].test_id == eventlist[k].course_id){
+          //add test after course
+          $scope.datesandreserve.push(eventlist[k])
+          // console.log('eventlist[k]')
+          // console.log(eventlist[k])
+
+          //calc sum of course-test-group
+          var summe = 0
+          for (var l = $scope.datesandreserve.length; l >0; l--) {
+           if ($scope.datesandreserve[l].name != 'Summe') {
+            summe = summe + $scope.datesandreserve[l].price
+           }else{l=0}//stopp          
+          }
+          //add sum if exist
+          if (summe > 0) {
+           $scope.datesandreserve.push({start : '',finish : '',name : 'Summe',location : '',trainer : '',price : summe})
+           // console.log($scope.datesandreserve[$scope.datesandreserve.length-1])
+          }
+         }
+        }        
+       }
+      }
+     }
+    }
+    // console.log($scope.datesandreserve)
    }
-	createModalList( response.data.eventlist)
+  createModalList(ta)
 
 
 
 
+
+
+
+//
    $scope.pricelist=[]
    var createPrizeList = function(pl){
     for (var coursenr = 0; coursenr < pl.length; coursenr++) {
@@ -197,7 +255,7 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
        $scope.pricelist[ coursenow.topic ][ coursenow.level ].push(coursenow)
       };
     };
-    console.log($scope.pricelist)
+    // console.log($scope.pricelist)
 
     for (var topicnr = 0; topicnr < $scope.pricelist.length; topicnr++) {
      // console.log('a')
@@ -217,22 +275,12 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
      };
     };  
 
-    console.log('pricelist')  
-    console.log($scope.pricelist)  
+    // console.log('pricelist')  
+    // console.log($scope.pricelist)  
    } 
    createPrizeList(pl)
 
 
-
-topictable:{
-	coursetable:[
-		{course:{start_date : '',finish_date : '',course_name : '',
-			location : '',trainer : '',price : ''},
-		prüfung:{start_date : '',finish_date : '',course_name : '',
-			location : '',trainer : '',price : ''}
-		}
-	]
-}
 
 
    /*search matches in course- and eventlist and push them to the Topic*/
@@ -251,6 +299,86 @@ topictable:{
    cereateEventList($scope.topics, $scope.eventlist)
     // console.log('\nel: ')
     // console.log($scope.topics[1].eventList)
+
+
+
+
+
+
+
+
+
+
+
+function createanotherlist(ta){
+  thelist=[]
+  for (var i = 0; i < $scope.topics.length; i++) {
+    var elist = $scope.topics[i].eventList
+
+    //first complete the Eventlistinfos
+    for (var i = 0; i < elist.length; i++) {
+      for (var o = 0; o < ta.length; o++) {
+        if (ta[o].course_id==elist[i].course_id) {
+          elist[i].price = ta[o].price
+          elist[i].test = ta[o].test
+          elist[i].test_id = ta[o].test_id
+          elist[i].trainer = 'Anonym'
+          elist[i].checked = false
+        };
+      };
+    };
+
+    //second exploid Tests
+    for (var j = 0; j < elist.length; j++) {
+      eve = elist[j]
+
+      //createModallist -> 
+      if(eve.test!=1){
+        thelist.push(eve) 
+
+        for (var k = 0; k < elist.length; k++) {
+          evex = elist[k]
+          if(eve.test_id == evex.course_id){
+            thelist.push(evex)
+            console.log('evex')
+            console.log(evex)
+            //calc sum of course-test-group
+            var summe = 0
+            for (var l = $scope.datesandreserve.length; l >0; l--) {
+              if (thelist[l].name != 'Summe') {
+                summe = summe + thelist[l].price
+              }else{l=0}//stopp          
+            }
+            //add sum if exist
+            if (summe > 0) {
+              thelist.push({start : '',finish : '',name : 'Summe',location : '',trainer : '',price : summe})
+              console.log(thelist[thelist.length-1])
+            }
+          }
+        }
+      }
+    }
+  }
+  return thelist 
+}
+$scope.xlist =  createanotherlist(ta);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -294,30 +422,37 @@ topictable:{
  )
 
 
-/*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
-the responsible person in the Brand (DB-change -> registermail)*/
-$scope.reservateCourse = function(part) {
- var reserveInfo = /*document.getElementById($scope['inputNameId'+part]).mVorname ||*/ 'Horst'
- var reserveInfo = part
-
- console.log('reservepush: '+ reserveInfo)
- $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', reserveInfo)
- $http.post('localhost:4041', reserveInfo)
-}
 
 
 /*ng-models for imputs*/
-$scope.rinfo={organisation : '', contactperson : '', contactpersonemail : '',
-     street : '', housenr : '', city : '',
-     zip : '', country : '', tel1 : '', 
-     telmobile : '', certificate : ''}
+$scope.rinfo={organisation : '', contactname : '', contactsname : '', 
+	contactpersonemail : '', street : '', housenr : '', city : '',
+    zip : '', country : '', courses:[]}
 /*add and remove Partitioner namefields*/
-$scope.reserveparticipants = [{name:'', sname:'', email:''}];
+$scope.reserveparticipants = [{name:'', sname:'', email:'', certificate:''}];
 $scope.addInput = function(){
     $scope.reserveparticipants.push({name:'', sname:'', email:'', certificate:''});
 }
 $scope.removeInput = function(index){
     $scope.reserveparticipants.splice(index,1);
+}
+
+
+/*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
+the responsible person in the Brand (DB-change -> registermail)*/
+$scope.reservate = function() {
+for (var i = 0; i < $scope.topics.length; i++) {
+    for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
+      if ($scope.topics[i].eventList[j].checked) {
+        $scope.rinfo.courses.push($scope.topics[i].eventList[j])
+      };
+    };
+};
+ $scope.rinfo.reserveparticipants = $scope.reserveparticipants
+ console.log('reservepush: ')
+ console.log($scope.rinfo)
+ $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo)
+ $http.post('http://localhost:4041', $scope.rinfo)
 }
 
 
@@ -328,21 +463,5 @@ $scope.removeInput = function(index){
 
 
 
-
-
-
-
-/*Dummytextgenerator
-* max = Zahl der Rückgabewörter
-* return = String 
-*/
-var lorem = function(max) {
- var lw = ['abenteuerlich','aktiv','angenehm','animalisch','anmutig','anregend','anspruchsvoll','anziehend','aphrodisierend','atemberaubend','athletisch','attraktiv','aufreizend','ausgelassen','außergewöhnlich','außerordentlich','bedeutend','beeindruckend','beflügelt','befreiend','begehrenswert','begeisternd','beglückend','belebt','berauschend','berühmt','besonders','bewundernswert','bezaubernd','bildlich','brillant','charismatisch','charmant','dominant','duftend','dynamisch','','[adjektivebuchbanner]','echt','edel','ehrlich','einfühlsam','einzigartig','ekstatisch','elegant','emotional','empfehlenswert','entzückend','erfrischend','erhellend','erotisch','erregend','erstaunlich','erstklassig','exklusiv','extravagant','exzellent','fabelhaft','fantastisch','faszinierend','fein','fesselnd','feurig','freizügig','freudig','freundlich','frisch','fröhlich','geborgen','geheim','geheimnisvoll','geliebt','genüsslich','geschmackvoll','gespannt','gigantisch','glänzend','glücklich','grandios','gravierend','grenzenlos','großartig','harmonisch','heißblütig','hell','hemmungslos','herrlich','hervorragend','hübsch','hüllenlos','','[adjektivebuchbanner]','humorvoll','ideal','imponierend','individuell','Instinktiv','intelligent','intensiv','interessant','klar','knallig','komfortabel','königlich','kostbar','kraftvoll','kunstvoll','lebendig','lebhaft','leidenschaftlich','leuchtend','liebenswert','lüstern','lustvoll','luxuriös','mächtig','magisch','märchenhaft','maximal','mitreißend','mysteriös','mystisch','packend','perfekt','persönlich','phänomenal','phantastisch','pikant','positiv','potent','prächtig','prall','rasant','real','reich','rein','reizend','riesig','riskant','romantisch','schamlos','scharf','schön','selbstlos','selbstsicher','selten','sensationell','sensibel','sexuell','sinnlich','spannend','spektakulär','sprachlos','spürbar','stark','stilvoll','stürmisch','sündig','sympathisch','traumhaft','überlegen','überwältigend','unfassbar','unglaublich','unsterblich','unwiderstehlich','verblüffend','verführerisch','verlockend','verwöhnt','vital','warm','weiblich','wertvoll','wild','wohlklingend','wohlriechend','wunderbar','wunderschön','wundervoll','zaghaft','zärtlich','zuverlässig','zwischenmenschlich','Anruf','Anzug','Apfel','April','Arm','Arzt','August','Ausweis','Bahnhof','Balkon','Baum','Berg','Beruf','Bildschirm','Bus','Computer','Dezember','Dienstag','Durst','Drucker','Eintrittskarte','Einwohner','Fahrschein','Februar','Fernseher','Finger','Flughafen','Flur','Frühling','Füller','Fuß','Fußboden','Garten','Gast','Geburtstag','Hafen','Hamburger','Herbst','Herr','Himmel','Hut','Hunger','Januar','Juli','Juni','Kaffee','Kakao','Keller','Kellner','Kleiderhaken','Koch','Kognak','Kuchen','Kugelschreiber','Kuchen','Kunde','Laden','Lehrer','Locher','Löffel','Mai','März','Mann','Markt','Marktplatz','Monitor','Name','November','Oktober','Opa','Park','Pass','Passant','Platz','Projektor','Pullover','Radiergummi','Regen','Rock','Schinken','Schlüssel','Schnaps','Schnee','Schrank','September','Sessel','Sommer','Star','Strumpf','Stuhl','Supermarkt','Tag','Tee','Teppich','Test','Tisch','Tourist','Urlaub','Vater','Wagen','Wein','Wind','Winter','Wunsch','Zeiger','Zucker','Zug','Zuschauer Adresse','Apfelsine','Apotheke','Bank','Bankkarte','Bedienung','Beschreibung','Bestellung','Bibliothek','Bluse','Brille','Brücke','City','Cola','Decke','Diskette','Dolmetscherin','Dose','Dusche','Eile','Einladung','Etage','Fahrkarte','Festung','Fotografie','Frage','Funktion','Gabel','Garage','Gardine','Gasse','Gitarre','Größe','Hilfe','Hose','Hütte','Information','Kasse','Kassette','Kirche','Krawatte','Kreditkarte','Kreide','Küche','Kultur','Lampe','Landkarte','Landschaft','Mandarine','Maschine','Maus','Milch','Mutter','Mütze','Nachricht','Nacht','Nase','Natur','Nummer','Oma','Oper','Ordnung','Pause','Pflanze','Pizza','Polizistin','Post','Postkarte','Prüfung','Reparatur','Reservierung','Sache','Sahne','Schule','Sehenswürdigkeit','SMS','Socke','Sonne','Straße','Straßenbahn','Tasche','Tasse','Toilette','Torte','U-Bahn','Überraschung','Übung','Uhr','Umwelt','Universität','Verbindung','Wand','Wanderung','Welt','Werbung','Werkstatt','Wirtschaft','Woche','Wurst','Zeitung Auge','Auto','Bad','Bein','Bett','Bier','Bild','Brötchen','Buch','Café','Einkaufszentrum','Fahrrad','Fest','Flugzeug','Foto','Fräulein','Frühstück','Gefühl','Gemüse','Geschäft','Glas','Gleis','Handy','Haus','Heft','Hemd','Hotel','Huhn','Kännchen','Internet','Kind','Kino','Kleid','Klo','Leben','Mädchen','Messer','Motorrad','Museum','Radio','Regal','Restaurant','Schiff','Schnitzel','Sofa','Spiel','Steak','Stück','Taxi','Telefon','Theater','Ticket','Tonbandgerät','Warenhaus','Wasser','Wetter','Wunder','Aids','Antibiotikum','Apartheid','Atombombe','Autobahn','Automatisierung','Beat','Beton','Bikini','Blockwart','Bolschewismus','Camping','Comics','Computer','Demokratisierung','Demonstration','Demoskopie','Deportation','Design','Doping','Dritte Welt','Drogen','Eiserner Vorhang','Emanzipation','Energiekrise','Entsorgung','Faschismus','Fernsehen','Film','Fließband','Flugzeug','Freizeit','Friedensbewegung','Führer','Fundamentalismus','Gen','Globalisierung','Holocaust','Image','Inflation','Information','Jeans','Jugendstil','Kalter Krieg','Kaugummi','Klimakatastrophe','Kommunikation','Konzentrationslager','Kreditkarte','Kugelschreiber','Luftkrieg','Mafia','Manipulation','Massenmedien','Molotowcocktail','Mondlandung','Oktoberrevolution','Panzer','Perestroika','Pille','Planwirtschaft','Pop','Psychoanalyse','Radar','Radio','Reißverschluss','Relativitätstheorie','Rock and Roll','Satellit','Säuberung','Schauprozess','Schreibtischtäter','Schwarzarbeit','Schwarzer Freitag','schwul','Selbstverwirklichung','Sex','Single','Soziale Marktwirtschaft','Sport','Sputnik','Star','Stau','Sterbehilfe','Stress','Terrorismus','U-Boot','Umweltschutz','Urknall','Verdrängung','Vitamin','Völkerbund','Völkermord','Volkswagen','Währungsreform','Weltkrieg','Wende','Werbung','Wiedervereinigung','Wolkenkratzer']
- var a = Math.floor(Math.random()*max), b='';
- for (var i = 0; i < a; i++) {
-  b= b + ' ' + lw[Math.floor(Math.random()*lw.length)]
- }
- return b
-}
 
 </script>
