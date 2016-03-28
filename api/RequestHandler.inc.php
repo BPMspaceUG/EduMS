@@ -283,6 +283,7 @@ class RequestHandler
         //Hole Events zu Courses
         $return['eventlist'] = $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` WHERE ".$queryCourses);
         $return['coursetotestlist'] = $this->getResultArray("SELECT * FROM `v_testcourse`");
+        $return['stateinfo'] = $this->getResultArray("SELECT * FROM `v_statuseventguarantee`");
         
         return $return;
     }
@@ -303,3 +304,4 @@ class RequestHandler
     }
 
 }
+//v_eventcourselocation_futurepublicnotdepercatednotstornonotnew v_statuseventguarantee

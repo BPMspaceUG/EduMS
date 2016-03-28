@@ -21,7 +21,8 @@
       </li>
 
       <li ng-repeat="topic in topics">
-       <a href="#" data-toggle="tab" data-target="#panel-{{topic.topic_name}},#panel-{{topic.topic_name}}-sidebar">{{topic.topic_name_raw}}</a>
+       <a href="#" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab" 
+       data-target="#panel-{{topic.topic_name}},#panel-{{topic.topic_name}}-sidebar">{{topic.topic_name_raw}}</a>
       </li>
       <li class="pull-right">
        <a href="#" data-toggle="tab" data-target="#panel-sonstiges,#panel-sonstiges-sidebar">sonstiges</a>
@@ -45,6 +46,23 @@
         <nav class="navbar navbar-default">
          <div class="container-fluid">
           <course-list ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"></course-list>
+
+          <table class="table table-responsive table-hover table-striped" style="width: 50%;">
+            <thead>
+                <th><a href="#"><h4>Course</h4></a></th>
+                <th><a href="#"><h4>Preis</h4></a></th>
+                <th><a href="#"><h4>Preis Brutto</h4></a></th>
+
+              </thead>
+              <tbody>
+                <tr ng-repeat="courseprice in topicpanel.courseList">
+                  <td>{{courseprice.course_name}}</td>
+                  <td>{{courseprice.coursePrice}},00- €</td>
+                  <td>{{courseprice.brutto}},00- €</td>
+                </tr>
+              </tbody>
+          </table>
+
          </div>
         </nav>
        </div>
@@ -79,7 +97,7 @@
 
       <div class="tab-pane" id="panel-standort">
        <p>Standortbeschreibung aus EduMS und dazugehörige Termine</p>
-       <div ng-repeat="loc in location">        
+        <div ng-repeat="loc in location">        
          <h2><font color="#660000"><b>{{loc.name}} ~ </b><span class="badge">Teilnehmerkapazität: {{loc.locationMaxPart}} Personen</span></font></h2>   
          <div  ng-bind-html="loc.description"></div>           
         <div class="progress">
@@ -199,18 +217,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
  <div class="modal fade" id="modal-container-1" role="dialog" >
    <div class="modal-dialog">
      <div class="modal-content ">
@@ -224,24 +230,6 @@
 
            <h2>Termine und Anmeldung</h2>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
            <div class="col-md-9">
              <form>
                <div class="input-group">
@@ -252,75 +240,43 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <table class="table table-responsive table-hover table-striped" style="width: 98%;">
             <thead>
                 <th><a href="#"><h4>Auswahl</h4></a></th>
+                <th><a href="#" ng-click="sortType = 'eventguaranteestatus'; sortReverse = !sortReverse"><h4>Status</h4>
+                 <span ng-show="sortType == 'eventguaranteestatus' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'eventguaranteestatus' && sortReverse" class="fa fa-caret-up"></span>
+                </a></th>
                 <th><a href="#" ng-click="sortType = 'start_date'; sortReverse = !sortReverse"><h4>von - bis</h4>
-                 <span ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-up"></span>
+                 <span ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
-                <th><a href="#" ng-click="sortType = 'course_name'; sortReverse = !sortReverse"><h4>Name</h4>
-                 <span ng-show="sortType == 'course_name' && sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'course_name' && !sortReverse" class="fa fa-caret-up"></span>
+                <th><a href="#" ng-click="sortType = 'namefortable'; sortReverse = !sortReverse"><h4>Name</h4>
+                 <span ng-show="sortType == 'namefortable' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'namefortable' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
                 <th><a href="#" ng-click="sortType = 'location_name'; sortReverse = !sortReverse"><h4>Ort</h4>
-                 <span ng-show="sortType == 'location_name' && sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'location_name' && !sortReverse" class="fa fa-caret-up"></span>
+                 <span ng-show="sortType == 'location_name' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'location_name' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
                 <th><a href="#" ng-click="sortType = 'event_id'; sortReverse = !sortReverse"><h4>Trainer</h4>
-                 <span ng-show="sortType == 'event_id' && sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'event_id' && !sortReverse" class="fa fa-caret-up"></span>
+                 <span ng-show="sortType == 'event_id' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'event_id' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
                 <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Preis</h4>
-                 <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-up"></span>
+                 <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
               </thead>
               <tbody>
                 <tr ng-repeat="xelem in xlist | orderBy:sortType:sortReverse | filter:tablesearch">
                   <td><input type="checkbox" class="checkbox" type="checkbox" ng-model="xelem.checked" name="userAgree"></td>
+                  <td>{{xelem.eventguaranteestatus}}</td>               
                   <td>{{xelem.start_date}} - {{xelem.finish_date}}</td>
-                  <td>{{xelem.course_name}}</td>
+                  <td>{{xelem.namefortable}}</td>
                   <td>{{xelem.location_name}}</td>
                   <td>{{xelem.event_id}}</td>               
                   <td>{{xelem.price}}</td>               
-                  <!-- <td>{{xelem}}</td> -->               
                 </tr>
               </tbody>
           </table>
@@ -469,15 +425,6 @@
                     
 
 
-
-
-
-
-
-
-
-
-
             
 
 
@@ -497,7 +444,7 @@
                      </div>
 
                      <div class="col-md-6">
-                       <input type="text" class="form-control" placeholder="Nachname" ng-model="rinfo.contactsname">
+                       <input type="text" class="form-control" placeholder="Nachname" required="" ng-model="rinfo.contactsname">
                      </div>
                    </div>
                    <div class="col-md-12">
@@ -527,7 +474,7 @@
                        <input class="form-control" type="text" placeholder="Vorname" ng-model="reserveparticipant.name">
                       </div>
                       <div class="col-md-8">
-                       <input class="form-control" type="text" placeholder="Nachname" ng-model="reserveparticipant.sname">
+                       <input class="form-control" type="text" placeholder="Nachname" required="" ng-model="reserveparticipant.sname">
                       </div>
                      </div>
 
@@ -594,29 +541,6 @@
      </div> <!-- end modal-content -->
    </div> <!-- end modal-dialog-->
  </div> <!-- modal fade -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

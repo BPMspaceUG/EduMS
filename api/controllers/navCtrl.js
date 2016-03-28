@@ -2,11 +2,10 @@
 
 /*
 Eng: The controller navCtrl uses the $http-service to get JSON-datasets from DB-Views and reorganize them in $scope.
-The templates rightBar-X show the next courses in context of the selected topic. Also there is a lorem fuction for dummytext.
+He defines all models and functions
 
 Deu/Ger: Der Controller navCtrl fordert über den $http-service JSON-Datensätze DB-Views und reorganisiert sie in $scope.
-Die Templates rightBarCourseByTopic und rightBarCourseAll zeigen die nächsten courses in Abhängigkeit des ausgewählten Topics an.
-Die lorem function erzeugt Dummytext.
+Er definiert alle Models und funktionen.
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 */
@@ -19,7 +18,7 @@ app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $s
 $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
  .then(function(response) {
   console.log(response)
-  //brandinfo:
+  //brandinfo RAW:
   /*accesstoken: "5b35793a3",brandDescription: "<h2>description</p>",brandDescriptionFooter: "<h2>FOOTices proin.</p>",brandDescriptionSidebar: "<h2>SIDt felis</p>",
   brandHeadline: "Brand with ID 9",brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9",brand_id: "9",brand_name: "Eqpajbuu ID 9",
   branddeprecated: "0",css-style: "<style> body {background-color: ;}</style>",discount: "7.00",event_partner_id: "1",login: "EqpajbuuID9"*/
@@ -30,7 +29,7 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
   $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandImage+'</div>')
 
 
-  //topiclist: 
+  //topiclist RAW: 
   /*$$hashKey: "object:953", deprecated: "0", footer: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
   topicDescriptionSidebar: "<h2>with ID 1</h2>", topicHeadline: "TOPIC with ID 1", topicImage: "data:image/svg+xml;charset=utf-8,<svg><%2Fsvg>", topicName: "Pkhhoaged", topic_id: "1"*/
   $scope.topics = response.data.topiclist
@@ -43,13 +42,13 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 
 
 
-  //topiccourselist:
+  //topiccourselist RAW:
   /*course_id: "43", course_name: "Training 43 in Topic 1 - Level-Rank 1-1", level: "1", rank: "1", topicName: "Pkhhoaged", topic_course_id: "43", topic_id: "1"*/
   $scope.topiccourseCourse = response.data.topiccourselist 
 
   
 
-  //courselist:
+  //courselist RAW:
   /*courseDescription: "<p>Posuere mus.</p>", courseDescriptionCertificate: "<h2>adfadf</ul>", courseDescriptionMail: "<h2>Course description from conec.</p>"
   courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1", coursePrice: "1075", course_id: "43",  course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
   internet_course_article_id: "14",min_participants: "3", number_of_days: "3"*/
@@ -65,13 +64,13 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
     };
    }
 
-  //coursetotestlist:
+  //coursetotestlist RAW:
   /*v_testcourse - course_id:1, test_id:44*/
   $scope.courseToTest = response.data.coursetotestlist;
 
 
 
-  //eventlist:
+  //eventlist RAW:
   /*courseMaxParticipants: "16", course_id: "74", course_name: "Training 74 in Topic 1 - Level-Rank 2-4", coursedeprecated: "0", event_id: "3873", event_status_id: "2"
   eventguaranteestatus: "2", eventinhouse: "0", finish_date: "2016-03-11", finish_time: "17:00:00", internet_location_name: "Koqlg", locationMaxParticipants: "16"
   location_description: "<h2>Location description from Locatos.</p>", location_id: "177", location_name: "Koqlg", start_date: "2016-03-09", start_time: "13:30:00", test: "0"*/ 
@@ -95,29 +94,36 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 
   $scope.location=[]
   for (var i = 0; i < response.data.eventlist.length; i++) {
-   $scope.location.push({id : response.data.eventlist[i].location_id, 
-    name : response.data.eventlist[i].location_name,
-    description : response.data.eventlist[i].location_description, 
-    locationMaxPart : response.data.eventlist[i].locationMaxParticipants,
-    width: (function(){return Math.round((100*i)/response.data.eventlist.length)})()
-   })
+    var push=true;
+    for (var j = 0; j < $scope.location.length; j++) {
+      $scope.location[j].width= Math.round((100*j)/$scope.location.length)
+      if (response.data.eventlist[i].location_name == $scope.location[j].name) {
+        push=false
+      };
+    };
+
+    if (push) {
+     $scope.location.push(
+      {id : response.data.eventlist[i].location_id, 
+      name : response.data.eventlist[i].location_name,
+      description : response.data.eventlist[i].location_description, 
+      locationMaxPart : response.data.eventlist[i].locationMaxParticipants,
+     })      
+    };
   }
 
 
-
-
-
-
-
-
-
-
+//stateinfo RAW:
+//states of a event - Object[0] {ID:"2", eventguaranteestatus:"guaranteed"}
+  $scope.stateinfo = response.data.stateinfo
 
 
 
 
  pl=[];
  ta=[];
+ /*The primary sortfunction adds to the topicobject its courses and define its test-status.
+  It also define pl for createPrizeList, ta for createModalList & finishEventlist as referenceobjects*/
 var createCourseList = function (top,mn,cou, mnctt){
 // console.log(mnctt)
   for (var i = 0; i < top.length; i++) {//Jedes Topic bekommt eine Kursliste
@@ -130,6 +136,7 @@ var createCourseList = function (top,mn,cou, mnctt){
                //Zuteilung
                cou[k].level = mn[j].level //Anzeigereihenfolge in Panel
                cou[k].rank = mn[j].rank
+               cou[k].brutto = Math.round(cou[k].coursePrice*1.19)
                cou[k].sysName = cou[k].course_name.replace(/\W+/g,''); //PanelIds
                cou[k].test=(function() {for (var m = 0; m < mnctt.length; m++) { if (cou[k].course_id==mnctt[m].test_id) {return 1}} return 0})()
                cou[k].test_id=(function() {
@@ -137,10 +144,7 @@ var createCourseList = function (top,mn,cou, mnctt){
                  /*Ausgabe für darunterliegendes if.. console.log('cou['+k+'].course_id: '+cou[k].course_id+', mnctt['+m+'].course_id: '+ mnctt[m].course_id);*/ 
                  if (cou[k].course_id==mnctt[m].course_id) {return mnctt[m].test_id}} return false})()
 
-// console.log('\nt'+i+' tcc'+j+' k'+k+'.test:'+cou[k].test)
-// console.log('test: '+cou[k].test+', testID: '+cou[k].test_id)
-
-
+                // console.log('\nt'+i+' tcc'+j+' k'+k+'.test:'+cou[k].test);  console.log('test: '+cou[k].test+', testID: '+cou[k].test_id)
 
                  pl.push({name: cou[k].course_name,
                       sysname: cou[k].sysName,
@@ -153,7 +157,7 @@ var createCourseList = function (top,mn,cou, mnctt){
                       start: cou[k].start_date,
                       finish: cou[k].finish_date,
                    topic: i})
-                 // verwendet in createanotherlist 
+              
                    ta.push({name: top[i].topicName+' - '+cou[k].course_name,
                       sysname: cou[k].sysName,
                       course_id: cou[k].course_id,
@@ -167,9 +171,6 @@ var createCourseList = function (top,mn,cou, mnctt){
                    topic: i})
 
                   courseList.push(cou[k])
-               /*if (cou[k].test != '0'){
-               }else{
-               }*/
               }
             };
           };
@@ -184,7 +185,7 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
 
 
 
-   $scope.datesandreserve=[]
+  /* $scope.datesandreserve=[]
    //deprecated (ersetzt durch createanotherlist) -> cleanflag
    var createModalList = function(eventlist){
  //ta = Termine und Anmeldung
@@ -234,14 +235,14 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
     // console.log($scope.datesandreserve)
    }
   createModalList(ta)
+*/
 
 
 
 
 
 
-
-//
+/*Create a Sorted list and add a groupprice to the level*/
    $scope.pricelist=[]
    var createPrizeList = function(pl){
     for (var coursenr = 0; coursenr < pl.length; coursenr++) {
@@ -255,16 +256,11 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
        $scope.pricelist[ coursenow.topic ][ coursenow.level ].push(coursenow)
       };
     };
-    // console.log($scope.pricelist)
 
     for (var topicnr = 0; topicnr < $scope.pricelist.length; topicnr++) {
-     // console.log('a')
      // console.log( $scope.pricelist.length)
      for (var level = 0; level < $scope.pricelist[topicnr].length; level++) {
-     //  console.log('b')
-     // console.log( $scope.pricelist[topicnr].length)
-     // console.log( level)
-     // console.log( $scope.pricelist[topicnr][level])
+     // console.log( $scope.pricelist[topicnr].length); console.log( level); console.log( $scope.pricelist[topicnr][level])
      var price = 0
      if (level>0) {
       for (var coursenow = 0; coursenow < $scope.pricelist[topicnr][level].length; coursenow++) {
@@ -306,24 +302,32 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
 
 
 
-
-
-
-
-function createanotherlist(ta){
+/*Fill in the Eventlist all nessesary Infos from other tables and add values for models.
+Calculate a sum for all [course(1-n) +  test]-Groups*/
+function finishEventlist(ta){
   thelist=[]
   for (var i = 0; i < $scope.topics.length; i++) {
     var elist = $scope.topics[i].eventList
 
     //first complete the Eventlistinfos
-    for (var i = 0; i < elist.length; i++) {
+    for (var h = 0; h < elist.length; h++) {
       for (var o = 0; o < ta.length; o++) {
-        if (ta[o].course_id==elist[i].course_id) {
-          elist[i].price = ta[o].price
-          elist[i].test = ta[o].test
-          elist[i].test_id = ta[o].test_id
-          elist[i].trainer = 'Anonym'
-          elist[i].checked = false
+        if (ta[o].course_id==elist[h].course_id) {
+          elist[h].price = ta[o].price
+          elist[h].test = ta[o].test
+          elist[h].test_id = ta[o].test_id
+          //trainerinfo nicht vorhanden
+          elist[h].trainer = 'Anonym'
+          //model for checkboxes
+          elist[h].checked = false
+          //value for panel-click-serachfield interaction
+          elist[h].namefortable = elist[h].course_name +' ('+ $scope.topics[i].topicName+')'          
+
+          //change id-number to status-word
+          elist[h].eventguaranteestatus = (function(statusnr) {for (var i = 0; i < $scope.stateinfo.length; i++) {
+            if ($scope.stateinfo[i].ID==statusnr) {return $scope.stateinfo[i].eventguaranteestatus};
+          };})(elist[h].eventguaranteestatus)
+
         };
       };
     };
@@ -351,7 +355,7 @@ function createanotherlist(ta){
             }
             //add sum if exist
             if (summe > 0) {
-              thelist.push({start : '',finish : '',name : 'Summe',location : '',trainer : '',price : summe})
+              thelist.push({start : '',finish : '',name : 'Summe', location : '',trainer : '',price : summe})
               console.log(thelist[thelist.length-1])
             }
           }
@@ -361,20 +365,7 @@ function createanotherlist(ta){
   }
   return thelist 
 }
-$scope.xlist =  createanotherlist(ta);
-
-
-
-
-
-
-
-
-
-
-
-
-
+$scope.xlist =  finishEventlist(ta);
 
 
 
@@ -416,8 +407,7 @@ $scope.xlist =  createanotherlist(ta);
    };
   };
 
-  //};
-  console.log('fertiges $scope.topics: (Auskommentiert)');console.log($scope.topics); 
+  console.log('fertiges $scope.topics: ');console.log($scope.topics); 
   },function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
  )
 
@@ -428,7 +418,7 @@ $scope.xlist =  createanotherlist(ta);
 $scope.rinfo={organisation : '', contactname : '', contactsname : '', 
 	contactpersonemail : '', street : '', housenr : '', city : '',
     zip : '', country : '', courses:[]}
-/*add and remove Partitioner namefields*/
+/*add and remove Partitioner namefields in the Modal*/
 $scope.reserveparticipants = [{name:'', sname:'', email:'', certificate:''}];
 $scope.addInput = function(){
     $scope.reserveparticipants.push({name:'', sname:'', email:'', certificate:''});
@@ -436,6 +426,8 @@ $scope.addInput = function(){
 $scope.removeInput = function(index){
     $scope.reserveparticipants.splice(index,1);
 }
+$scope.sortType = 'start_date'
+$scope.sortReverse = false
 
 
 /*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
@@ -454,6 +446,9 @@ for (var i = 0; i < $scope.topics.length; i++) {
  $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo)
  $http.post('http://localhost:4041', $scope.rinfo)
 }
+
+//If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
+$scope.tablesearchchange = function(name){$scope.tablesearch = name}
 
 
 }])
