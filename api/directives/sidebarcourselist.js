@@ -3,11 +3,13 @@
 app.directive('rightBarCourseAll', function() {//sideBarCourse = Directive Name
  return{
 //Sidebarelement für allgemeine Kurse
-template:'<div class="list-group">\
-<a class="list-group-item active">\
-<h3 class="list-group-item-heading">{{e.course_name}} \
-<span class="label label-danger"> {{e.start_date}} </span>\
-</h3>'+
+template:'<div class="list-group" >\
+  <a class="list-group-item active" style="background-color:#333;">\
+  <div class="row">\
+  <div class="col-md-3" ng-if="e.eventguaranteestatus">\
+  <img class="transparent" alta="https://www.mitsm.de/images/CDN/mITSM_ICON_OT_Formular_Termingarantie_klein.png" src="https://www.mitsm.de/images/CDN/mITSM_ICON_OT_Formular_Termingarantie_klein.png"></div>\
+  <div class="col-md-9" ><h5 class="list-group-item-heading" style="color:#FFA639;" class="pull-left"><b>{{e.start_date}}</b></h5></div>\
+  <div class="row"><h4 class="list-group-item-heading" style="color:#ccc;">{{e.course_name}}</h4></div>'+
 
 '<div>\
 <button type="button" class="btn btn-info btn-sm" ng-click= "e.btnInfo=!e.btnInfo">\
@@ -112,17 +114,20 @@ app.directive('registerFormTwo', function() {
 
 app.directive('rightBarCourseByTopic', function() {//sideBarCourse = Directive Name
  return{
-  template:'<div class="list-group"><a class="list-group-item active"><h3 class="list-group-item-heading">{{sbc.course_name}}\
-  <span class="label label-danger"> {{sbc.start_date}}\
-  </span></h3><div><button type="button" class="btn btn-info btn-sm" ng-click= "sbc.btnInfo=!sbc.btnInfo">\
-  <span class="fa-stack"><i class="fa fa-info fa-stack-1x fa-inverse"></i></span>Info</button> - <button type="button" class="btn btn-success btn-sm" ng-model="reservate" ng-click= "sbc.btnRegister=!sbc.btnRegister">\
-  <span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i></span>reservieren</button></div><div ng-show="sbc.btnInfo">\
+  template:'<div class="list-group" >\
+  <a class="list-group-item active" style="background-color:#333;">\
+  <div class="row">\
+  <div class="col-md-3" ng-if="sbc.eventguaranteestatus"><img class="transparent" alta="https://www.mitsm.de/images/CDN/mITSM_ICON_OT_Formular_Termingarantie_klein.png" src="https://www.mitsm.de/images/CDN/mITSM_ICON_OT_Formular_Termingarantie_klein.png"></div>\
+  <div class="col-md-9" ><h5 class="list-group-item-heading" style="color:#FFA639;" class="pull-left"><b>{{sbc.start_date}}</b></h5></div>\
+  <div class="row"><h4 class="list-group-item-heading" style="color:#ccc;">{{sbc.course_name}}</h4></div>\
+  <div><button type="button" class="btn btn-info btn-sm" ng-click= "sbc.btnInfo=!sbc.btnInfo"><span class="fa-stack"><i class="fa fa-info fa-stack-1x fa-inverse"></i></span><b>Info</b></button> - <button type="button" class="btn btn-success btn-sm" ng-model="reservate" ng-click= "sbc.btnRegister=!sbc.btnRegister">\
+  <span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse"></i></span><b>reservieren</b></button></div><div ng-show="sbc.btnInfo">\
   <h3>Start: {{sbc.start_date}} {{sbc.start_time}}</h3>\
   <h3>Ende: {{sbc.finish_date}} {{sbc.finish_time}}</h3>\
   <h3>Internet-Location-Name: {{sbc.internet_location_name}}\
   <div ng-bind-html="sbc.location_description"></div>\
   </h3></div><div ng-show="sbc.btnRegister">\
-  <register-form-two></register-form-two></div></a></div>'
+  <register-form-two> orange FFA639 hellgrau ccc hintergrundgrau #333</register-form-two></div></a></div>'
  }
 });
 
@@ -141,9 +146,10 @@ app.directive('courseList', function(){
   <div class="panel-body" ng-if="panelcourse.test=1"> \
   <h3>Test: {{panelcourse.courseHeadline}}</h3>\
   <div ng-bind-html="panelcourse.courseDescription"></div>\
-  <h4 style="color:green">Preis: {{panelcourse.coursePrice}},00 €</h4>\
-  <h4 style="color:blue">Dauer: {{panelcourse.number_of_days}} Tage</h4>\
-  <h4 style="color:red">Mindestteilnehmerzahl: {{panelcourse.min_participants}} Personen</h4></div>\
+  <h4 style="color:#78b433">Preis: {{panelcourse.coursePrice}},- €</h4>\
+  <h4 style="color:#78b433">Brutto: {{Math.round(panelcourse.coursePrice*1.19)}},- €</h4>\
+  <h4 style="color:136b26">Dauer: {{panelcourse.number_of_days}} Tage</h4>\
+  <h4 style="color:#FFA639">Mindestteilnehmerzahl: {{panelcourse.min_participants}} Personen</h4></div>\
   </div>\
   </div>\
   </div> \

@@ -15,6 +15,7 @@ Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular de
 
 app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
+$scope.Math = window.Math
 $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
  .then(function(response) {
   console.log(response)
@@ -317,7 +318,7 @@ function finishEventlist(ta){
           elist[h].test = ta[o].test
           elist[h].test_id = ta[o].test_id
           //trainerinfo nicht vorhanden
-          elist[h].trainer = 'Anonym'
+          elist[h].trainer = $scope.topics[i].responsibleTrainer_id
           //model for checkboxes
           elist[h].checked = false
           //value for panel-click-serachfield interaction

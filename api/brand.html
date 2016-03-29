@@ -47,7 +47,7 @@
          <div class="container-fluid">
           <course-list ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"></course-list>
 
-          <table class="table table-responsive table-hover table-striped" style="width: 50%;">
+          <table class="table table-responsive table-hover table-striped" style="width: 66%;">
             <thead>
                 <th><a href="#"><h4>Course</h4></a></th>
                 <th><a href="#"><h4>Preis</h4></a></th>
@@ -57,8 +57,8 @@
               <tbody>
                 <tr ng-repeat="courseprice in topicpanel.courseList">
                   <td>{{courseprice.course_name}}</td>
-                  <td>{{courseprice.coursePrice}},00- €</td>
-                  <td>{{courseprice.brutto}},00- €</td>
+                  <td>{{courseprice.coursePrice}},- €</td>
+                  <td>{{courseprice.brutto}},- €</td>
                 </tr>
               </tbody>
           </table>
@@ -259,11 +259,15 @@
                  <span ng-show="sortType == 'location_name' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'location_name' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
-                <th><a href="#" ng-click="sortType = 'event_id'; sortReverse = !sortReverse"><h4>Trainer</h4>
-                 <span ng-show="sortType == 'event_id' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'event_id' && sortReverse" class="fa fa-caret-up"></span>
+                <th><a href="#" ng-click="sortType = 'trainer'; sortReverse = !sortReverse"><h4>Trainer</h4>
+                 <span ng-show="sortType == 'trainer' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'trainer' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
                 <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Preis</h4>
+                 <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
+                </a></th>
+                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Brutto</h4>
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
@@ -275,154 +279,13 @@
                   <td>{{xelem.start_date}} - {{xelem.finish_date}}</td>
                   <td>{{xelem.namefortable}}</td>
                   <td>{{xelem.location_name}}</td>
-                  <td>{{xelem.event_id}}</td>               
-                  <td>{{xelem.price}}</td>               
+                  <td>{{xelem.trainer}}</td>
+                  <td>{{xelem.price}},-</td>               
+                  <td>{{Math.round(xelem.price*1.19)}},-</td>               
                 </tr>
               </tbody>
           </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Generiere Tabelle aus Pricelist -->
-
-<!-- Generiere Tabelle aus datesandreserve --><!-- 
-            <table class="table table-responsive table-hover table-striped" style="width: 98%;">
-            <thead>
-                <th><a href="#">Auswahl</a></th>
-
-                <th><a href="#" ng-click="sortType = 'start'; sortReverse = !sortReverse">[von/bis]
-                 <span ng-show="sortType == 'start' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'start' && sortReverse" class="fa fa-caret-up"></span>
-                </a></th>
-                
-                <th>
-                <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                 Name
-                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-                
-                <th>
-                <a href="#" ng-click="sortType = 'location'; sortReverse = !sortReverse">
-                 Ort
-                 <span ng-show="sortType == 'location' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'location' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-                
-                <th>
-                <a href="#" ng-click="sortType = 'trainer'; sortReverse = !sortReverse">
-                 Trainer
-                 <span ng-show="sortType == 'trainer' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'trainer' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-
-                <th>
-                <a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse">
-                 Preis
-                 <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-
-              </thead>
-              <tbody>
-                <tr ng-repeat="courseevent in datesandreserve | orderBy:sortType | filter:tablesearch">
-                  <td><input type="checkbox" class="checkbox"></td>
-                  <td>{{courseevent.start}}/{{courseevent.finish}}</td>
-                  <td>{{courseevent.name}}</td>
-                  <td>{{courseevent.location}}</td>
-                  <td>{{courseevent.trainer}}</td>
-                  <td>{{courseevent.price}}</td>                  
-                </tr>
-              </tbody>
-          </table> -->
-
-
-<!--eventlistelement:  "object:323"btnInfo:falsebtnRegister:falsecourseMaxParticipants:"16"course_id:"43"course_name:"Training 43 in Topic 1 - Level-Rank 1-1"coursedeprecated:"0"event_id:"3845"event_status_id:"2"eventguaranteestatus:"1"eventinhouse:"0"finish_date:"2016-04-06"finish_time:"17:00:00"internet_location_name:"Koqlg"locationMaxParticipants:"16"location_description:blocation_id:"177"location_name:"Koqlg"start_date:"2016-04-04"start_time:"09:00:00"sysName:"Training43inTopic1LevelRank11"test:"0" -->
-
-<!-- courselistelement: "object:425"courseDescription:bcourseDescriptionCertificate:bcourseDescriptionMail:bcourseHeadline:"Training 43 in Topic 1 - Level-Rank 1-1"coursePrice:"1075"course_id:"43"course_name:"Training 43 in Topic 1 - Level-Rank 1-1"internet_course_article_id:"14"level:"1"min_participants:"3"number_of_days:"3"rank:"1"sysName:"Training43inTopic1LevelRank11"test:1test_id:false -->
-
-
-<!-- Generiere Tabelle aus Pricelist -->
-            <!-- <table ng-repeat="dropic in pricelist" 
-            class="table table-responsive table-hover table-striped" style="width: 98%;">
-              <thead>
-                <th><a href="#">Auswahl</a></th>
-
-                <th><a href="#" ng-click="sortType = 'finish_date'; sortReverse = !sortReverse">[von/bis]
-                 <span ng-show="sortType == 'start' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'start' && sortReverse" class="fa fa-caret-up"></span>
-                </a></th>
-                
-                <th>
-                <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                 Name
-                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-                
-                <th>
-                <a href="#" ng-click="sortType = 'location'; sortReverse = !sortReverse">
-                 Ort
-                 <span ng-show="sortType == 'location' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'location' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-                
-                <th>
-                <a href="#" ng-click="sortType = 'test'; sortReverse = !sortReverse">
-                 Trainer
-                 <span ng-show="sortType == 'test' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'test' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th>
-
-                <th>
-                <a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse">
-                 Preis
-                 <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
-                </a>
-               </th> 
- -->
-                <!-- <th ng-repeat="head in ['Auswahl', '[von/bis]', 'Name', 'Ort', 'Trainer', 'Preis']">
-                <a href="#" ng-click="sortType = 'finish_date'; sortReverse = !sortReverse">{{head}}</a>
-               </th>
-               <th> -->
-
-<!--             </thead>
-              <tbody ng-repeat="lvl in dropic">
-                <tr ng-repeat="x in lvl | orderBy:sortType:sortReverse | filter:tablesearch">
-                  <td><input type="checkbox" class="checkbox"></td>
-                  <td>{{x.start}}/{{x.finish}}</td>
-                  <td>{{x.name}}</td>
-                  <td>{{x.location}}</td>
-                  <td>{{x.trainer}}</td>
-                  <td>{{x.price}}</td>                  
-                </tr>
-              </tbody>
-            </table> 
-            
- -->
-
-                    
 
 
             
