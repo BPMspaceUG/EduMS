@@ -49,7 +49,7 @@
 
           <table class="table table-responsive table-hover table-striped" style="width: 66%;">
             <thead>
-                <th><a href="#"><h4>Course</h4></a></th>
+                <th><a href="#"><h4>Kurs</h4></a></th>
                 <th><a href="#"><h4>Preis</h4></a></th>
                 <th><a href="#"><h4>Preis Brutto</h4></a></th>
 
@@ -231,6 +231,7 @@
            <h2>Termine und Anmeldung</h2>
 
            <div class="col-md-9">
+
              <form>
                <div class="input-group">
                  <div class="input-group-addon"><i class="fa fa-search"></i></div>
@@ -267,21 +268,21 @@
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
-                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Brutto</h4>
+                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>MwSt.</h4>
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
               </thead>
               <tbody>
                 <tr ng-repeat="xelem in xlist | orderBy:sortType:sortReverse | filter:tablesearch">
-                  <td><input type="checkbox" class="checkbox" type="checkbox" ng-model="xelem.checked" name="userAgree"></td>
+                  <td><input type="checkbox" class="checkbox" type="checkbox" ng-model="xelem.checked" name="userAgree" ng-change="reservationlistupdate(xelem)"></td>
                   <td>{{xelem.eventguaranteestatus}}</td>               
                   <td>{{xelem.start_date}} - {{xelem.finish_date}}</td>
                   <td>{{xelem.namefortable}}</td>
                   <td>{{xelem.location_name}}</td>
                   <td>{{xelem.trainer}}</td>
                   <td>{{xelem.price}},-</td>               
-                  <td>{{Math.round(xelem.price*1.19)}},-</td>               
+                  <td>{{Math.round(xelem.price*0.19)}},-</td>               
                 </tr>
               </tbody>
           </table>
@@ -377,10 +378,15 @@
                        <input type="text" class="form-control" placeholder="Ort" ng-model="rinfo.city">
                      </div>
                    </div>
-                 </div>
 
+                 </div>
                </div>
               </form>
+              <div class="row" style="margin-top: 15px;" ng-if="rinfo.courses.length>0">
+                <h4>Ausgewählte Events:</h4>
+                <h5 ng-repeat="picked in rinfo.courses track by $index" style="color:#333">
+                  <b>-Nr.: {{picked.event_id}}:</b> {{picked.start_date}} - {{picked.course_name}}</h5>
+             </div>
            </div>
 
 
@@ -394,6 +400,40 @@
 
         <div class="modal-footer">
 
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+         schließen</button>
+
+
+         <a id="modal-2" href="#modal-container-2" data-toggle="modal">
+
+         <button type="button" class="btn btn-success" ng-click="reservate()">
+
+          <i class="fa fa-arrow-circle-right"></i> Anmeldung
+         </button>
+     </a>
+
+        </div>
+     </div> <!-- end modal-content -->
+   </div> <!-- end modal-dialog-->
+ </div> <!-- modal fade -->
+
+
+
+
+<div class="modal fade" id="modal-container-2" role="dialog" class="col-md-4" >
+   <div class="modal-dialog">
+     <div class="modal-content ">
+
+       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X </button>
+
+       <div> <!-- afterbutton -->
+         <div class="modal-body" >
+           <h2>Anmeldung erfolgt.</h2> {{rinfo}}     
+         </div><!-- end registerform -->
+       </div> <!-- end afterbutton -->
+
+
+        <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">
          schließen</button>
          <button type="button" class="btn btn-success" ng-click="reservate()">
