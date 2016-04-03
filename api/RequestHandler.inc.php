@@ -134,7 +134,7 @@ class RequestHandler
                 'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>",
                 'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css'),
                 'directive'=>file_get_contents('directives/monitor.js'),
-                'ct'=>file_get_contents('monitor.html'));   
+                'ct'=>file_get_contents('monitor.html'));
                 return $return;
                 break;             
             //show all Data for handleMonitor
@@ -160,7 +160,6 @@ class RequestHandler
                 break;
 
             case "reserve":
-                //$return['content'] = array( array("text"=>file_get_contents('../custom/signupcontent.html')) );
                 $to      = 'cnu301@mitsm.de';
                 $subject = 'Reservierungsanfrage: Nachname Vorname, Courseabkürzung, Datum, Anzahl';
                 $message = 'Buttons für zusagen, ablehnen und erneut erinnern'.
