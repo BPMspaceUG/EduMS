@@ -12,7 +12,7 @@ $response = array("response" => "no data");
 
 if(sizeof($routes)<2){ 
     echo noLogin;
-    file_put_contents('failLogInLog.txt', date("d.m.Y - H:i:s",time())."\nnoLogin/fail request: ".implode($routes)."\n-----------\n", FILE_APPEND | LOCK_EX);
+    file_put_contents('logs/failLogInLog.log', date("d.m.Y - H:i:s",time())."\nnoLogin/fail request: ".implode($routes)."\n-----------\n", FILE_APPEND | LOCK_EX);
     exit;
 }
 //minimal valid request
