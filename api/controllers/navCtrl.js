@@ -15,7 +15,7 @@ Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular de
 
 app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
-$scope.Math = window.Math
+$scope.Math = window.Math, reservefinal=false
 $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
  .then(function(response) {
   console.log(response)
@@ -244,7 +244,7 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
 
 
 /*Create a Sorted list and add a groupprice to the level*/
-   $scope.pricelist=[]
+   $scope.pricelist=[], $scope.testlist=[]
    var createPrizeList = function(pl){
     for (var coursenr = 0; coursenr < pl.length; coursenr++) {
       if(!$scope.pricelist[pl[coursenr].topic]){$scope.pricelist[pl[coursenr].topic]=[]}
@@ -255,7 +255,10 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
 
       if (coursenow.test==0) {
        $scope.pricelist[ coursenow.topic ][ coursenow.level ].push(coursenow)
-      };
+      }else{
+        $scope.testlist.push(coursenow)
+        console.log($scope.testlist)
+      }
     };
 
     for (var topicnr = 0; topicnr < $scope.pricelist.length; topicnr++) {
@@ -288,8 +291,8 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
          for (var k = 0; k < eve.length; k++) {
            if (eve[k].course_id == top[i].courseList[j].course_id) {
              top[i].eventList.push(eve[k])
-           };        
-         };      
+           };
+         };
        };
      };
    }
@@ -398,13 +401,15 @@ $scope.xlist =  finishEventlist(ta);
       if ($scope.topics[i].sideBarCourses.length<5) { //sidebar soll 5 elemente haben           
        if (tcC.course_id == $scope.eventlist[k].course_id) { //nur Events die zur aktuellen course_id passen
         $scope.topics[i].sideBarCourses.push($scope.eventlist[k]) //befülle SideBar-Array
-        $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
-        .sysName=$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,'');
+        var newentry = $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
+        newentry.sysName=newentry.course_name.replace(/\W+/g,''); 
+        newentry.start_time=newentry.start_time.slice(0,5); //cut seconds
+        newentry.finish_time=newentry.finish_time.slice(0,5); //cut seconds
         // console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
-       };        
+       };
       };
      };
-    };     
+    };
    };
   };
 
@@ -413,11 +418,12 @@ $scope.xlist =  finishEventlist(ta);
  )
 
 
+$scope.tablesearchchange = function(name){$scope.tablesearch = name}
 
 
 /*ng-models for imputs*/
 $scope.rinfo={organisation : '', contactname : '', contactsname : '', 
-	contactpersonemail : '', street : '', housenr : '', city : '',
+  contactpersonemail : '', street : '', housenr : '', city : '',
     zip : '', country : '', courses:[]}
 /*add and remove Partitioner namefields in the Modal*/
 $scope.reserveparticipants = [{name:'', sname:'', email:'', certificate:''}];
@@ -433,23 +439,49 @@ $scope.sortReverse = false
 
 /*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
 the responsible person in the Brand (DB-change -> registermail)*/
-$scope.reservate = function() {
-for (var i = 0; i < $scope.topics.length; i++) {
-    for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
-      if ($scope.topics[i].eventList[j].checked) {
-        $scope.rinfo.courses.push($scope.topics[i].eventList[j])
-      };
+$scope.reservationlistupdate = function(c) {
+var reslist = $scope.rinfo.courses, xlist = $scope.xlist
+  if (c.checked) {
+    reslist.push(c)
+  }else{
+    for (var i = 0; i < reslist.length; i++) {
+      if (reslist[i].event_id) {reslist.splice(i,1)};    
     };
-};
+  }
+}
+$scope.reservate = function() {
+  for (var i = 0; i < $scope.topics.length; i++) {
+      for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
+        if ($scope.topics[i].eventList[j].checked) {
+          $scope.rinfo.courses.push($scope.topics[i].eventList[j])
+        };
+      };
+  };
+
+
  $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush: ')
  console.log($scope.rinfo)
- $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo)
- $http.post('http://localhost:4041', $scope.rinfo)
+ $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo).
+ 
+        then(function(response) {
+          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+bname+'/'+pw+'/reserve')
+        }, function(response) {
+          $scope.data = response.data || "Request failed";
+          $scope.status = response.status;
+      });
+
+ $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
+ 
+        then(function(response) {
+          console.log(reservefinal='reserveinfo send to:[POST] http://localhost:4041 - (nodemail)')
+        }, function(response) {
+          $scope.data = response.data || "Request failed";
+          $scope.status = response.status;
+      });
 }
 
 //If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
-$scope.tablesearchchange = function(name){$scope.tablesearch = name}
 
 
 }])
