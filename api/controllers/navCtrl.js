@@ -418,6 +418,7 @@ $scope.xlist =  finishEventlist(ta);
  )
 
 
+//If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
 $scope.tablesearchchange = function(name){$scope.tablesearch = name}
 
 
@@ -470,6 +471,12 @@ $scope.reservate = function() {
           $scope.data = response.data || "Request failed";
           $scope.status = response.status;
       });
+        /*Apache Errorlog:
+
+[Tue Apr 05 00:07:18.177996 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Warning:  mail(): &quot;sendmail_from&quot; not set in php.ini or custom &quot;From:&quot; header missing in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 169, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
+[Tue Apr 05 00:07:18.177996 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Notice:  Array to string conversion in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 170, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
+[Tue Apr 05 00:07:18.209223 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Notice:  Undefined variable: return in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 171, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
+        */
 
  $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
  
@@ -481,7 +488,6 @@ $scope.reservate = function() {
       });
 }
 
-//If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
 
 
 }])

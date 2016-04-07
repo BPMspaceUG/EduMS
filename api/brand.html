@@ -1,4 +1,24 @@
+
 <div class="container-fluid" ng-controller="navCtrl">
+
+
+<div ng-repeat="event in xlist|limitTo:5">
+<div itemscope itemtype="http://schema.org/EducationEvent"> 
+<!-- meta muss wahrsch. in head -> head wird in index ausgeführt weil gesamt brand in div liegt -> keine xlist in index verfügbar: Entweder ohne meta itemprop an sidebar binden oder sidebar in requesthandler vorsortieren Außerdem ISO´s prüfen-->
+ <meta itemprop="startDate" content="{{event.start_date}}"/>
+ <meta itemprop="endDate" content="{{event.finish_date}}"/>
+ <meta itemprop="location" content="{{event.location}} ({{event.eventgarantiestatus}})"/>
+ <meta itemprop="name" content="{{event.name}}"/>
+ <!-- URL notwendig? (hoher Aufwand)-->
+ <!-- <meta itemprop="url" content="https://www.mitsm.de/kursname" />
+ <a href="https://www.mitsm.de/kursname" target="_self"></a> -->
+</div> 
+</div>
+
+
+
+
+
  <div class="row">
   <!----header-->
   <div class="col-md-12" id="header">
@@ -52,7 +72,6 @@
                 <th><a href="#"><h4>Kurs</h4></a></th>
                 <th><a href="#"><h4>Preis</h4></a></th>
                 <th><a href="#"><h4>Preis Brutto</h4></a></th>
-
               </thead>
               <tbody>
                 <tr ng-repeat="courseprice in topicpanel.courseList">
@@ -207,8 +226,6 @@
     </div>
 
     <div class="alert alert-info">
-     <a class="text-danger" href="http://schema.org/EducationEvent"> WICHTIG muss http://schema.org/EducationEvent unterstützen</a>
-     (Alle Propertys in Info anzeigen?)
     </div>
    </div>
   </div>
