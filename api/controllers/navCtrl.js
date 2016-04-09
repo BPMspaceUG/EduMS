@@ -13,27 +13,39 @@ Er definiert alle Models und funktionen.
 /*Controllers define and handle an Angular area
 Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular definiert*/
 
+ // document.domain = "http://development.bpmspace.org:4040";
+ //Uncaught SecurityError: Failed to set the 'domain' property on 'Document': 'http://development.bpmspace.org:4040' is not a suffix of 'localhost'.
+ // location.origin = "http://development.bpmspace.org:4040";
+ //wird ohne fehler abgeblockt kann auch über consoleneingabe nicht geändert werden
+
 app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $scope.Math = window.Math, reservefinal=false
-$http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
- .then(function(response) {
+var app = angular.module('application', ['ngSanitize']);
+//https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+//http://stackoverflow.com/questions/23823010/how-to-enable-cors-in-angularjs
+
+// console.log('location.origin') //"http://localhost:4040"
+// console.log('document.domain') //"localhost"
+// $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
+//  .then(
+  orderbranddata = function(response) {
   console.log(response)
   //brandinfo RAW:
   /*accesstoken: "5b35793a3",brandDescription: "<h2>description</p>",brandDescriptionFooter: "<h2>FOOTices proin.</p>",brandDescriptionSidebar: "<h2>SIDt felis</p>",
   brandHeadline: "Brand with ID 9",brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9",brand_id: "9",brand_name: "Eqpajbuu ID 9",
   branddeprecated: "0",css-style: "<style> body {background-color: ;}</style>",discount: "7.00",event_partner_id: "1",login: "EqpajbuuID9"*/
-  $scope.brandinfo = response.data.brandinfo
-  $scope.brandinfo.brandDescription = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandDescription+'</div>')
-  $scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandDescriptionFooter+'</div>')
-  $scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandDescriptionSidebar+'</div>')
-  $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.data.brandinfo[0].brandImage+'</div>')
+  $scope.brandinfo = response.brandinfo
+  $scope.brandinfo.brandDescription = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescription+'</div>')
+  $scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionFooter+'</div>')
+  $scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionSidebar+'</div>')
+  $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandImage+'</div>')
 
 
   //topiclist RAW: 
   /*$$hashKey: "object:953", deprecated: "0", footer: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
   topicDescriptionSidebar: "<h2>with ID 1</h2>", topicHeadline: "TOPIC with ID 1", topicImage: "data:image/svg+xml;charset=utf-8,<svg><%2Fsvg>", topicName: "Pkhhoaged", topic_id: "1"*/
-  $scope.topics = response.data.topiclist
+  $scope.topics = response.topiclist
    for (var i = 0; i < $scope.topics.length; i++) {
     $scope.topics[i].footer = $sce.trustAsHtml('<div>'+$scope.topics[i].topicFooter+'</div>')
     $scope.topics[i].topicDescription = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescription+'</div>')
@@ -45,7 +57,7 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 
   //topiccourselist RAW:
   /*course_id: "43", course_name: "Training 43 in Topic 1 - Level-Rank 1-1", level: "1", rank: "1", topicName: "Pkhhoaged", topic_course_id: "43", topic_id: "1"*/
-  $scope.topiccourseCourse = response.data.topiccourselist 
+  $scope.topiccourseCourse = response.topiccourselist 
 
   
 
@@ -53,7 +65,7 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
   /*courseDescription: "<p>Posuere mus.</p>", courseDescriptionCertificate: "<h2>adfadf</ul>", courseDescriptionMail: "<h2>Course description from conec.</p>"
   courseHeadline: "Training 43 in Topic 1 - Level-Rank 1-1", coursePrice: "1075", course_id: "43",  course_name: "Training 43 in Topic 1 - Level-Rank 1-1"
   internet_course_article_id: "14",min_participants: "3", number_of_days: "3"*/
-  $scope.courses = response.data.courselist;
+  $scope.courses = response.courselist;
   for (var i = 0; i < $scope.courses.length; i++) {
     $scope.courses[i].courseDescription = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescription+'</div>')
     $scope.courses[i].courseDescriptionCertificate = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionCertificate+'</div>')
@@ -67,7 +79,7 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 
   //coursetotestlist RAW:
   /*v_testcourse - course_id:1, test_id:44*/
-  $scope.courseToTest = response.data.coursetotestlist;
+  $scope.courseToTest = response.coursetotestlist;
 
 
 
@@ -75,14 +87,14 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
   /*courseMaxParticipants: "16", course_id: "74", course_name: "Training 74 in Topic 1 - Level-Rank 2-4", coursedeprecated: "0", event_id: "3873", event_status_id: "2"
   eventguaranteestatus: "2", eventinhouse: "0", finish_date: "2016-03-11", finish_time: "17:00:00", internet_location_name: "Koqlg", locationMaxParticipants: "16"
   location_description: "<h2>Location description from Locatos.</p>", location_id: "177", location_name: "Koqlg", start_date: "2016-03-09", start_time: "13:30:00", test: "0"*/ 
-  $scope.eventlist = response.data.eventlist
-  for (var i = 0; i < response.data.eventlist.length; i++) {
-    $scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.data.eventlist[i].location_description+'</div>')
+  $scope.eventlist = response.eventlist
+  for (var i = 0; i < response.eventlist.length; i++) {
+    $scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.eventlist[i].location_description+'</div>')
    }
 
-  $scope.allNextEvents = response.data.eventlist //Termine & Anmeldung Modal
-  $scope.nextEvents =  Object.keys(response.data.eventlist)
-  .map(function (key) {return response.data.eventlist[key]});
+  $scope.allNextEvents = response.eventlist //Termine & Anmeldung Modal
+  $scope.nextEvents =  Object.keys(response.eventlist)
+  .map(function (key) {return response.eventlist[key]});
   $scope.nextEvents = $scope.nextEvents.slice(0,4) //Sidebar-next 'x' Events
 
   for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
@@ -94,21 +106,21 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
   };
 
   $scope.location=[]
-  for (var i = 0; i < response.data.eventlist.length; i++) {
+  for (var i = 0; i < response.eventlist.length; i++) {
     var push=true;
     for (var j = 0; j < $scope.location.length; j++) {
       $scope.location[j].width= Math.round((100*j)/$scope.location.length)
-      if (response.data.eventlist[i].location_name == $scope.location[j].name) {
+      if (response.eventlist[i].location_name == $scope.location[j].name) {
         push=false
       };
     };
 
     if (push) {
      $scope.location.push(
-      {id : response.data.eventlist[i].location_id, 
-      name : response.data.eventlist[i].location_name,
-      description : response.data.eventlist[i].location_description, 
-      locationMaxPart : response.data.eventlist[i].locationMaxParticipants,
+      {id : response.eventlist[i].location_id, 
+      name : response.eventlist[i].location_name,
+      description : response.eventlist[i].location_description, 
+      locationMaxPart : response.eventlist[i].locationMaxParticipants,
      })      
     };
   }
@@ -116,7 +128,7 @@ $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
 
 //stateinfo RAW:
 //states of a event - Object[0] {ID:"2", eventguaranteestatus:"guaranteed"}
-  $scope.stateinfo = response.data.stateinfo
+  $scope.stateinfo = response.stateinfo
 
 
 
@@ -414,8 +426,9 @@ $scope.xlist =  finishEventlist(ta);
   };
 
   console.log('fertiges $scope.topics: ');console.log($scope.topics); 
-  },function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
- )
+  }
+ //  ,function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
+ // )
 
 
 //If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
@@ -463,14 +476,14 @@ $scope.reservate = function() {
  $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush: ')
  console.log($scope.rinfo)
- $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo).
+ // $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo).
  
-        then(function(response) {
-          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+bname+'/'+pw+'/reserve')
-        }, function(response) {
-          $scope.data = response.data || "Request failed";
-          $scope.status = response.status;
-      });
+ //        then(function(response) {
+ //          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+bname+'/'+pw+'/reserve')
+ //        }, function(response) {
+ //          $scope.data = response || "Request failed";
+ //          $scope.status = response.status;
+ //      });
         /*Apache Errorlog:
 
 [Tue Apr 05 00:07:18.177996 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Warning:  mail(): &quot;sendmail_from&quot; not set in php.ini or custom &quot;From:&quot; header missing in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 169, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
@@ -478,19 +491,20 @@ $scope.reservate = function() {
 [Tue Apr 05 00:07:18.209223 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Notice:  Undefined variable: return in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 171, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
         */
 
- $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
+//  $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
  
-        then(function(response) {
-          console.log(reservefinal='reserveinfo send to:[POST] http://localhost:4041 - (nodemail)')
-        }, function(response) {
-          $scope.data = response.data || "Request failed";
-          $scope.status = response.status;
-      });
+//         then(function(response) {
+//           console.log(reservefinal='reserveinfo send to:[POST] http://localhost:4041 - (nodemail)')
+//         }, function(response) {
+//           $scope.data = response || "Request failed";
+//           $scope.status = response.status;
+//       });
+// }
+
+
 }
-
-
-
-}])
+ orderbranddata(response);
+}]);
 
 
 

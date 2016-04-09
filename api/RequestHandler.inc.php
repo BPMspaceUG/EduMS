@@ -119,8 +119,7 @@ class RequestHandler
             case 'brand': 
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
-                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".
-                file_get_contents('controllers/navCtrl.js'),
+                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".file_get_contents('controllers/navCtrl.js'),
                 'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css').file_get_contents('custom/cssSheets.html').$this->usercss,
                 'directive'=>file_get_contents('directives/lawdata.js').file_get_contents('directives/sidebarcourselist.js'),
                 'ct'=>file_get_contents('brand.html'));                
@@ -160,10 +159,12 @@ class RequestHandler
                 break;
 
             case "reserve":
+            require 'mail/sendtobrand.php';
+            testmail();
                 $to      = 'cnu301@mitsm.de';
                 $subject = 'Reservierungsanfrage: Nachname Vorname, Courseabkürzung, Datum, Anzahl';
                 $message = 'Buttons für zusagen, ablehnen und erneut erinnern'.
-                    'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation. '.
+                    'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation.'.
                     'Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,'.
                     'dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).'.
                     'Unter https://wiki.ubuntuusers.de/Postfix/ ist der standart'.
