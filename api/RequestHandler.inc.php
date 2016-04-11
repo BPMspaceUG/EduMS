@@ -125,7 +125,6 @@ class RequestHandler
                 'ct'=>file_get_contents('brand.html'));                
                 return $return;
                 break;
-
             //show Data in an Administrative mode
             case 'monitor': 
                 $return = array(
