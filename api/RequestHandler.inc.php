@@ -120,7 +120,7 @@ class RequestHandler
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
                 'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".file_get_contents('controllers/navCtrl.js'),
-                'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css').file_get_contents('custom/cssSheets.html').$this->usercss,
+                'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
                 'directive'=>file_get_contents('directives/lawdata.js').file_get_contents('directives/sidebarcourselist.js'),
                 'ct'=>file_get_contents('brand.html'));                
                 return $return;
@@ -131,7 +131,7 @@ class RequestHandler
                 $return = array(
                 'script'=>file_get_contents('custom/scripte.html'),
                 'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>",
-                'css'=>file_get_contents('custom/3.3.6 bootstrap.min.css'),
+                'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css'),
                 'directive'=>file_get_contents('directives/monitor.js'),
                 'ct'=>file_get_contents('monitor.html'));
                 return $return;

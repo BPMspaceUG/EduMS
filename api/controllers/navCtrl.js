@@ -13,22 +13,12 @@ Er definiert alle Models und funktionen.
 /*Controllers define and handle an Angular area
 Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular definiert*/
 
- // document.domain = "http://development.bpmspace.org:4040";
- //Uncaught SecurityError: Failed to set the 'domain' property on 'Document': 'http://development.bpmspace.org:4040' is not a suffix of 'localhost'.
- // location.origin = "http://development.bpmspace.org:4040";
- //wird ohne fehler abgeblockt kann auch über consoleneingabe nicht geändert werden
-
 app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $scope.Math = window.Math, reservefinal=false
-var app = angular.module('application', ['ngSanitize']);
-//https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
-//http://stackoverflow.com/questions/23823010/how-to-enable-cors-in-angularjs
 
-// console.log('location.origin') //"http://localhost:4040"
-// console.log('document.domain') //"localhost"
-// $http.get('/EduMS/api/index.php/'+bname+'/'+pw+'/getBrandInfo')
-//  .then(
+
+
   orderbranddata = function(response) {
   console.log(response)
   //brandinfo RAW:
@@ -309,8 +299,6 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
      };
    }
    cereateEventList($scope.topics, $scope.eventlist)
-    // console.log('\nel: ')
-    // console.log($scope.topics[1].eventList)
 
 
 
