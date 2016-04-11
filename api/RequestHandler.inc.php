@@ -64,7 +64,7 @@ class RequestHandler
                 return true;
             }else{
                 return 'forbidden';
-            // file_put_contents('logs/failLogInSQLqueryLog.log', date("d.m.Y - H:i:s",time())."\nReceaved query: ".$sql."\n$result: ".$result."\n-----------\n", FILE_APPEND | LOCK_EX);
+                file_put_contents('logs/failLogInSQLqueryLog.log', date("d.m.Y - H:i:s",time())."\nReceaved query: ".$sql."\n$result: ".$result."\n-----------\n", FILE_APPEND | LOCK_EX);
             }
 
              // create new directory with 744 permissions if it does not exist yet
@@ -73,12 +73,12 @@ class RequestHandler
              //     $oldmask = umask(0);  //when used in linux server  
              //     mkdir ('logs', 0744);
              // }
-             // file_put_contents ('metaLog.log', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ', FILE_APPEND | LOCK_EX);
+            file_put_contents ('metaLog.log', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ', FILE_APPEND | LOCK_EX);
             
             // var_dump($this->usercss);
         }
         else{
-            // file_put_contents('logs/failLogInLog.log', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
+            file_put_contents('logs/failLogInLog.log', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
             exit;
             return 'forbidden';
         }
@@ -119,24 +119,11 @@ class RequestHandler
             case 'brand': 
                 $return = array(
                 'script'=>file_get_contents('js/jQuery 2.2.1.js').file_get_contents('js/AngularJS v1.4.9.js').file_get_contents('js/Bootstrap v3.3.6.js'),
-                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".file_get_contents('js/EduMS_Ctrl.js'),
+                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); </script>".file_get_contents('js/EduMS_Ctrl.js'),
                 'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
                 'directive'=>file_get_contents('js/EduMS_template-directives.js'),
                 'ct'=>file_get_contents('brand.html'));                
                 return $return;
-                break;
-            //show Data in an Administrative mode
-            case 'monitor': 
-                $return = array(
-                'script'=>file_get_contents('custom/scripte.html'),
-                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>",
-                'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css'),
-                'directive'=>file_get_contents('directives/monitor.js'),
-                'ct'=>file_get_contents('monitor.html'));
-                return $return;
-                break;             
-            //show all Data for handleMonitor
-            case 'getMonitor': return $this->getMonitor();
                 break;
 
             //database getters
@@ -175,7 +162,7 @@ class RequestHandler
             break;
         
             default: echo "Defaultrequest from: Requesthandler -> handle -> defaultRequest.";
-                echo "There is no '".$section."' avaliable try http://localhost:4040/EduMS-client/index.php?navdest=brand";
+                echo "There is no section '".$section."' avaliable";
                 file_put_contents('logs/failsectionLog.log', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
             exit;
             break;
@@ -188,21 +175,21 @@ class RequestHandler
 
 
     /*Choose by URL($handle) what data the monitor have to responde*/
-    private function handleMonitor($handle=array('a' => 'default' )){
-        //wie viele Parameter wurden übergeben? sizeof=count
-        $out = array();
-        if(sizeof($handle)==0){ //api/usr/token/monitor---
-            $out['monitor'] = $this->getAll(); //Monitor everything
-            return $out;
-        }
-        /*If receaved a specific Monitor, responde data for every specification*/
-        else{ 
-            for ($i=0; $i < sizeof($handle); $i++) { 
-                $out[$handle[i]] = $this->handle($handle); //response[handle-1,(..),handle-n]=Data               
-            }
-            return $out;
-        }
-    }
+    // private function handleMonitor($handle=array('a' => 'default' )){
+    //     //wie viele Parameter wurden übergeben? sizeof=count
+    //     $out = array();
+    //     if(sizeof($handle)==0){ //api/usr/token/monitor---
+    //         $out['monitor'] = $this->getAll(); //Monitor everything
+    //         return $out;
+    //     }
+    //     /*If receaved a specific Monitor, responde data for every specification*/
+    //     else{ 
+    //         for ($i=0; $i < sizeof($handle); $i++) { 
+    //             $out[$handle[i]] = $this->handle($handle); //response[handle-1,(..),handle-n]=Data               
+    //         }
+    //         return $out;
+    //     }
+    // }
 
     //vTopicNotdepercated vTopiccourseNotdepercatedlevelnotzero vEventcourselocationFuturepublicnotdepercatednotstornonotnew
     /*Definition of all getters for the database*/
@@ -291,19 +278,19 @@ class RequestHandler
     }
 
  
-    private function getMonitor(){ 
-        $tables = array('v_topic_notdepercated',
-            'v_eventcourselocation_futurepublicnotdepercatednotstornonotnew',
-            'v_topiccourse_notdepercatedlevelnotzero',
-            'v_course_notdepercated', 'v_testcourse','v_brand__notdepercated_loginnotempty_accesstokennotempty', 'v_brandtopic', 
-            'v_participationevent_count_futurepublicnotstornonotnew', 
-            'v_statusevent', 'v_statuseventguarantee', 'v_statustrainer');
-        for ($i=0; $i < count($tables); $i++) { 
-            $query = "SELECT * FROM ".$tables[$i]." limit 1";
-            $return[$tables[$i]] = $this->getResultArray($query);
-          }  
-        return $return;
-    }
+    // private function getMonitor(){ 
+    //     $tables = array('v_topic_notdepercated',
+    //         'v_eventcourselocation_futurepublicnotdepercatednotstornonotnew',
+    //         'v_topiccourse_notdepercatedlevelnotzero',
+    //         'v_course_notdepercated', 'v_testcourse','v_brand__notdepercated_loginnotempty_accesstokennotempty', 'v_brandtopic', 
+    //         'v_participationevent_count_futurepublicnotstornonotnew', 
+    //         'v_statusevent', 'v_statuseventguarantee', 'v_statustrainer');
+    //     for ($i=0; $i < count($tables); $i++) { 
+    //         $query = "SELECT * FROM ".$tables[$i]." limit 1";
+    //         $return[$tables[$i]] = $this->getResultArray($query);
+    //       }  
+    //     return $return;
+    // }
 
 }
 //v_eventcourselocation_futurepublicnotdepercatednotstornonotnew v_statuseventguarantee

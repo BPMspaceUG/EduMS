@@ -486,7 +486,7 @@ $scope.reservate = function() {
 
 
 }
- orderbranddata(response);
+orderbranddata(response);
 }]);
 
 

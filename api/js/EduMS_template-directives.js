@@ -8,7 +8,7 @@ template:
   <a class="list-group-item active" style="background-color:#333;">\
     <div class="row">\
       <div class="col-md-3" ng-if="e.eventguaranteestatus">\
-        <img class="transparent" alta="https://www.mitsm.de/images/CDN/mITSM_ICON_OT_Formular_Termingarantie_klein.png" src="https://www.mitsm.de/images/CDN/mITSM_ICON_OT_Formular_Termingarantie_klein.png">\
+\
       </div>\
       <div class="col-md-9">\
         <div class="row">\
@@ -21,18 +21,10 @@ template:
       </div>\
     </div>\
     <div style="margin-top: 5px;">\
-      <button type="button" style="width:107px;" class="btn btn-info btn-sm" ng-click= "e.btnInfo=!e.btnInfo">\
-        <span class="fa-stack"><i class="fa fa-info fa-stack-1x fa-inverse" style="color:#0e0067; font-size:17px;"></i></span>Info\
-      </button> \
       <div class="fa fa-caret-down" style="color:#00675a; font-size:29px;"> </div> \
       <button type="button" style="color:#333;" class="btn btn-success btn-sm" ng-model="reservate" ng-click= "e.btnRegister=!e.btnRegister">\
         <span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse" style="color:#1d6700; font-size:17px;"></i></span>reservieren\
       </button>\
-    </div>\
-    <div  ng-show="e.btnInfo">\
-      <div style="color:#FFA639; font-size:17px; margin-top: 3px;"><b>Start: {{e.start_date}} {{e.start_time}} Uhr</b></div> \
-      <div style="color:#FFA639; font-size:17px;"><b>Ende: {{e.finish_date}} {{e.finish_time}} Uhr</b></div> \
-      <div ng-bind-html="e.location_description"></div>\
     </div>\
     <div ng-show="e.btnRegister">\
       <register-form></register-form>\
@@ -97,21 +89,6 @@ app.directive('registerForm', function() {//sideBarCourse = Directive Name
 //Sidebarelement für allgemeine Kurse
 template:'<form name="formReg" class="form-horizontal" novalidate>\
   <div class="form-group has-warning">\
-\
-    <div class="row" style="margin-top: 2px;">\
-      <div class="col-md-3">{{rinfo.mVorname}} {{rinfo.mFamName}}</div>\
-      <div class="col-md-3">\
-        <div class="input-group" class="form-input">\
-          <input type="text" style="margin-top: 5px;" class="form-control" id="inputNameId{{e.sysName}}" placeholder="Vorname" name="inputNameName{{e.sysName}}" ng-model="rinfo.mVorname">\
-        </div>\
-      </div>\
-      <div class="col-md-3">\
-        <div class="input-group" class="form-input">\
-          <input type="text" style="margin-top: 5px;" class="form-control" id="inputFamNameId{{e.sysName}}" placeholder="Nachname" ng-model="rinfo.mFamName">\
-        </div>\
-      </div>\
-    </div>\
-\
     <div class="row" style="margin-top: 2px; ">\
       <div class="col-md-3">{{rinfo.mTeilnehmerZahl}} {{rinfo.mAdresse}}</div>\
       <div class="col-md-3">\
@@ -127,6 +104,7 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
     </div>\
   </div>\
   <input type="submit" ng-click="reservate(e.sysName)" class="btn btn-success" style="color:#333;" value="Reservierungsanfrage Abschicken"/>\
+  <input type="submit" class="btn btn-success" style="color:#333;" value="Weitere Kurse" href="#modal-container-1" data-toggle="modal"/>\
 </form>'
 }
 });
