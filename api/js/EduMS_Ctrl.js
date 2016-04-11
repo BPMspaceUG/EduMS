@@ -301,11 +301,6 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
    cereateEventList($scope.topics, $scope.eventlist)
 
 
-
-
-
-
-
 /*Fill in the Eventlist all nessesary Infos from other tables and add values for models.
 Calculate a sum for all [course(1-n) +  test]-Groups*/
 function finishEventlist(ta){

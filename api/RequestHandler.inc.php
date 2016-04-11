@@ -118,10 +118,10 @@ class RequestHandler
             //default view for a brand 
             case 'brand': 
                 $return = array(
-                'script'=>file_get_contents('custom/scripte.html'),
-                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".file_get_contents('controllers/navCtrl.js'),
+                'script'=>file_get_contents('js/jQuery 2.2.1.js').file_get_contents('js/AngularJS v1.4.9.js').file_get_contents('js/Bootstrap v3.3.6.js'),
+                'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); bname = '".$bname."', pw = '".$pw."';</script>".file_get_contents('js/EduMS_Ctrl.js'),
                 'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
-                'directive'=>file_get_contents('directives/lawdata.js').file_get_contents('directives/sidebarcourselist.js'),
+                'directive'=>file_get_contents('js/EduMS_template-directives.js'),
                 'ct'=>file_get_contents('brand.html'));                
                 return $return;
                 break;

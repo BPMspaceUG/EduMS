@@ -1,4 +1,6 @@
 # log by rob
 *.log
-
-
+/mail
+api/mail
+api/mail/*
+sendtobrand.php
