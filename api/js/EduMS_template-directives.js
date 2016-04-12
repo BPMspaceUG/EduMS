@@ -8,13 +8,11 @@ template:
   <a class="list-group-item active" style="background-color:#333;">\
     <div class="row">\
       <div class="col-md-3" ng-if="e.eventguaranteestatus">\
-\
       </div>\
       <div class="col-md-9">\
         <div class="row">\
         <div class="pull-left" style="color:#FFA639; font-size:17px;">Nächster Termin: <b>{{e.start_date}}</b></div>\
         </div>\
-\
         <div class="row">\
         <div class="pull-left" style="color:#ccc; font-size:19px;"><b>{{e.course_name}}</b></div>\
         </div>\
@@ -104,7 +102,7 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
     </div>\
   </div>\
   <input type="submit" ng-click="reservate(e.sysName)" class="btn btn-success" style="color:#333;" value="Reservierungsanfrage Abschicken"/>\
-  <input type="submit" class="btn btn-success" style="color:#333;" value="Weitere Kurse" href="#modal-container-1" data-toggle="modal"/>\
+  <input type="submit" class="btn btn-success" style="color:#333;" value="Weitere Kurse" href="#modal-container-1" data-toggle="modal" ng-click="initreslistfromsidebar(e)"/>\
 </form>'
 }
 });
@@ -155,23 +153,23 @@ app.directive('registerFormTwo', function() {
 app.directive('courseList', function(){
  return{
   template: '<div class="container" style="width: 98%;">\
-  <div class="panel-group" id="t.topic_name_raw">\
-  <div class="panel panel-default">\
-  <div class="panel-heading with panel-primary">\
-  <h3><a data-toggle="collapse" href="#{{panelcourse.sysName}}">{{panelcourse.courseHeadline}}</a></h3>\
-  </div>\
-  <div id="{{panelcourse.sysName}}"" class="panel-collapse collapse">\
-  <div class="panel-body" ng-if="panelcourse.test=0">Kurs: {{panelcourse.courseHeadline}}{{panelcourse.courseDescription}}{{panelcourse.coursePrice}}{{panelcourse.number_of_days}}{{panelcourse.min_participants}}</div>\
-  <div class="panel-body" ng-if="panelcourse.test=1"> \
-  <h3>Test: {{panelcourse.courseHeadline}}</h3>\
-  <div ng-bind-html="panelcourse.courseDescription"></div>\
-  <h4 style="color:#78b433">Preis: {{panelcourse.coursePrice}},- €</h4>\
-  <div style="color:#78b433">Mwst. ({{Math.round(panelcourse.coursePrice*0.19)}},- €)</div>\
-  <h4 style="color:136b26">Dauer: {{panelcourse.number_of_days}} Tage</h4>\
-  <h4 style="color:#FFA639">Mindestteilnehmerzahl: {{panelcourse.min_participants}} Personen</h4></div>\
-  </div>\
-  </div>\
-  </div> \
+    <div class="panel-group" id="t.topic_name_raw">\
+    <div class="panel panel-default">\
+    <div class="panel-heading with panel-primary">\
+    <h3><a data-toggle="collapse" href="#{{panelcourse.sysName}}">{{panelcourse.courseHeadline}}</a></h3>\
+    </div>\
+    <div id="{{panelcourse.sysName}}"" class="panel-collapse collapse">\
+    <div class="panel-body" ng-if="panelcourse.test=0">Kurs: {{panelcourse.courseHeadline}}{{panelcourse.courseDescription}}{{panelcourse.coursePrice}}{{panelcourse.number_of_days}}{{panelcourse.min_participants}}</div>\
+    <div class="panel-body" ng-if="panelcourse.test=1"> \
+    <h3>Test: {{panelcourse.courseHeadline}}</h3>\
+    <div ng-bind-html="panelcourse.courseDescription"></div>\
+    <h4 style="color:#78b433">Preis: {{panelcourse.coursePrice}},- €</h4>\
+    <div style="color:#78b433">Mwst. ({{Math.round(panelcourse.coursePrice*0.19)}},- €)</div>\
+    <h4 style="color:136b26">Dauer: {{panelcourse.number_of_days}} Tage</h4>\
+    <h4 style="color:#FFA639">Mindestteilnehmerzahl: {{panelcourse.min_participants}} Personen</h4></div>\
+    </div>\
+    </div>\
+    </div> \
   </div>',
   replace: true
  }

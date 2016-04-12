@@ -56,7 +56,13 @@
 
 
      <div class="tab-content">
-     <div class="tab-pane active" id="panel-brand"><div ng-bind-html="brandinfo.brandDescription"></div></div>      
+     <div class="tab-pane active" id="panel-brand">
+      <div ng-bind-html="brandinfo.brandDescription"></div>
+      <div class="col-md-12 well well-lg" id="container-footer">
+        <h4>{{brandinfo.brand_name}}</h4>
+        <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
+     </div>
+    </div>
       <div ng-repeat="topicpanel in topics" class="tab-pane" id="panel-{{topicpanel.topic_name}}">
        <div class="col-md-12 well well-lg">
        <h2>{{topicpanel.topicHeadline}}</h2>
@@ -84,6 +90,7 @@
          </div>
         </nav>
        </div>
+       <div ng-bind-html="topicpanel.footer"></div>
       </div>
       
       <div class="tab-pane" id="panel-preis">
@@ -182,10 +189,6 @@
        </div>
       </div>
      </div>
-     <div   class="col-md-12 well well-lg" id="container-footer">
-      <h4>{{brandinfo.brand_name}}</h4>
-      <h5  ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
-     </div>
     </div>
    </div>
 
@@ -222,9 +225,6 @@
        </div>    
       
      </div>
-    </div>
-
-    <div class="alert alert-info">
     </div>
    </div>
   </div>
@@ -460,11 +460,8 @@
      </div> <!-- end modal-content -->
    </div> <!-- end modal-dialog-->
  </div> <!-- modal fade -->
-
-
-
-  <div class="row">
    <!----external footer-->
+<!--   <div class="row">
    <div class="col-md-12" id="footer">
     <div class="well well-lg well_darkgrey">
      verwendete scripte: 
@@ -473,7 +470,5 @@
      <a href="https://jquery.com/download/">jQuery 2.2.1</a>
     </div>
    </div>
-  </div>
-
-
+  </div> -->
  </div>

@@ -33,11 +33,11 @@ $scope.Math = window.Math, reservefinal=false
 
 
   //topiclist RAW: 
-  /*$$hashKey: "object:953", deprecated: "0", footer: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
+  /*$$hashKey: "object:953", deprecated: "0", topicDescriptionFooter: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
   topicDescriptionSidebar: "<h2>with ID 1</h2>", topicHeadline: "TOPIC with ID 1", topicImage: "data:image/svg+xml;charset=utf-8,<svg><%2Fsvg>", topicName: "Pkhhoaged", topic_id: "1"*/
   $scope.topics = response.topiclist
    for (var i = 0; i < $scope.topics.length; i++) {
-    $scope.topics[i].footer = $sce.trustAsHtml('<div>'+$scope.topics[i].topicFooter+'</div>')
+    $scope.topics[i].topicDescriptionFooter = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescriptionFooter+'</div>')
     $scope.topics[i].topicDescription = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescription+'</div>')
     $scope.topics[i].topicDescriptionSidebar = $sce.trustAsHtml('<div>'+$scope.topics[i].topicDescriptionSidebar+'</div>')
     $scope.topics[i].topicImage = $sce.trustAsHtml('<div>'+$scope.topics[i].topicImage+'</div>')
@@ -88,9 +88,9 @@ $scope.Math = window.Math, reservefinal=false
   $scope.nextEvents = $scope.nextEvents.slice(0,4) //Sidebar-next 'x' Events
 
   for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
-   $scope.nextEvents[i].btnInfo=false; //Show
+   $scope.nextEvents[i].btnInfo=false; //Show cleanflag
    $scope.nextEvents[i].btnRegister=false; //Show
-   if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample
+   if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample cleanflag
    $scope.nextEvents[i].sysName=$scope.nextEvents[i].course_name.replace(/\W+/g,'');
    //console.log('nextEvents['+i+']:');console.log($scope.nextEvents[i]); console.log('')
   };
@@ -436,7 +436,7 @@ $scope.sortReverse = false
 
 /*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
 the responsible person in the Brand (DB-change -> registermail)*/
-$scope.reservationlistupdate = function(c) {
+$scope.reservationlistupdate = function(c) { //c = course
 var reslist = $scope.rinfo.courses, xlist = $scope.xlist
   if (c.checked) {
     reslist.push(c)
@@ -445,6 +445,11 @@ var reslist = $scope.rinfo.courses, xlist = $scope.xlist
       if (reslist[i].event_id) {reslist.splice(i,1)};    
     };
   }
+}
+/*On click 'Weitere Kurse' add course to reservation list and open T&A-Modal for more courseoptions*/
+$scope.initreslistfromsidebar = function(c) { //c = course
+  c.checked = true
+  $scope.reservationlistupdate(c)
 }
 $scope.reservate = function() {
   for (var i = 0; i < $scope.topics.length; i++) {
@@ -494,5 +499,5 @@ orderbranddata(response);
 
 
 
-
+function log(a){console.log(a)}
 </script>
