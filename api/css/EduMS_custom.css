@@ -1,14 +1,5 @@
 <style type="text/css">
-.well_darkgrey {
-    opacity: 0.9; /* opacity [0-1] */
-    -moz-opacity: 0.9; /* opacity [0-1] */
-    -webkit-opacity: 0.9; /* opacity [0-1] */
-    background: #C6C6C6;
-}
 
-.90_percent {
-    max-width: 90%;
-}
 
 .modal {
     position: fixed;
@@ -76,27 +67,13 @@ table {
     margin-right: auto;
 }
 
-.btn-sucsess-outline {
-    background: #FFFFFF;
-    border-color: #5CB85C;
-    border-style: solid;
-    border-width: 2px;
-}
-
 body {
     position: relative;
 }
 
-#inhalt {
-            background-color: #E2E2E2;
+#content {
+            background-color: #FFFFFF;
         }
 
-        #steuerung {
-            float: right;
-            
-        }
 
-        #fussbereich {
-            clear: both;
-        }
 </style>
