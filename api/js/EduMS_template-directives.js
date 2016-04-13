@@ -4,30 +4,31 @@ app.directive('rightBarCourseAll', function() {//sideBarCourse = Directive Name
  return{
 //Sidebarelement für allgemeine Kurse
 template:
-'<div class="list-group" >\
-  <a class="list-group-item active" style="background-color:#333;">\
+'<div class="list-group " >\
+  <div class="list-group-item event">\
     <div class="row">\
-      <div class="col-md-3" ng-if="e.eventguaranteestatus">\
+      <div class="col-md-1" >\
       </div>\
-      <div class="col-md-9">\
+      <div class="col-md-8">\
         <div class="row">\
-        <div class="pull-left" style="color:#FFA639; font-size:17px;">Nächster Termin: <b>{{e.start_date}}</b></div>\
+        <div class="pull-left"><b>{{e.start_date}} - Location </b></div>\
         </div>\
         <div class="row">\
-        <div class="pull-left" style="color:#ccc; font-size:19px;"><b>{{e.course_name}}</b></div>\
-        </div>\
-      </div>\
-    </div>\
-    <div style="margin-top: 5px;">\
-      <div class="fa fa-caret-down" style="color:#00675a; font-size:29px;"> </div> \
-      <button type="button" style="color:#333;" class="btn btn-success btn-sm" ng-model="reservate" ng-click= "e.btnRegister=!e.btnRegister">\
-        <span class="fa-stack"><i class="fa fa-cart-plus fa-stack-1x fa-inverse" style="color:#1d6700; font-size:17px;"></i></span>reservieren\
+        <div class="pull-left"><b>{{e.course_name}}</b></div>\
+		    <div style="margin-top: 5px;">\
+       <button type="button" class="btn btn-success btn-block" ng-model="reservate" ng-click= "e.btnRegister=!e.btnRegister">\
+        <i class="fa fa-cart-plus fa-stack-3x fa-inverse"></i> Anmelden!\
       </button>\
     </div>\
     <div ng-show="e.btnRegister">\
       <register-form></register-form>\
     </div>\
-  </a>\
+        </div>\
+      </div>\
+	  <div class="col-md-3" >\
+      </div>\
+    </div>\
+  </div>\
 </div>'
 
 }
