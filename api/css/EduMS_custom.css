@@ -1,6 +1,5 @@
 <style type="text/css">
 
-
 .modal {
     position: fixed;
     top: 3%;
@@ -71,9 +70,11 @@ body {
     position: relative;
 }
 
-#content {
-            background-color: #FFFFFF;
-        }
-
-
+.event{
+	z-index: 2;
+	color: #000;
+	background-color: #FFF;
+	border-color: grey;
+}
+ 
 </style>
