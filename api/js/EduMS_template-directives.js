@@ -6,28 +6,38 @@ app.directive('rightBarCourseAll', function() {//sideBarCourse = Directive Name
 template:
 '<div class="list-group " >\
   <div class="list-group-item event">\
+  \
     <div class="row">\
-      <div class="col-md-1" >\
-      </div>\
-      <div class="col-md-8">\
-        <div class="row">\
-        <div class="pull-left"><b>{{e.start_date}} - Location </b></div>\
+      <div class="col-md-1" ></div>\
+	  \
+      <div class="col-md-10">\
+        <div class="row" style="width=100%">\
+			<div class="pull-left"><b>{{e.start_date}} - Location</b></div>\
         </div>\
+		\
         <div class="row">\
-        <div class="pull-left"><b>{{e.course_name}}</b></div>\
-		    <div style="margin-top: 5px;">\
-       <button type="button" class="btn btn-success btn-block" ng-model="reservate" ng-click= "e.btnRegister=!e.btnRegister">\
-        <i class="fa fa-cart-plus fa-stack-3x fa-inverse"></i> Anmelden!\
-      </button>\
+			<div class="pull-left" style="text-align: left;" ><b>{{e.course_name}}</b></div>\
+			<div style="margin-top: 5px;">\
+			<button type="button" class="btn btn-success btn-block" ng-model="reservate" ng-click= "e.btnRegister=!e.btnRegister">\
+			<i class="fa fa-cart-plus fa-stack-3x fa-inverse"></i> Anmelden!\
+			</button>\
+		</div>\
+      <div class="col-md-1" ></div>\
+	  \
     </div>\
-    <div ng-show="e.btnRegister">\
-      <register-form></register-form>\
-    </div>\
-        </div>\
-      </div>\
-	  <div class="col-md-3" >\
-      </div>\
-    </div>\
+		\
+	<div class="row">\
+		<div class="col-md-1" ></div>\
+		\
+			<div class="col-md-10">\
+				<div class="row" style="width=100%">\
+					<div ng-show="e.btnRegister">\
+					<register-form></register-form>\
+					</div>\
+				</div>\
+			</div>\
+			<div class="col-md-1" ></div>\
+	</div>\
   </div>\
 </div>'
 
@@ -88,23 +98,31 @@ app.directive('registerForm', function() {//sideBarCourse = Directive Name
 //Sidebarelement für allgemeine Kurse
 template:'<form name="formReg" class="form-horizontal" novalidate>\
   <div class="form-group has-warning">\
-    <div class="row" style="margin-top: 2px; ">\
-      <div class="col-md-3">{{rinfo.mTeilnehmerZahl}} {{rinfo.mAdresse}}</div>\
+    <div class="row" style="margin-top: 10px; ">\
+\
       <div class="col-md-3">\
+	  <div class="row">Anzahl</div>\
+      <div class="input-group" class="form-input">\
+          <input type="anzahl" class="form-control" sytle="width:100%" id="inputAnzahlId{{e.sysName}}" placeholder="1" ng-model="rinfo.mTeilnehmerZahl">\
+      </div>\
+      </div>\
+      <div class="col-md-9">\
+	  <div class="row" style="text-align: left; margin-left: 3px;" >E-Mail</div>\
         <div class="input-group" class="form-input">\
-          <input type="anzahl" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="Teilnehmerzahl" ng-model="rinfo.mTeilnehmerZahl">\
+          <input type="email" class="form-control" sytle="width:100%" id="inputEmailId{{e.sysName}}" placeholder="name@domain.tld" ng-model="rinfo.mAdresse">\
         </div>\
       </div>\
-      <div class="col-md-3">\
-        <div class="input-group" class="form-input">\
-          <input type="email" class="form-control" id="inputEmailId{{e.sysName}}" placeholder="Kontakt E-Mail Adresse" ng-model="rinfo.mAdresse">\
-        </div>\
-      </div>\
+	</div>\
+	<div class="row" style="margin-top: 10px; ">\
+		<div class="col-md-6">\
+			<input type="submit" ng-click="reservate(e.sysName)" class="btn btn-default btn-block" style="color:#333;" value="abschicken"/>\
+		</div>\
+		<div class="col-md-6">\
+			<input type="submit" class="btn btn-default btn-block" value="Weitere Kurse" href="#modal-container-1" data-toggle="modal" ng-click="initreslistfromsidebar(e)"/>\
+		</div>\
     </div>\
   </div>\
-  <input type="submit" ng-click="reservate(e.sysName)" class="btn btn-success" style="color:#333;" value="Reservierungsanfrage Abschicken"/>\
-  <input type="submit" class="btn btn-success" style="color:#333;" value="Weitere Kurse" href="#modal-container-1" data-toggle="modal" ng-click="initreslistfromsidebar(e)"/>\
-</form>'
+  </form>'
 }
 });
 
