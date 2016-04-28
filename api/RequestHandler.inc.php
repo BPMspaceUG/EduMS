@@ -107,7 +107,7 @@ class RequestHandler
         $bname = $route[0];
         $pw = $route[1];
         $route = $this->rmFirstParam($route); //delete username
-        $route = $this->rmFirstParam($route); //delete token
+        $route = $this->rmFirstParam($route); //delete token 
         $section = $route[0]; // $section = destinypoint
         $handle = $this->rmFirstParam($route); //$handle = array('A','B')
 
@@ -115,10 +115,10 @@ class RequestHandler
             case 'location': $return = $this->handleLocations($handle);
                 return $return;
                 break;
-            //default view for a brand 
+            //default view for a brand
             case 'brand': 
                 $return = array(
-                'script'=>file_get_contents('js/jQuery 2.2.1.js').file_get_contents('js/AngularJS v1.4.9.js').file_get_contents('js/Bootstrap v3.3.6.js'),
+                'script'=>file_get_contents('js/Underscore v1.8.3.js').file_get_contents('js/jQuery 2.2.1.js').file_get_contents('js/AngularJS v1.4.9.js').file_get_contents('js/Bootstrap v3.3.6.js'),
                 'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); </script>".file_get_contents('js/EduMS_Ctrl.js'),
                 'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
                 'directive'=>file_get_contents('js/EduMS_template-directives.js'),
@@ -234,7 +234,7 @@ class RequestHandler
         $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
         
         //Hole Brandinfo
-        file_put_contents('logs/getBrandLog.log', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
+        // file_put_contents('logs/getBrandLog.log', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
         
         if ($return['brandinfo'][0]['branddeprecated']!=0) {//In case SQL fails exit
             return $return['brandinfo'][0]['brandDescription'] = '- Forbidden - Please contact Admin';
