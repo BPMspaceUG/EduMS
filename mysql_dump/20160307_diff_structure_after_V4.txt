@@ -5,5 +5,8 @@ ADD COLUMN `terms and conditions` LONGTEXT NULL AFTER `protection of data privac
 ADD COLUMN `email` VARCHAR(99) NULL AFTER `terms and conditions`;
 ALTER TABLE `topic` 
 CHANGE COLUMN `topicImage` `topicImage` LONGTEXT NULL DEFAULT NULL ;
+ALTER TABLE `course` 
+CHANGE COLUMN `courseImage` `courseImage` LONGTEXT NULL DEFAULT NULL ;
+
 
 
