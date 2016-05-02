@@ -10,8 +10,9 @@ Er definiert alle Models und funktionen.
 ------------------------------------------------------------------------------------------------------------------------------
 */
 
-app.constant('_', window._)
 
+//meta topic: https://github.com/angular/angular.js/wiki/Understanding-Dependency-Injection
+app.constant('_', window._)
 // use in views, ng-repeat="x in _.range(3)"
 app.run(function ($rootScope) {
    $rootScope._ = window._;
@@ -129,24 +130,6 @@ $scope.Math = window.Math, reservefinal=false
   $scope.stateinfo = response.stateinfo
 
 
-/*var allEventList = function(){
-var list = []
-
-return list
-}
-
-var topicEventList = function(){
-var list = []
-
-return list
-}
-
-var courseEventList = function(){
-var list = []
-
-return list
-}*/
-
     
 
 var getTest = function(id, courseToTest, courses) {
@@ -168,7 +151,7 @@ var getTest = function(id, courseToTest, courses) {
 
 var getTestID = function(id, courseToTest) {
   _.each(courseToTest, function(cttRef){
-    if (id == cttRef.course_id) {return mnctt[m].test_id};
+    if (id == cttRef.course_id) {return cttRef.test_id};
   })
   return false
 }
@@ -243,26 +226,6 @@ var defineCourseTabs = function(){
   })
   var topicTabs = []
 }
-// Topic Header (gesamt Berite)
-// brand - Topc n -Standort - sonstiges
-// TOPIC Beschreibung
-// Topic Images
-// 1 - n mal zugeodrnetet Kursbeschreibung
-
-// Anordnung Vertikal:
-// - Kursüberschriften in Akkordeon -Sortierung laut Level dann Order
-// aufgeklappt 4 Tabs 
-// -- Inhalt
-// Kursbeschreibung
-// -- Preistabelle
-// Kursname (Dauer) | netto | brutto
-// Prüfungsvorbereitung (inklusive) | Prüfungsgebühr (zugeordnete Prüfung), Mittagessen & Pausenverpflegung (inklusive), Gesamtpreis - netto und brutto
-// - Prüfung & Zertifizierung
-// Beschreibung des zugeordneten Tests
-// - Termin
-// Anzeige der nächsten 5 Termine des Kurses (NICHT Topic)
-// Topic-footer-description in Topic-footer (über die GANZE Breite)
-
 
 
 

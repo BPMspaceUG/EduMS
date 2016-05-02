@@ -56,13 +56,13 @@
      <div class="tab-content">
      <div class="tab-pane active" id="panel-brand">
       <div ng-bind-html="brandinfo.brandDescription"></div>
-      <div class="col-md-12 " id="container-footer">
+      <div class="col-md-12" id="container-footer">
         <h4>{{brandinfo.brand_name}}</h4>
         <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
      </div>
     </div>
       <div ng-repeat="topicpanel in topics" class="tab-pane" id="panel-{{topicpanel.topic_name}}">
-       <div class="col-md-12 ">
+       <div class="col-md-12">
        <h2>{{topicpanel.topicHeadline}}</h2>
        <div ng-bind-html="topicpanel.topicDescription"></div>
        <div ng-bind-html="topicpanel.topicImage"></div>
@@ -85,10 +85,10 @@
 
 
 
-          <div ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
+          <div>
 
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-              <div class="panel panel-default">
+            <div class="panel-group" id="accordion" role="tablist" >
+              <div class="panel panel-default"  ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
                 <div class="panel-heading" role="tab" id="heading{{panelcourse.sysName}}">
                   <h3 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{panelcourse.sysName}}" 
@@ -97,81 +97,11 @@
                     </a>
                   </h3>
                 </div>
-                <div id="collapse{{panelcourse.sysName}}" class="panel-collapse collapse" role="tabpanel" 
+                <div id="collapse{{panelcourse.sysName}}"  class="panel-collapse collapse" role="tabpanel" 
                   aria-labelledby="heading{{panelcourse.sysName}}">
                   <div class="panel-body">
-                    <div>
-
-                      <!-- Nav tabs -->
-                      <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
-                          <a href="#inhalt{{panelcourse.sysName}}" aria-controls="inhalt{{panelcourse.sysName}}" 
-                          role="tab" data-toggle="tab">Inhalt</a></li>
-
-                        <li role="presentation">
-                          <a href="#prüfung{{panelcourse.sysName}}" aria-controls="prüfung{{panelcourse.sysName}}" 
-                          role="tab" data-toggle="tab">Prüfung & Zertifizierung</a></li>
-
-                        <li role="presentation">
-                          <a href="#kosten{{panelcourse.sysName}}" aria-controls="kosten{{panelcourse.sysName}}" 
-                          role="tab" data-toggle="tab">Kosten</a></li>
-
-                        <li role="presentation">
-                          <a href="#termine{{panelcourse.sysName}}" aria-controls="termine{{panelcourse.sysName}}" 
-                          role="tab" data-toggle="tab">Termine</a></li>
-
-                      </ul>
-
-                      <!-- Tab panes -->
-                      <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="inhalt{{panelcourse.sysName}}">
-                          <div class="panel-body" ng-if="panelcourse.test=0"> 
-                            <h3>{{panelcourse.courseHeadline}}</h3>
-                            <div ng-bind-html="panelcourse.courseDescription"></div>
-                          </div>
-                          <div ng-bind-html="panelcourse.courseDescription"></div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="prüfung{{panelcourse.sysName}}">
-                          <h3>Test: {{panelcourse.test.courseHeadline}}</h3>
-                          <p>{{panelcourse.test}}</p>
-                          <div ng-bind-html="panelcourse.test.courseDescription"></div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="kosten{{panelcourse.sysName}}">
-                          <table class="table table-responsive table-hover table-striped" style="width: 66%;">
-                            <thead>
-                                <th><a href="#"><h4>Kurs (Dauer)</h4></a></th>
-                                <th><a href="#"><h4>Nettopreis</h4></a></th>
-                                <th><a href="#"><h4>Bruttopreis</h4></a></th>
-                              </thead>
-                              <tbody style="color:#78b433">
-                                <tr>
-                                  <td>{{panelcourse.course_name}}</td>
-                                  <td>{{panelcourse.coursePrice}},- €</td>
-                                  <td>{{panelcourse.brutto}},- €</td>
-                                </tr>
-                                <tr style="color:#FFA639">
-                                  <td>Prüfungsvorbereitung    inklusive</td>
-                                </tr>
-                                <tr>
-                                  <td>Prüfungsgebühr</td>
-                                  <td>{{panelcourse.coursePrice}},- €</td>
-                                </tr>
-                                <tr style="color:#FFA639">
-                                  <td>Mittagessen & Pausenverpflegung   inklusive</td>
-                                </tr>
-                                <tr>
-                                  <td>Gesamtpreis:</td>
-                                  <td>{{panelcourse.brutto}},- €</td>
-                                </tr>
-                              </tbody>
-                          </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="termine{{panelcourse.sysName}}">
-                          <div ng-repeat="event in panelcourse.events | limitTo:5">{{event.start_date}}</div>
-                        </div>
-                      </div>
-
-                    </div>
+                    <course-panel-body ></course-panel-body>
+                    
                   </div>
                 </div>
               </div>
@@ -300,15 +230,18 @@
         <h3 class="text-center">
          <i class="fa fa-calendar-check-o"></i> Aktuelle Termine
         </h3>
-        <right-bar-course-all ng-repeat="e in nextEvents|limitTo:5"></right-bar-course-all>        
-                
-       </div>
+
+
+        <right-bar-course-all ng-repeat="e in nextEvents | limitTo:5"></right-bar-course-all>        
+
 
        
-       <div ng-repeat="tsb in topics"  class="tab-pane" id="panel-{{tsb.topic_name}}-sidebar" role="tabpanel">
-        <right-bar-course-by-topic ng-repeat="sbc in tsb.sideBarCourses"></right-bar-course-by-topic>
-       </div>    
-      
+       <div ng-repeat="topic in topics" id="panel-{{topic.topic_name}}-sidebar" class="tab-pane">
+        <!-- <div ng-repeat="course in topic.courseList" id="panel-{{course.sysName}}-sidebar" -->
+         <!-- role="tabpanel"> -->
+          <right-bar-course-all ng-repeat="e in topic.eventList | limitTo:5"></right-bar-course-all>
+        <!-- </div> -->
+       </div>
      </div>
     </div>
    </div>
