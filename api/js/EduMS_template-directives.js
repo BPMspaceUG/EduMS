@@ -5,25 +5,35 @@ app.directive('rightBarCourseAll', function() {//sideBarCourse = Directive Name
 //Sidebarelement für allgemeine Kurse
 template:
 '<div class="list-group " >\
-          <div class="list-group-item event">\
+          <div class="list-group-item event" style="background-color:#E7E8E6; border:0px">\
           \
             <div class="row">\
-              <div class="col-md-1" ></div>\
-            \
-              <div class="col-md-10">\
-                <div class="row" >\
-              <div class="pull-left"><b>{{e.start_date}} - {{e.location_name}}</b></div>\
+              <div class="col-md-1">\
+                <div class="row"><br><br></div>\
+                <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" style="color:#68B32E;"></i> </div>\
                 </div>\
-            \
-                <div class="row">\
-              <div class="pull-left" style="text-align: left;" ><b>{{e.course_name}}</b></div>\
-              <div style="margin-top: 5px;">\
-              <button type="button" class="btn btn-success btn-block" ng-model="reservate" \
-                ng-hide="e.btnRegister" ng-click= "e.btnRegister=!e.btnRegister">\
-              <i class="fa fa-cart-plus fa-stack-3x fa-inverse" ></i> Anmelden!\
-              </button>\
-            </div>\
-              <div class="col-md-1" ></div>\
+                \
+              <div class="col-md-7" style="text-align: left;">\
+                <div class="row" >{{e.start_date | date:"dd/MM/yyyy"}}<br>{{e.internet_location_name}}</div>\
+                <div class="row" ><b>{{e.course_name}}</b></div>\
+                <div class="row"><button type="button" class="btn btn-block" ng-model="reservate" \
+                  style="margin-top: 15px; " ng-hide="e.btnRegister" ng-click= "e.btnRegister=!e.btnRegister">\
+                  <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> Anmelden!\
+                </button></div>\
+              </div>\
+              \
+              <div class="col-md-3">\
+                <div class="row" ng-if="e.eventguaranteestatus == 2 || true">\
+                  <div class="panel" style="background-color:#fff; color: #68B32E; margin-top: 10px; margin-bottom: 0px; margin-right: -10px; margin-left: 5px;">\
+                    <b>TERMIN-<br>GARANTIE</b>\
+                  </div>\
+                </div>\
+                <div class="row" ng-if="e.eventguaranteestatus == 5 || true">\
+                  <div class="panel" style="background-color:#fff; color: #E85C5C; margin-top: 10px; margin-bottom: 0px; margin-right: -10px; margin-left: 5px;">\
+                    <b>WARTELISTE</b>\
+                  </div>\
+                </div>\
+              </div>\
             \
             </div>\
             \
@@ -56,30 +66,45 @@ app.directive('registerForm', function() {//sideBarCourse = Directive Name
  return{
 //Sidebarelement für allgemeine Kurse
 template:'<form name="formReg" class="form-horizontal" novalidate>\
-  <div class="form-group has-warning">\
+  <div class="form-group">\
     <div class="row" style="margin-top: 10px; ">\
 \
-      <div class="col-md-3">\
-	  <div class="row">Anzahl</div>\
-      <div class="input-group" class="form-input">\
-          <input type="number" class="form-control" sytle="width:100%" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="0" ng-model="rinfo.mTeilnehmerZahl">\
+      <div class="col-md-1">\
       </div>\
-      </div>\
-      <div class="col-md-9">\
-	  <div class="row" style="text-align: left; margin-left: 3px;" >E-Mail</div>\
-        <div class="input-group" class="form-input">\
-          <input type="email" class="form-control" sytle="width:100%" id="inputEmailId{{e.sysName}}" placeholder="name@domain.tld" ng-model="rinfo.mAdresse">\
+      <div class="col-md-8" >\
+\
+      <div class="row">\
+        <div class="col-md-8" style="text-align:left"> Teilnehmerzahl </div>\
+        <div class="col-md-4" style="align:right">\
+          <input type="number" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="0" \
+           ng-model="rinfo.mTeilnehmerZahl">\
         </div>\
       </div>\
+      <div class="row" class="input-group" class="form-input">\
+        <div>\
+          <input type="email" class="form-control" style="margin-top: 10px; " id="inputEmailId{{e.sysName}}" \
+           placeholder="Kontakt E-Mail" ng-model="rinfo.mAdresse">\
+        </div>\
+      </div>\
+      <div class="row">\
+        <div>\
+          <button type="submit"  style="margin-top: 10px; " class="btn btn-block" href="#modal-container-1" \
+           data-toggle="modal" ng-click="initreslistfromsidebar(e)"><i class="fa fa-cart-plus" aria-hidden="true">\
+           </i> Weitere Kurse</button>\
+        </div>\
+      </div>\
+      <div class="row">\
+        <div>\
+          <button type="button" class="btn btn-block" ng-model="reservate" \
+            style="margin-top: 6px;" ng-click="reservate(e.sysName)">\
+            <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> One-Click Anmeldung\
+          </button>\
+        </div>\
+      </div>\
+\
+      </div>\
 	</div>\
-	<div class="row" style="margin-top: 10px; ">\
-		<div class="col-md-6">\
-			<input type="submit" ng-click="reservate(e.sysName)" class="btn btn-default btn-block" style="color:#333;" value="abschicken"/>\
-		</div>\
-		<div class="col-md-6">\
-			<input type="submit" class="btn btn-default btn-block" value="+ weitere Kurse" href="#modal-container-1" data-toggle="modal" ng-click="initreslistfromsidebar(e)"/>\
-		</div>\
-    </div>\
+\
   </div>\
   </form>'
 }
@@ -165,8 +190,8 @@ app.directive('coursePanelBody', function(){
                         <tbody style="color:#ff9900">\
                           <tr ng-repeat="event in panelcourse.events | limitTo:5">\
                             <td>{{panelcourse.course_name}}</td>\
-                            <td>{{event.start_date}}  -  {{event.start_time}} Uhr</td>\
-                            <td>{{event.finish_date}}</td>\
+                            <td>{{event.start_date | date:"dd/MM/yyyy"}} {{event.start_time | date:"hh"}} Uhr</td>\
+                            <td>{{event.finish_date | date:"dd/MM/yyyy"}}</td>\
                             <td>{{event.location_name}}</td>\
                           </tr>\
                         </tbody>\

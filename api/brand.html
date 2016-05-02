@@ -16,53 +16,41 @@
 </div>
 
 
-
-
-
-<!--  <div class="row">
-  <div class="col-md-4" id="header-left">
-    <img src="http://placehold.it/220x90?text=Your Logo" alt="Your Logo">
-  </div>
-   <div class="col-md-8" id="header-right">
-    
-  </div>
- </div> -->
- 
-	<div class="row" style="margin-bottom: 25px">
-		<ul class="nav nav-tabs" id="navbar" >
-
-      <li class="active">
-       <a href="#" data-toggle="tab" data-target="#panel-brand,#panel-brand-sidebar">
-        <i class="fa fa-university"></i>
-       </a>
-      </li>
-
-      <li ng-repeat="topic in topics">
-       <a href="#" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab" 
-       data-target="#panel-{{topic.topic_name}},#panel-{{topic.topic_name}}-sidebar">{{topic.topic_name_raw}}</a>
-      </li>
-      <li class="pull-right">
-       <a href="#" data-toggle="tab" data-target="#panel-sonstiges,#panel-sonstiges-sidebar">sonstiges</a>
-      </li>
-      <li class="pull-right">
-       <a href="#" data-toggle="tab" data-target="#panel-standort,#panel-standort-sidebar"><i class="fa fa-location-arrow"></i> Standorte</a>
-      </li>
-     </ul>
-	</div> 
-
   <div class="row" >
    <!----content & sidebar-->
    <div class="col-md-8" id="container-content" >
-    <div class="tabbable" id="tabs-sidebar">
-     
+    <div class="tabbable" >
+     <ul class="nav nav-tabs" id="navbar" >
+
+      <li class="active">
+       <a data-target="#panel-brand" ng-click="sidebarselect = 'start'" data-toggle="tab">
+        <i class="fa fa-university"></i>
+       </a>
+      </li>
+      <li ng-repeat="topic in topics">
+       <a data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
+         {{topic.topic_name_raw}}</a>
+      </li>
+      <li class="pull-right">
+       <a data-toggle="tab" data-target="#panel-sonstiges" ng-click="sidebarselect = 'start'">
+        sonstiges</a>
+      </li>
+      <li class="pull-right">
+       <a data-toggle="tab" data-target="#panel-standort" ng-click="sidebarselect = 'start'">
+        <i class="fa fa-location-arrow"></i> Standorte</a>
+      </li>
+     </ul>
+	<p></p>
+	
      <div class="tab-content">
-     <div class="tab-pane active" id="panel-brand">
-      <div ng-bind-html="brandinfo.brandDescription"></div>
-      <div class="col-md-12" id="container-footer">
-        <h4>{{brandinfo.brand_name}}</h4>
-        <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
-     </div>
-    </div>
+      <div class="tab-pane active" id="panel-brand">
+        <div ng-bind-html="brandinfo.brandDescription"></div>
+        <div class="col-md-12" id="container-footer">
+          <h4>{{brandinfo.brand_name}}</h4>
+          <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
+       </div>
+      </div>
+
       <div ng-repeat="topicpanel in topics" class="tab-pane" id="panel-{{topicpanel.topic_name}}">
        <div class="col-md-12">
        <h2>{{topicpanel.topicHeadline}}</h2>
@@ -71,33 +59,17 @@
         <nav class="navbar navbar-default">
          <div class="container-fluid">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <div>
-
-            <div class="panel-group" id="accordion" role="tablist" >
-              <div class="panel panel-default"  ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
+            <div class="panel-group" id="accordion{{topicpanel.topic_name}}" role="tablist" >
+              <div class="panel panel-default"  
+                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
                 <div class="panel-heading" role="tab" id="heading{{panelcourse.sysName}}">
                   <h3 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{panelcourse.sysName}}" 
-                       aria-expanded="false" aria-controls="collapse{{panelcourse.sysName}}">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion{{topicpanel.topic_name}}" 
+                    href="#collapse{{panelcourse.sysName}}" aria-expanded="false" 
+                    aria-controls="collapse{{panelcourse.sysName}}">
                       {{panelcourse.courseHeadline}}
                     </a>
-                  </h3>
+                  </h3> 
                 </div>
                 <div id="collapse{{panelcourse.sysName}}"  class="panel-collapse collapse" role="tabpanel" 
                   aria-labelledby="heading{{panelcourse.sysName}}">
@@ -108,30 +80,6 @@
                 </div>
               </div>
             </div>
-          </div>  
-
-
-
-
-          <!-- <course-list ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"></course-list> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
          </div>
         </nav>
@@ -187,7 +135,7 @@
            </div>
           </div>
          </div>
-        </div>
+        </div> 
 
         <div class="panel panel-default">
          <div class="panel-heading">
@@ -206,6 +154,26 @@
           </div>
          </div>
         </div>
+
+        <div class="panel-heading">
+          <a class="panel-title collapsed" data-toggle="collapse"
+            data-parent="#panel-493447" href="#panel-element-scripte">
+          <span class="badge">4</span> verwendete scripte</a>
+        </div>
+        <div id="panel-element-scripte" 
+        class="panel-collapse collapse">
+        <div class="panel-body">
+          <div class="container-fluid">
+          <div class="row">
+            <a href="http://getbootstrap.com">Bootstrap v3.3.6</a>
+            <a href="http://angularjs.org">AngularJS v1.4.9</a>
+            <a href="https://jquery.com/download/">jQuery 2.2.1</a>
+            <a href="http://underscorejs.org/">Underscore 1.8.3</a>
+          </div>
+          </div>
+        </div>
+        </div>
+
        </div>
       </div>
      </div>
@@ -216,38 +184,38 @@
 
 
 
-   <div class="col-md-4 text-center" id="sidebar">
-    <div>
-     <a id="modal-1" href="#modal-container-1" role="button" class="btn btn-primary btn-block" data-toggle="modal">
-      
+
+   <div class="col-md-3 text-center" id="sidebar">
+
+
+     <a id="modal-1" href="#modal-container-1" role="button" class="btn btn-primary btn-block" data-toggle="modal" style="margin-bottom: 15px; ">
        <i class="fa fa-arrow-circle-right"></i> Termine &amp; Anmeldung
-     
      </a>
 
 
-     <div class="tabbable" id="tabs-sidebar"> 
-      <div class="tab-content">       
-
-       <div class="tab-pane active" id="panel-brand-sidebar" role="tabpanel">
+     <div class="tabbable" class="tab-content">
+       <div class="tab-pane active" id="panel-brand-sidebar" role="tabpanel" ng-if="sidebarselect == 'start'">
         <h3 class="text-center">
          <i class="fa fa-calendar-check-o"></i> Aktuelle Termine
         </h3>
-
-
-        <right-bar-course-all ng-repeat="e in nextEvents | limitTo:5"></right-bar-course-all>        
-
-
-       
-       <div ng-repeat="topic in topics" id="panel-{{topic.topic_name}}-sidebar" class="tab-pane">
-        <!-- <div ng-repeat="course in topic.courseList" id="panel-{{course.sysName}}-sidebar" -->
-         <!-- role="tabpanel"> -->
-          <right-bar-course-all ng-repeat="e in topic.eventList | limitTo:5"></right-bar-course-all>
-        <!-- </div> -->
+        <right-bar-course-all ng-repeat="e in nextEvents | limitTo:5"></right-bar-course-all>
        </div>
+
+       <div ng-repeat="topic in topics">
+         <div class="tab-pane" id="panel-sidebar-{{topic.topic_name}}" role="tabpanel" 
+         ng-if="sidebarselect == topic.topic_name_raw">
+          <right-bar-course-all ng-repeat="e in topic.eventList | limitTo:5"></right-bar-course-all>
+         </div>
+       </div>
+
      </div>
     </div>
-   </div>
-  </div>
+
+
+
+
+
+
 
 
 
@@ -484,11 +452,7 @@
 <!--   <div class="row">
    <div class="col-md-12" id="footer">
     <div class="">
-     verwendete scripte: 
-     <a href="http://getbootstrap.com">Bootstrap v3.3.6</a>
-     <a href="http://angularjs.org">AngularJS v1.4.9</a>
-     <a href="https://jquery.com/download/">jQuery 2.2.1</a>
-    </div>
+
    </div>
   </div> -->
  </div>

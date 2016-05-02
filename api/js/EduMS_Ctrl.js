@@ -24,7 +24,7 @@ Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular de
 app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $scope.Math = window.Math, reservefinal=false
-
+$scope.sidebarselect = 'start'
 // log(Object.keys(_))
 
 
@@ -496,7 +496,10 @@ $scope.xlist =  finishEventlist(ta);
 
 
 //If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
-$scope.tablesearchchange = function(name){$scope.tablesearch = name}
+$scope.tablesearchchange = function(name){
+  $scope.tablesearch = name
+  $scope.sidebarselect = name
+}
 
 
 /*ng-models for imputs*/
