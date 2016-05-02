@@ -27,12 +27,9 @@
     
   </div>
  </div> -->
-
-  <div class="row" >
-   <!----content & sidebar-->
-   <div class="col-md-8" id="container-content" >
-    <div class="tabbable" id="tabs-sidebar">
-     <ul class="nav nav-tabs" id="navbar" >
+ 
+	<div class="row" style="margin-bottom: 25px">
+		<ul class="nav nav-tabs" id="navbar" >
 
       <li class="active">
        <a href="#" data-toggle="tab" data-target="#panel-brand,#panel-brand-sidebar">
@@ -51,8 +48,13 @@
        <a href="#" data-toggle="tab" data-target="#panel-standort,#panel-standort-sidebar"><i class="fa fa-location-arrow"></i> Standorte</a>
       </li>
      </ul>
-	<p></p>
-	
+	</div> 
+
+  <div class="row" >
+   <!----content & sidebar-->
+   <div class="col-md-8" id="container-content" >
+    <div class="tabbable" id="tabs-sidebar">
+     
      <div class="tab-content">
      <div class="tab-pane active" id="panel-brand">
       <div ng-bind-html="brandinfo.brandDescription"></div>
