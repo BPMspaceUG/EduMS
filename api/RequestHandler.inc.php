@@ -145,19 +145,20 @@ class RequestHandler
                 break;
 
             case "reserve":
-            require 'mail/sendtobrand.php';
-            testmail();
-                $to      = 'cnu301@mitsm.de';
-                $subject = 'Reservierungsanfrage: Nachname Vorname, Courseabkürzung, Datum, Anzahl';
-                $message = 'Buttons für zusagen, ablehnen und erneut erinnern'.
-                    'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation.'.
-                    'Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,'.
-                    'dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).'.
-                    'Unter https://wiki.ubuntuusers.de/Postfix/ ist der standart'.
-                    'Außerdem in Konkurenz zu PHP-mailer (Github) stellen'.
-                    'Windows nodemailer.';
-                mail($to, $subject, $message);
-                file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+            require 'reservemail.php';
+            echo "reservemail aufgerufen.";
+            // testmail();
+            //     $to      = 'cnu301@mitsm.de';
+            //     $subject = 'Reservierungsanfrage: Nachname Vorname, Courseabkürzung, Datum, Anzahl';
+            //     $message = 'Buttons für zusagen, ablehnen und erneut erinnern'.
+            //         'Die Windows-Implementierung von mail() unterscheidet sich auf mehrere Arten von der Unix-Implementation.'.
+            //         'Zum einen benutzt sie kein lokales Programm, um die Mails zu erstellen, sondern sie arbeitet auf Sockets. D.h.,'.
+            //         'dass ein MTA benötigt wird, der auf einem Netzwerk-Socket lauscht (entweder auf dem eigenen oder einem entfernten Rechner).'.
+            //         'Unter https://wiki.ubuntuusers.de/Postfix/ ist der standart'.
+            //         'Außerdem in Konkurenz zu PHP-mailer (Github) stellen'.
+            //         'Windows nodemailer.';
+            //     mail($to, $subject, $message);
+            //     file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
                 return $return;
             break;
         

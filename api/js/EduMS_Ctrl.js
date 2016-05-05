@@ -133,17 +133,13 @@ $scope.sidebarselect = 'start'
     
 
 var getTest = function(id, courseToTest, courses) {
+   // log(id);  //log(courseToTest);  log(courses)
   _.each(courseToTest, function(cttRef){
-    if (id == cttRef.course_id) {
-      log( 'cttRef' )         
-      log( cttRef )         
-      for (var i = 0; i < courses.length; i++) {
-        if(courses[i].course_id == cttRef.test_id){
-          log( 'courses['+i+']' )         
-          log( courses[i] )
-          return courses[i]          
-        }
-      };
+    // log(id == cttRef.course_id)
+    if (id == cttRef.course_id) {   
+      res = _.find(courses, function(course){ return course.course_id == cttRef.test_id }); 
+      log('res') ; log(res)
+
     };
   })
   return 0
@@ -151,12 +147,13 @@ var getTest = function(id, courseToTest, courses) {
 
 var getTestID = function(id, courseToTest) {
   _.each(courseToTest, function(cttRef){
-    if (id == cttRef.course_id) {return cttRef.test_id};
+    // log('id: '+id+' cttRefCourse:'+cttRef.course_id+' ctttest:'+cttRef.test_id)
+    if (id == cttRef.course_id) {log('getTestID: id == cttRef.course_id: '+(id == cttRef.course_id));return cttRef.test_id};
   })
   return false
 }
  pl=[], priceListBase=[];
- ta=[], termineAnmeldung=[];
+ ta=[], TundA=[], termineAnmeldung=[];
  /*The primary sortfunction adds to the topicobject its courses and define its test-status.
   It also define pl for createPrizeList, ta for createModalList & finishEventlist as referenceobjects*/
 
@@ -210,6 +207,23 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.test_id=getTestID(course.course_id, courseToTest)
           course.events=getDateSortedEventsToCourse(course.course_id)
 
+          if (course.course_id == course.test_id) {
+            log('testcourse')
+            log(course)
+          };
+
+          TundA.push({name: topic.topicName+' - '+course.course_name,
+          sysname: course.sysName,
+          course_id: course.course_id,
+          test: course.test,
+          test_id: course.test_id,
+          price: course.coursePrice,
+          location: course.location_name,
+          start: course.start_date,
+          finish: course.finish_date,
+          trainer: 'Anonym',
+          topic: i})
+
           courselist.push(course)
         };
       })
@@ -220,134 +234,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
 setCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest)
 
 
-var defineCourseTabs = function(){
-  _.each(topics, function(topic){
-    topic.courseList = []
-  })
-  var topicTabs = []
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-log('__________------------TRENNER')
-var createCourseList = function (top,mn,cou, mnctt){
-// console.log(mnctt)
-  for (var i = 0; i < top.length; i++) {//Jedes Topic bekommt eine Kursliste
-    top[i].courseList = (function(){
-        var courseList = [];
-        for (var j = 0; j < mn.length; j++) {//gehe Topic-Course m:n Tabelle durch
-          if (mn[j].topic_id == top[i].topic_id) { //Wenn m:n-Eintrag = dem aktuellen Topic ist
-            for (var k = 0; k < cou.length; k++) {//gehe Kurstabelle durch
-              if(mn[j].course_id == cou[k].course_id){// Wenn m:n-Eintrag (T-C) = dem aktuellen Kurs ist
-               //Zuteilung
-               cou[k].level = mn[j].level //Anzeigereihenfolge in Panel
-               cou[k].rank = mn[j].rank
-               cou[k].brutto = Math.round(cou[k].coursePrice*1.19)
-               cou[k].sysName = cou[k].course_name.replace(/\W+/g,''); //PanelIds
-               cou[k].test=(function() {for (var m = 0; m < mnctt.length; m++) { if (cou[k].course_id==mnctt[m].test_id) {return 1}} return 0})()
-               cou[k].test_id=(function() {
-                for (var m = 0; m < mnctt.length; m++) {
-                 /*Ausgabe für darunterliegendes if.. console.log('cou['+k+'].course_id: '+cou[k].course_id+', mnctt['+m+'].course_id: '+ mnctt[m].course_id);*/ 
-                 if (cou[k].course_id==mnctt[m].course_id) {return mnctt[m].test_id}} return false})()
-
-                // console.log('\nt'+i+' tcc'+j+' k'+k+'.test:'+cou[k].test);  console.log('test: '+cou[k].test+', testID: '+cou[k].test_id)
-
-                 pl.push({name: cou[k].course_name,
-                      sysname: cou[k].sysName,
-                      level: cou[k].level,
-                      rank: cou[k].rank,
-                      test: cou[k].test,
-                      test_id: cou[k].test_id,
-                      price: cou[k].coursePrice,
-                      location: cou[k].location_name,
-                      start: cou[k].start_date,
-                      finish: cou[k].finish_date,
-                   topic: i})
-              
-                   ta.push({name: top[i].topicName+' - '+cou[k].course_name,
-                      sysname: cou[k].sysName,
-                      course_id: cou[k].course_id,
-                      test: cou[k].test,
-                      test_id: cou[k].test_id,
-                      price: cou[k].coursePrice,
-                      location: cou[k].location_name,
-                      start: cou[k].start_date,
-                      finish: cou[k].finish_date,
-                      trainer: 'Anonym',
-                   topic: i})
-
-                  courseList.push(cou[k])
-              }
-            };
-          };
-        };
-        // console.log(top[i].testblock)
-        return courseList})()
-  };
-}
-createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest)
-
-
-
-
-
-
-
-
-// /*Create a Sorted list and add a groupprice to the level*/
-//    $scope.pricelist=[], $scope.testlist=[]
-//    var createPrizeList = function(pl){
-//     for (var coursenr = 0; coursenr < pl.length; coursenr++) {
-//       if(!$scope.pricelist[pl[coursenr].topic]){$scope.pricelist[pl[coursenr].topic]=[]}
-
-//       var coursenow = pl[coursenr]
-
-//       if(!$scope.pricelist[ coursenow.topic ][ coursenow.level ]){$scope.pricelist[ coursenow.topic ][ coursenow.level ]=[]}
-
-//       if (coursenow.test==0) {
-//        $scope.pricelist[ coursenow.topic ][ coursenow.level ].push(coursenow)
-//       }else{
-//         $scope.testlist.push(coursenow)
-//         console.log($scope.testlist)
-//       }
-//     };
-
-//     for (var topicnr = 0; topicnr < $scope.pricelist.length; topicnr++) {
-//      // console.log( $scope.pricelist.length)
-//      for (var level = 0; level < $scope.pricelist[topicnr].length; level++) {
-//      // console.log( $scope.pricelist[topicnr].length); console.log( level); console.log( $scope.pricelist[topicnr][level])
-//      var price = 0
-//      if (level>0) {
-//       for (var coursenow = 0; coursenow < $scope.pricelist[topicnr][level].length; coursenow++) {
-//        price = price + $scope.pricelist[topicnr][level][coursenow].price*1
-//       };      
-//      $scope.pricelist[topicnr][level].price = price 
-//      };
-//      };
-//     };  
-
-//     // console.log('pricelist')  
-//     // console.log($scope.pricelist)  
-//    } 
-//    createPrizeList(pl)
 
 
 
@@ -377,75 +264,55 @@ createCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope
 
 
 
-
-
-
-
-
-/*Fill in the Eventlist all nessesary Infos from other tables and add values for models.
-Calculate a sum for all [course(1-n) +  test]-Groups*/
-function finishEventlist(ta){
-  thelist=[]
-  for (var i = 0; i < $scope.topics.length; i++) {
-    var elist = $scope.topics[i].eventList
-
-    //first complete the Eventlistinfos
-    for (var h = 0; h < elist.length; h++) {
-      for (var o = 0; o < ta.length; o++) {
-        if (ta[o].course_id==elist[h].course_id) {
-          elist[h].price = ta[o].price
-          elist[h].test = ta[o].test
-          elist[h].test_id = ta[o].test_id
+/*underscore-copy of finishEventlist*/
+function setEventList(TundA) {
+  res = []
+  _.each($scope.topics, function(topic) {
+    _.each(topic.eventList, function(event){
+      _.each(TundA, function(tableEntry){
+        if (tableEntry.course_id == event.course_id) {
+          event.price = tableEntry.price
+          event.test = tableEntry.test
+          event.test_id = tableEntry.test_id
           //trainerinfo nicht vorhanden
-          elist[h].trainer = $scope.topics[i].responsibleTrainer_id
+          event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
-          elist[h].checked = false
+          event.checked = false
           //value for panel-click-serachfield interaction
-          elist[h].namefortable = elist[h].course_name +' ('+ $scope.topics[i].topicName+')'          
+          event.namefortable = event.course_name +' ('+ topic.topicName+')'          
 
+          //cleanflag Wort anzeigen?
           //change id-number to status-word
-          elist[h].eventguaranteestatus = (function(statusnr) {for (var i = 0; i < $scope.stateinfo.length; i++) {
-            if ($scope.stateinfo[i].ID==statusnr) {return $scope.stateinfo[i].eventguaranteestatus};
-          };})(elist[h].eventguaranteestatus)
-
+          // event.eventguaranteestatus = (function(statusnr) {for (var i = 0; i < $scope.stateinfo.length; i++) {
+          //   if ($scope.stateinfo[i].ID==statusnr) {return $scope.stateinfo[i].eventguaranteestatus};
+          // };})(event.eventguaranteestatus)
         };
-      };
-    };
-
-    //second exploid Tests
-    for (var j = 0; j < elist.length; j++) {
-      eve = elist[j]
-
+      })
+    })
+    _.each(topic.eventList, function(event){
       //createModallist -> 
-      if(eve.test!=1){
-        thelist.push(eve) 
+      if(event.test!=1){
+        // log('test!=1')
+        // log(event.course_id+' - '+event.test_id+' - '+event.test)
+        res.push(event) 
 
-        for (var k = 0; k < elist.length; k++) {
-          evex = elist[k]
-          if(eve.test_id == evex.course_id){
-            thelist.push(evex)
-            console.log('evex')
-            console.log(evex)
-            //calc sum of course-test-group
-            var summe = 0
-            for (var l = $scope.datesandreserve.length; l >0; l--) {
-              if (thelist[l].name != 'Summe') {
-                summe = summe + thelist[l].price
-              }else{l=0}//stopp          
-            }
-            //add sum if exist
-            if (summe > 0) {
-              thelist.push({start : '',finish : '',name : 'Summe', location : '',trainer : '',price : summe})
-              console.log(thelist[thelist.length-1])
-            }
+        _.each(topic.eventList, function(eventRef){
+          if (event.test_id == eventRef.course_id) {
+
+            res.push(eventRef)
           }
-        }
+        })
+      }else{
+        // log('\nevent is test:')
+        // log(event.course_id+' - '+event.test_id+' - '+event.test)
       }
-    }
-  }
-  return thelist 
+    })
+  })
+return res;
 }
-$scope.xlist =  finishEventlist(ta);
+
+
+$scope.xlist =  setEventList(TundA);
 
 
 
@@ -536,6 +403,13 @@ $scope.initreslistfromsidebar = function(c) { //c = course
   $scope.reservationlistupdate(c)
 }
 $scope.reservate = function() {
+  _.each($scope.topics, function(topic){
+    _.each(topic.eventlist, function(event){
+      if (event.checked) {
+        $scope.rinfo.courses.push(event)
+      };
+    })
+  })
   for (var i = 0; i < $scope.topics.length; i++) {
       for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
         if ($scope.topics[i].eventList[j].checked) {
