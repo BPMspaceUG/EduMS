@@ -7,24 +7,21 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css">
 <link rel="stylesheet" href="custom/custom.css">
-
 <!----- js scripts are loadede in the footer --------------------> 
 </head>	
 <body>
 <?php
-include_once '../phpSecureLogin/includes/db_connect.inc.php';
-include_once '../phpSecureLogin/includes/functions.inc.php';
-sec_session_start(); 
-if(login_check($mysqli) != true) {
-  header("Location: ../index.php?error_messages='You are not logged in!'");
-  exit();
-}
-  else {
-  	$logged = 'in';
+  include_once '../phpSecureLogin/includes/db_connect.inc.php';
+  include_once '../phpSecureLogin/includes/functions.inc.php';
+  
+  sec_session_start(); 
+  if(login_check($mysqli) != true) {
+    header("Location: ../index.php?error_messages='You are not logged in!'");
+    exit();
   }
-
+  else
+    $logged = 'in';
 ?>
-
 <div class="container">
 	<div class="container">
 		<div class="col-md-8"></div>
@@ -89,23 +86,21 @@ if (!empty($_GET["error_messages"])) {
 			<span class="fa-stack  ">
 				  <i class="fa fa-question fa-stack-1x"></i>
 				  <i class="fa fa-ban fa-stack-1x text-danger"></i>
-			</span>Help</a> 	
+			</span>Help</a>
 </div>
 <div class="clearfix"></br></div>
 <!--------------- END SUB MENU --------->
-
 <?php
-$help_text = "true";
-/* presente file with helptxt if $help_text = "true" (or set) when not empty */
-if ($help_text) {
-		echo '<div class="container bg-info 90_percent" >' ;
-			echo "<a data-toggle=\"collapse\" data-target=\"#collapse_help_header\" >PSEUDO CODE FOR HEADER PHP - Later here will be the helptext&nbsp;<i class=\"fa fa-chevron-down\"></i></a>";
-			echo "<div id=\"collapse_help_header\" class=\"collapse\"> ";
-			include_once '_header_helptxt.inc.php';
-			echo "</div>";
-		echo "</div><p></p><p></p>";
-		
-}
+  $help_text = "true";
+  /* presente file with helptxt if $help_text = "true" (or set) when not empty */
+  if ($help_text) {
+    echo '<div class="container bg-info 90_percent" >' ;
+    echo "<a data-toggle=\"collapse\" data-target=\"#collapse_help_header\" >PSEUDO CODE FOR HEADER PHP - Later here will be the helptext&nbsp;<i class=\"fa fa-chevron-down\"></i></a>";
+    echo "<div id=\"collapse_help_header\" class=\"collapse\"> ";
+    include_once '_header_helptxt.inc.php';
+    echo "</div>";
+    echo "</div><p></p><p></p>";      
+  }
 ?>
 
 

@@ -1,8 +1,6 @@
 <?php
-include_once '_dbconfig.inc.php';
-?>
-<?php
-include_once '_header.inc.php';
+  include_once '_dbconfig.inc.php';
+  include_once '_header.inc.php';
 ?>
 <div class="clearfix"></div>
 <div class="container">
@@ -24,6 +22,10 @@ FROM
         INNER JOIN
     course AS c ON aa.course_id = c.course_id;
 </pre>
+<div ng-app="">
+  <p>Name : <input type="text" ng-model="name"></p>
+  <h1>Hello {{name}}</h1>
+</div>
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
@@ -36,7 +38,7 @@ FROM
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr ng-show="test">
       <td>1</td>
       <td>Test</td>
       <td>Test</td>
@@ -48,7 +50,7 @@ FROM
 </table>
 </div>
 <?php
-include_once '_footer.inc.php';
+  include_once '_footer.inc.php';
 ?>
  
  
