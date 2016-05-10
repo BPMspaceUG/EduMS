@@ -1,16 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>BPMspace EduMS</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" media="screen">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="http://www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css">
-<link rel="stylesheet" href="custom/custom.css">
-<!----- js scripts are loadede in the footer --------------------> 
-</head>	
-<body>
 <?php
+  //===============================================================
+  //                          EduMS Header
+  //===============================================================
   include_once '../phpSecureLogin/includes/db_connect.inc.php';
   include_once '../phpSecureLogin/includes/functions.inc.php';
   
@@ -21,6 +12,36 @@
   }
   else
     $logged = 'in';
+  
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="phonecatApp">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>BPMspace EduMS</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css">
+<link rel="stylesheet" href="custom/custom.css">
+<!----- js scripts are loadede in the footer -------------------->
+  <!-- AngularJS -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script type="text/javascript" src="https://code.angularjs.org/1.4.9/angular-sanitize.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <!-- BootstrapUI -->
+	<script type="text/javascript" src="js/ui-bootstrap-1.3.1.min.js"></script>
+	<script type="text/javascript" src="js/ui-bootstrap-tpls-1.3.1.min.js"></script>
+  <!-- TinyMCE -->
+  <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script src="js/tinymceng.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/xeditable.min.js"></script>
+  <script type="text/javascript" src="./jquery_plugin/tablesorter-master/jquery.tablesorter.js"></script> 
+  <script type="text/javascript" src="https://www.fuelcdn.com/fuelux/3.13.0/js/fuelux.min.js"></script>
+</head>
+<body ng-controller="PhoneListCtrl">
+<?php
+
 ?>
 <div class="container">
 	<div class="container">
@@ -39,31 +60,31 @@
 </br>
 <div class="clearfix"></div>
 <!--------------- MAIN MENU --------->
-<nav class="navbar navbar-inverse ">
-  <div class="container" >
-    <div class="navbar-inner ">
-      <ul role="navigation" class="nav  nav-justified">
-        <li><a href="dashboard.php" title='Dashboard' class="btn btn-large btn-primary"><i class="fa fa-tachometer"></i>&nbsp;Dashboard</a></li>
-		<li><a href="event.php" title='Show all Events' class="btn btn-large btn-primary"><i class="fa fa-calendar"></i>&nbsp;Events</a></li> 
-        <li><a href="participant.php" title='Show all Participants' class="btn btn-large btn-primary"><i class="fa fa-user"></i>&nbsp;Participant</a></li>  
-        <li><a href="organization.php" title='Show all Organizations' class="btn btn-large btn-primary"><i class="fa fa-cubes"></i>&nbsp;Organization</a></li>
-        <li><a href="location.php" title='Show all Locations' class="btn btn-large btn-primary"><i class="fa fa-location-arrow"></i>&nbsp;Location</a></li>  
-        <li><a href="sales.php" title='Start Sales activity' class="btn btn-large btn-primary"><i class="fa fa-usd"></i>&nbsp;Sales</a></li>  
-		<li class="dropdown">
-			<a title='Admin'  data-toggle="dropdown" class="dropdown-toggle btn btn-large btn-primary"><i class="fa fa-user-secret"></i>&nbsp;Admin<b class="caret"></b></a>
-				<ul class="dropdown-menu">
-        <li><a href="user.php" title='user'  class="btn btn-large btn-primary"><i class="fa fa-user-plus"></i>&nbsp;User</a></li>
-				<li><a href="topic.php" title='Topic'  class="btn btn-large btn-primary"><i class="fa fa-folder-o"></i>&nbsp;Topic</a></li>
-				<li><a href="trainer.php" title='Trainer' class="btn btn-large btn-primary"><i class="fa fa-graduation-cap"></i>&nbsp;Trainer</a></li>
-				<li><a href="course.php" title='Course' class="btn btn-large btn-primary"><i class="fa fa-university"></i>&nbsp;Course</a></li>
-			</ul>
-		</li> 		
-        <li><a href="../phpSecureLogin/includes/logout.php" title='Logout' class="btn btn-large btn-primary"><i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>
-	</ul>
-    </div>
-  </div>
-</nav>
-
+<?php
+  include_once("inc/RequestHandler.inc.php");
+?>
+<div class="container">
+  <nav class="navbar">
+    <ul role="navigation" class="nav nav-pills">
+      <li><a href="dashboard.php" title='Dashboard' class="btn btn-large btn-primary"><i class="fa fa-tachometer"></i>&nbsp;Dashboard</a></li>
+      <li><a href="event.php" title='Show all Events' class="btn btn-large btn-primary"><i class="fa fa-calendar"></i>&nbsp;Events</a></li> 
+      <li><a href="participant.php" title='Show all Participants' class="btn btn-large btn-primary"><i class="fa fa-user"></i>&nbsp;Participant</a></li>  
+      <li><a href="organization.php" title='Show all Organizations' class="btn btn-large btn-primary"><i class="fa fa-cubes"></i>&nbsp;Organization</a></li>
+      <li><a href="location.php" title='Show all Locations' class="btn btn-large btn-primary"><i class="fa fa-location-arrow"></i>&nbsp;Location</a></li>  
+      <li><a href="sales.php" title='Start Sales activity' class="btn btn-large btn-primary"><i class="fa fa-usd"></i>&nbsp;Sales</a></li>  
+      <li class="dropdown">
+        <a title='Admin'  data-toggle="dropdown" class="dropdown-toggle btn btn-large btn-primary"><i class="fa fa-user-secret"></i>&nbsp;Admin<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="user.php" title='user'  class="btn btn-large btn-primary"><i class="fa fa-user-plus"></i>&nbsp;User</a></li>
+            <li><a href="topic.php" title='Topic'  class="btn btn-large btn-primary"><i class="fa fa-folder-o"></i>&nbsp;Topic</a></li>
+            <li><a href="trainer.php" title='Trainer' class="btn btn-large btn-primary"><i class="fa fa-graduation-cap"></i>&nbsp;Trainer</a></li>
+            <li><a href="course.php" title='Course' class="btn btn-large btn-primary"><i class="fa fa-university"></i>&nbsp;Course</a></li>
+          </ul>
+      </li>
+      <li><a href="../phpSecureLogin/includes/logout.php" title='Logout' class="btn btn-large btn-primary"><i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>
+    </ul>
+  </nav>
+</div>
 <?php
 /* presente $error_messages when not empty */
 if (!empty($_GET["error_messages"])) {
