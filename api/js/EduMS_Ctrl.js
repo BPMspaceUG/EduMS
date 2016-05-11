@@ -312,7 +312,7 @@ return res;
 }
 
 
-$scope.xlist =  setEventList(TundA);
+$scope.extendedEventlist =  setEventList(TundA);
 
 
 
@@ -388,10 +388,12 @@ $scope.sortReverse = false
 /*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
 the responsible person in the Brand (DB-change -> registermail)*/
 $scope.reservationlistupdate = function(c) { //c = course
-var reslist = $scope.rinfo.courses, xlist = $scope.xlist
+var reslist = $scope.rinfo.courses
   if (c.checked) {
     reslist.push(c)
+    // _.extend(reslist, c) /*als Objekt*/
   }else{
+    // delete reslist.c /*als Objekt*/
     for (var i = 0; i < reslist.length; i++) {
       if (reslist[i].event_id) {reslist.splice(i,1)};    
     };
@@ -422,14 +424,14 @@ $scope.reservate = function() {
  $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush: ')
  console.log($scope.rinfo)
- // $http.post('/EduMS/api/index.php/'+bname+'/'+pw+'/reserve', $scope.rinfo).
+ $http.post('/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve', $scope.rinfo).
  
- //        then(function(response) {
- //          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+bname+'/'+pw+'/reserve')
- //        }, function(response) {
- //          $scope.data = response || "Request failed";
- //          $scope.status = response.status;
- //      });
+        then(function(response) {
+          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve')
+        }, function(response) {
+          $scope.data = response || "Request failed";
+          $scope.status = response.status;
+      });
         /*Apache Errorlog:
 
 [Tue Apr 05 00:07:18.177996 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Warning:  mail(): &quot;sendmail_from&quot; not set in php.ini or custom &quot;From:&quot; header missing in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 169, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
@@ -437,18 +439,18 @@ $scope.reservate = function() {
 [Tue Apr 05 00:07:18.209223 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Notice:  Undefined variable: return in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 171, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
         */
 
-//  $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
+ // $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
  
-//         then(function(response) {
-//           console.log(reservefinal='reserveinfo send to:[POST] http://localhost:4041 - (nodemail)')
-//         }, function(response) {
-//           $scope.data = response || "Request failed";
-//           $scope.status = response.status;
-//       });
-// }
+ //        then(function(response) {
+ //          console.log(reservefinal='reserveinfo send to:[POST] http://localhost:4041 - (nodemail)')
+ //        }, function(response) {
+ //          $scope.data = response || "Request failed";
+ //          $scope.status = response.status;
+ //      });
+  }
 
 
-}
+
 orderbranddata(response);
 }]);
 
