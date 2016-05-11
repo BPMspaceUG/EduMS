@@ -33,14 +33,8 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
 	$scope.saveEl = function(actEl, data, cmd) {
 		var c;
 		switch (cmd) {
-			case 'u_answer_t': c = 'update_answer'; actEl.answer = data; break;
+			case 'u_course_n': c = 'update_answer'; actEl.newname = data; break;
 			case 'u_answer_c': c = 'update_answer'; actEl.correct = data; break;
-			case 'u_syllabel_n': c = 'update_syllabuselement'; actEl.name = data; actEl.ID = actEl.sqms_syllabus_element_id; break;
-			case 'u_syllabel_s': c = 'update_syllabuselement'; actEl.severity = data; actEl.ID = actEl.sqms_syllabus_element_id; break;
-			case 'u_topic_n': c = 'update_topic'; actEl.name = data; actEl.ID = actEl.id; break;
-			case 'u_syllab_n': c = 'update_syllabus_name'; actEl.name = data; break;
-			case 'u_syllab_tc': c = 'update_syllabus_topic'; actEl.TopicID = data; break;
-			case 'u_question_q': c = 'update_question'; actEl.Question = data; break;
 		}
 		return $http.post('getjson.php?c='+c, JSON.stringify(actEl)); // send new model
 	}

@@ -3,7 +3,6 @@
 	include_once '_dbconfig.inc.php';
 	include_once './inc/RequestHandler.inc.php';
 	include_once '../DB_config/login_credentials_DB_bpmspace_edums.inc.php';
-	include_once './inc/functions.inc.php';
 
 	// Command (via GET)
 	if (isset($_GET["c"]))
