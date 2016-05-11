@@ -272,21 +272,21 @@
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
-                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>MwSt.</h4>
+                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Brutto</h4>
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
               </thead>
               <tbody>
-                <tr ng-repeat="xelem in xlist | orderBy:sortType:sortReverse | filter:tablesearch">
-                  <td><input type="checkbox" class="checkbox" type="checkbox" ng-model="xelem.checked" name="userAgree" ng-change="reservationlistupdate(xelem)"></td>
-                  <td>{{xelem.eventguaranteestatus}}</td>               
-                  <td>{{xelem.start_date}} - {{xelem.finish_date}}</td>
-                  <td>{{xelem.namefortable}}</td>
-                  <td>{{xelem.location_name}}</td>
-                  <td>{{xelem.trainer}}</td>
-                  <td>{{xelem.price}},-</td>               
-                  <td>{{Math.round(xelem.price*0.19)}},-</td>               
+                <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch">
+                  <td><input type="checkbox" class="checkbox" type="checkbox" ng-model="event.checked" name="userAgree" ng-change="reservationlistupdate(event)"></td>
+                  <td>{{event.eventguaranteestatus}}</td>               
+                  <td>{{event.start_date | date:"dd/MM/yy"}} - {{event.finish_date | date:"dd/MM/yy"}}</td>
+                  <td>{{event.namefortable}}</td>
+                  <td>{{event.location_name}}</td>
+                  <td>{{event.trainer}}</td>
+                  <td>{{event.price}},-</td>               
+                  <td>{{Math.round(event.price*1.19)}},-</td>               
                 </tr>
               </tbody>
           </table>
@@ -300,92 +300,41 @@
 
 
            <div class="col-md-3">
-             <form>
-               <div class="form-group">
-                 <div class="input-group">
+            <form name="formReg" class="form-horizontal" novalidate>
+              <div class="form-group">
+                <div class="row" style="margin-top: 10px; ">
 
-                       <h4>Ansprechpartner</h4>
-                   <div class="col-md-12" >
+                  <div class="col-md-1"> </div>
 
-                     <div class="col-md-6">
-                       <input type="text" class="form-control" placeholder="Vorname" ng-model="rinfo.contactname">
-                     </div>
+                  <div class="col-md-8" >
 
-                     <div class="col-md-6">
-                       <input type="text" class="form-control" placeholder="Nachname" required="" ng-model="rinfo.contactsname">
-                     </div>
-                   </div>
-                   <div class="col-md-12">
-                   <div  style="margin-top: 5px;">
-                       <h4>Kontakt</h4>
-                   </div>
+                  <div class="row">
+                    <div class="col-md-8" style="text-align:left"><h4>Teilnehmerzahl</h4></div>
+                    <div class="col-md-4" style="align:right">
+                      <input type="number" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="0" 
+                       ng-model="rinfo.mTeilnehmerZahl">
+                    </div>
+                  </div>
+                  <div class="row" class="input-group" class="form-input">
+                    <div>
+                      <input type="email" class="form-control" style="margin-top: 10px; " id="inputEmailIdModal" 
+                       placeholder="Kontakt E-Mail" ng-model="rinfo.mAdresse">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div>
+                      <button type="button" class="btn btn-block" ng-model="reservate" 
+                        style="margin-top: 6px;" ng-click="reservate()">
+                        <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> One-Click Anmeldung
+                      </button>
+                    </div>
+                  </div>
+                  </div>
+              </div>
 
-                     <div class="col-md-6">
-                       <input type="text" class="form-control" placeholder="Firma" ng-model="rinfo.organisation">
-                     </div>
-
-                     <div class="col-md-6">
-                       <input type="email" required="" class="form-control" type="text" placeholder="E-MaiL" ng-model="rinfo.contactpersonemail">
-                     </div>
-                   </div>
-
-                     <div class="col-md-12" style="margin-top: 5px;">
-                       <button class="btn btn-success btn-sm" ng-click="addInput()">+ Person</button>
-                     </div>
-                   <div class="col-md-12" ng-repeat="reserveparticipant in reserveparticipants">
-
-                     <div class="col-md-12">
-                     <div class="col-md-12"  style="margin-top: 2px;">
-                      <button class="btn btn-default btn-xs" ng-click="removeInput($index)">Teilnehmer entfernen</button>
-                     </div>
-                      <div class="col-md-8">
-                       <input class="form-control" type="text" placeholder="Vorname" ng-model="reserveparticipant.name">
-                      </div>
-                      <div class="col-md-8">
-                       <input class="form-control" type="text" placeholder="Nachname" required="" ng-model="reserveparticipant.sname">
-                      </div>
-                     </div>
-
-                     <div class="col-md-12">
-                      <div class="col-md-8">
-                       <input type="email" required="" class="form-control" type="text" placeholder="E-MaiL" ng-model="reserveparticipant.email">
-                      </div>
-                      <div class="col-md-10">
-                       <input type="checkbox" ng-model="reserveparticipant.certificate"> Anmeldung zur Prüfung</input> 
-                      </div>
-                     </div>
-
-                     </div>
-                   </div>
-                    <div class="col-md-12" style="margin-top: 5px;">
-                       <button class="btn btn-success btn-sm" ng-click="addInput()">+ Person</button>
-                     </div>
-                      <p>.</p>
-                    <h4>Anschrift </h4>                     
-                   <div class="col-md-12">
-                       
-                     <div class="col-md-8">
-                       <input type="text" class="form-control" placeholder="Straße" ng-model="rinfo.street">
-                     </div>
-
-                     <div class="col-md-3">
-                       <input type="text" class="form-control" placeholder="Nr." ng-model="rinfo.housenr">
-                     </div>
-                   </div>
-
-                   <div class="col-md-12">
-                     <div class="col-md-6">
-                       <input type="text" class="form-control" placeholder="PLZ" ng-model="rinfo.zip">
-                     </div>
-
-                     <div class="col-md-6">
-                       <input type="text" class="form-control" placeholder="Ort" ng-model="rinfo.city">
-                     </div>
-                   </div>
-
-                 </div>
-               </div>
+              </div>
               </form>
+
               <div class="row" style="margin-top: 15px;" ng-if="rinfo.courses.length>0">
                 <h4>Ausgewählte Events:</h4>
                 <h5 ng-repeat="picked in rinfo.courses track by $index" style="color:#333">
