@@ -1,0 +1,69 @@
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+<div class="container-fluid" ng-controller="formCtrl">
+               
+Vielen Dank für die Reservierung zu ng-if="course.length >1" den Kurs/ die Kurse ng-repeat course in courses {{course.course_name}}, für {{reserveparticipants.length}} Teilnehmer.
+
+<form> 
+ <div class="form-group">
+   <div class="input-group">
+
+         <h4>Ansprechpartner</h4>
+     <div class="col-md-12" >
+
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Vorname" ng-model="rinfo.contactname">
+       </div>
+
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Nachname" required="" ng-model="rinfo.contactsname">
+       </div>
+     </div>
+     <div class="col-md-12">
+     <div  style="margin-top: 5px;">
+         <h4>Kontakt</h4>
+     </div>
+
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Firma" ng-model="rinfo.organisation">
+       </div>
+
+       <div class="col-md-3">
+         <input type="email" required="" class="form-control" placeholder="E-MaiL" ng-model="rinfo.contactpersonemail">
+       </div>
+     </div>
+
+
+       <teilnehmer ng-repeat="reserveparticipant in reserveparticipants"></teilnehmer>
+     </div>
+      <div class="col-md-12" style="margin-top: 5px;">
+         <button class="btn btn-success btn-sm" ng-click="addInput()">+ weitere Person</button>
+       </div>
+        <p>.</p>
+      <h4>Anschrift </h4>                     
+     <div class="col-md-12">
+         
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Straße" ng-model="rinfo.street">
+       </div>
+
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Nr." ng-model="rinfo.housenr">
+       </div>
+     </div>
+
+     <div class="col-md-12">
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="PLZ" ng-model="rinfo.zip">
+       </div>
+
+       <div class="col-md-3">
+         <input type="text" class="form-control" placeholder="Ort" ng-model="rinfo.city">
+       </div>
+     </div>
+
+   </div>
+
+</form>
+
+</div>
