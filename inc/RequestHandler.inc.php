@@ -44,10 +44,10 @@ class RequestHandler
 				return $this->delTopic($params["sqms_topic_id"]);
 				break;
 
-			case 'update_course':
-				$res = $this->updateTopic(
+			case 'update_course_name':
+				$res = $this->updateCourseName(
 					$params["ID"],
-					$params["name"]
+					$params["Name"]
 				);
 				if ($res != 1) return ''; else return $res;
 				break;
@@ -63,12 +63,12 @@ class RequestHandler
     ####################### Definition der Handles
     ###################################################################################################################
 
-	private function updateTopic($id, $name) {
-		$query = "UPDATE sqms_topic SET name = ? WHERE sqms_topic_id = ?;";
-		$stmt = $this->db->prepare($query); // prepare statement
-		$stmt->bind_param("si", $name, $id); // bind params
-        $result = $stmt->execute(); // execute statement
-		return (!is_null($result) ? 1 : null);
+	private function updateCourseName($id, $name) {
+    $query = "UPDATE course SET course_name = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $name, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : null);
 	}
 	private function addTopic($name) {
 		$query = "INSERT INTO sqms_topic (name) VALUES (?);";

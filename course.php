@@ -5,9 +5,8 @@
 <div class="clearfix"></div>
 <div class="container">
 
-<!-- Debugging
-<pre ng-show="debugMode">{{courses}}</pre>
--->
+<!-- Debugging -->
+<pre ng-show="debugMode">{{actCourse}}</pre>
 
 <table class="table table-condensed table-striped">
   <thead>
@@ -24,11 +23,11 @@
   <tbody>
     <tr ng-repeat="c in courses">
       <td style="width: 100px;">
-        <a class="btn pull-left"><i ng-class="{'fa fa-fw fa-check-square-o': s.ID === actSyllabus.ID, 'fa fa-fw fa-square-o': s.ID != actSyllabus.ID}"></i></a>
-        <a class="btn pull-left" ng-click="editsyllabus(s)"><i class="fa fa-fw fa-pencil"></i></a>
+        <a class="btn pull-left"><i ng-class="{'fa fa-fw fa-check-square-o': c.ID === actCourse.ID, 'fa fa-fw fa-square-o': s.ID != actCourse.ID}"></i></a>
+        <a class="btn pull-left" ng-click="editsyllabus(c)"><i class="fa fa-fw fa-pencil"></i></a>
       </td>
       <td>{{c.ID}}</td>
-      <td style="width: 350px;"><a href="#" onbeforesave="saveEl(s, $data, 'u_course_n')" editable-text="c.Name">{{c.Name || "empty"}}</a></td>
+      <td style="width: 350px;"><a href="#" onbeforesave="saveEl(c, $data, 'update_course_name')" editable-text="c.Name">{{c.Name || "empty"}}</a></td>
       <td>{{c.Topic}}</td>
       <td>{{c.MinPart}}</td>
       <td>{{c.Depr}}</td>

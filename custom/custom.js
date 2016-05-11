@@ -31,12 +31,8 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
 
   //********************* Inline editing
 	$scope.saveEl = function(actEl, data, cmd) {
-		var c;
-		switch (cmd) {
-			case 'u_course_n': c = 'update_answer'; actEl.newname = data; break;
-			case 'u_answer_c': c = 'update_answer'; actEl.correct = data; break;
-		}
-		return $http.post('getjson.php?c='+c, JSON.stringify(actEl)); // send new model
+    actEl.Name = data; // only here
+		return $http.post('getjson.php?c='+cmd, JSON.stringify(actEl)); // send new model
 	}
 
 	//********************* WRITE data to server
