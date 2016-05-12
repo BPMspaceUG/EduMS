@@ -43,59 +43,59 @@
 	</div>
 	<div class="modal-body">
 	  <form class="form-horizontal">
-	  <fieldset>    
+	  <fieldset>
       <legend>Edit course</legend>
       <div class="form-group">
-        <label>Course ID</label>
-        <input ng-model="object.data.ID" placeholder="3" class="form-control" type="text" disabled/>
+        <label class="col-sm-2 control-label">Course ID</label>
+        <div class="col-sm-10"><input ng-model="object.data.ID" placeholder="3" class="form-control" type="text" disabled/></div>
       </div>
       <div class="form-group">
-        <label>Course name</label>
-        <input ng-model="object.data.Name" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Course name</label>
+        <div class="col-sm-10"><input ng-model="object.data.Name" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Topic</label>
-        <input ng-model="object.data.Topic" placeholder="IT Sec" class="form-control" type="text" disabled/>
+        <label class="col-sm-2 control-label">Topic</label>
+        <div class="col-sm-10"><input ng-model="object.data.Topic" placeholder="IT Sec" class="form-control" type="text" disabled/></div>
       </div>
       <div class="form-group">
-        <label>Course Headline</label>
-        <input ng-model="object.data.courseHeadline" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Course Headline</label>
+        <div class="col-sm-10"><input ng-model="object.data.courseHeadline" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Number of Days</label>
-        <input ng-model="object.data.number_of_days" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Number of Days</label>
+        <div class="col-sm-10"><input ng-model="object.data.number_of_days" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Number of Trainers</label>
-        <input ng-model="object.data.number_of_trainers" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Number of Trainers</label>
+        <div class="col-sm-10"><input ng-model="object.data.number_of_trainers" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Min. Participants</label>
-        <input ng-model="object.data.MinPart" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Min. Participants</label>
+        <div class="col-sm-10"><input ng-model="object.data.MinPart" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Deprecated</label>
-        <input ng-model="object.data.Depr" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Deprecated</label>
+        <div class="col-sm-10"><input ng-model="object.data.Depr" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Course Description</label>
-        <textarea data-ui-tinymce ng-model="object.data.courseDescription"></textarea>
+        <label class="col-sm-2 control-label">Course Description</label>
+        <div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescription"></textarea></div>
       </div>
       <div class="form-group">
-        <label>Course Image</label>
-        <textarea class="form-control" ng-model="object.data.courseImage"></textarea>
+        <label class="col-sm-2 control-label">Course Image</label>
+        <div class="col-sm-10"><textarea class="form-control" ng-model="object.data.courseImage"></textarea></div>
       </div>
       <div class="form-group">
-        <label>Course Description Mail</label>
-        <textarea data-ui-tinymce ng-model="object.data.courseDescriptionMail"></textarea>
+        <label class="col-sm-2 control-label">Course Description Mail</label>
+        <div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionMail"></textarea></div>
       </div>
       <div class="form-group">
-        <label>Course Price</label>
-         <input ng-model="object.data.Price" placeholder="Training 1" class="form-control" type="text" />
+        <label class="col-sm-2 control-label">Course Price</label>
+        <div class="col-sm-10"><input ng-model="object.data.Price" placeholder="Training 1" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label>Course Description Certificate</label>
-        <textarea data-ui-tinymce ng-model="object.data.courseDescriptionCertificate"></textarea>
+        <label class="col-sm-2 control-label">Course Description Certificate</label>
+        <div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionCertificate"></textarea></div>
       </div>
 	  </fieldset>
 	  </form>
