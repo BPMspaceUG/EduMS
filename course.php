@@ -4,39 +4,36 @@
 ?>
 <div class="clearfix"></div>
 <div class="container">
-
-<!-- Debugging -->
-<pre ng-show="debugMode">{{actCourse}}</pre>
-
-<table class="table table-condensed table-striped">
-  <thead>
-    <tr>
-      <th>&nbsp;</th>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Topic</th>
-      <th>Min. Participants</th>
-      <th>Deprecated</th>
-      <th>Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="c in courses">
-      <td style="width: 100px;">
-        <span class="btn pull-left" ng-click="setSelectedCourse(c)">
-          <i ng-class="{'fa fa-fw fa-check-square-o': c.ID === actCourse.ID, 'fa fa-fw fa-square-o': c.ID != actCourse.ID}"></i>
-        </span>
-        <a class="btn pull-left" ng-click="editcourse(c)"><i class="fa fa-fw fa-pencil"></i></a>
-      </td>
-      <td>{{c.ID}}</td>
-      <td style="width: 350px;">{{c.Name}}</td>
-      <td>{{c.Topic}}</td>
-      <td>{{c.MinPart}}</td>
-      <td>{{c.Depr}}</td>
-      <td>{{c.Price}}</td>
-    </tr>
-  </tbody>
-</table>
+  <!-- Table -->
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th>&nbsp;</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Topic</th>
+        <th>Min. Participants</th>
+        <th>Deprecated</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="c in courses">
+        <td style="width: 100px;">
+          <span class="btn pull-left" ng-click="setSelectedCourse(c)">
+            <i ng-class="{'fa fa-fw fa-check-square-o': c.ID === actCourse.ID, 'fa fa-fw fa-square-o': c.ID != actCourse.ID}"></i>
+          </span>
+          <a class="btn pull-left" ng-click="editcourse(c)"><i class="fa fa-fw fa-pencil"></i></a>
+        </td>
+        <td>{{c.ID}}</td>
+        <td style="width: 350px;">{{c.Name}}</td>
+        <td>{{c.Topic}}</td>
+        <td>{{c.MinPart}}</td>
+        <td>{{c.Depr}}</td>
+        <td>{{c.Price}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- Template Modal "Edit Syllabus" -->
@@ -86,7 +83,7 @@
       </div>
       <div class="form-group">
         <label>Course Image</label>
-        <textarea class="form-control">{{object.data.courseImage}}</textarea>
+        <textarea class="form-control" ng-model="object.data.courseImage"></textarea>
       </div>
       <div class="form-group">
         <label>Course Description Mail</label>

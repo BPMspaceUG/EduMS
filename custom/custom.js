@@ -8,12 +8,18 @@ module.run(function(editableOptions) {
 });
 
 // Controller of Modal Window
-module.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items, cmd, parentid) {
-    
-  $scope.ok = function () {
-    $uibModalInstance.close(false); // Return result
-  };
+module.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, cmd, element) {
   
+  // Initial settings  
+  $scope.object = {
+    command: cmd,
+    data: {}
+  };
+  $scope.object.data = element;
+  
+  $scope.ok = function () {
+    $uibModalInstance.close($scope.object); // Return result
+  };  
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
@@ -22,7 +28,9 @@ module.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, item
 // Main Controller
 module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', function($scope, $http, $sce, $uibModal) {
 
-	$scope.setSelectedCourse = function (el) {$scope.actCourse = el;};
+	$scope.setSelectedCourse = function (el) {
+    $scope.actCourse = el;
+  };
 
 	//------------------------------- Courses
 	
@@ -40,17 +48,8 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
         cmd: function () {
           return command;
         },
-        parentid: function() {
-          return 1;
-        },
-        items: function () {
-          return false;
-          /*if (command == "create_syllabus" || command == "create_question") {
-            $scope.getTopics(); // Refresh
-            return $scope.topics;
-          } else {
-            return $scope.items;
-          }*/
+        element: function () {
+          return $scope.actCourse;
         }
       }
     });
@@ -68,22 +67,11 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
     $scope.open('modalEditCourse.html', 'update_course');
   }
 
-  
-  $http.get('getjson.php?c=courses').success(function(data) {
-    $scope.courses = data.courselist;
-  });
-  
   $scope.getCourses = function() {
     return $scope.courses.length ? null : $http.get('getjson.php?c=courses').success(function(data) {
-      $scope.courses = data;
+      $scope.courses = data.courselist;
     });
   };
-
-  //********************* Inline editing
-	$scope.saveEl = function(actEl, data, cmd) {
-    actEl.Name = data; // only here
-		return $http.post('getjson.php?c='+cmd, JSON.stringify(actEl)); // send new model
-	}
 
 	//********************* WRITE data to server
 	$scope.writeData = function (command, data) {
@@ -101,10 +89,6 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
 			console.log("Error! " + error);
 		});
 	}
-  
-  /******* D E B U G G I N G *******/  
-  $scope.debugMode = true;
-  /*********************************/
   
 	//---- Initial functions
 	$scope.getCourses();

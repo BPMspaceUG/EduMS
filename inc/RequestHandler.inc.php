@@ -51,6 +51,22 @@ class RequestHandler
 				);
 				if ($res != 1) return ''; else return $res;
 				break;
+        
+			case 'update_course':
+        $id = $params["ID"];
+				$res = $this->updateCourseName($id, $params["Name"]);
+				$res += $this->updateCourseHeadline($id, $params["courseHeadline"]);
+				$res += $this->updateCourseNbrOfDays($id, $params["number_of_days"]);
+				$res += $this->updateCourseNbrOfTrainers($id, $params["number_of_trainers"]);
+				$res += $this->updateCourseMinParticipants($id, $params["MinPart"]);
+				$res += $this->updateCourseDeprecated($id, $params["Depr"]);
+				$res += $this->updateCourseDescription($id, $params["courseDescription"]);
+				$res += $this->updateCourseImage($id, $params["courseImage"]);
+				$res += $this->updateCourseDescriptionMail($id, $params["courseDescriptionMail"]);
+				$res += $this->updateCoursePrice($id, $params["Price"]);
+				$res += $this->updateCourseDescriptionCertificate($id, $params["courseDescriptionCertificate"]);
+				if ($res != 11) return ''; else return $res;
+				break;
 
       default:
 				return ""; // empty string
@@ -68,8 +84,79 @@ class RequestHandler
     $stmt = $this->db->prepare($query); // prepare statement
     $stmt->bind_param("si", $name, $id); // bind params
     $result = $stmt->execute(); // execute statement
-    return (!is_null($result) ? 1 : null);
+    return (!is_null($result) ? 1 : 0);
 	}
+	private function updateCourseHeadline($id, $text) {
+    $query = "UPDATE course SET courseHeadline = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseNbrOfDays($id, $nbr) {
+    $query = "UPDATE course SET number_of_days = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseNbrOfTrainers($id, $nbr) {
+    $query = "UPDATE course SET number_of_trainers = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseMinParticipants($id, $nbr) {
+    $query = "UPDATE course SET min_participants = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseDeprecated($id, $nbr) {
+    $query = "UPDATE course SET deprecated = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseDescription($id, $text) {
+    $query = "UPDATE course SET courseDescription = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseImage($id, $text) {
+    $query = "UPDATE course SET courseImage = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseDescriptionMail($id, $text) {
+    $query = "UPDATE course SET courseDescriptionMail = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCoursePrice($id, $nbr) {
+    $query = "UPDATE course SET coursePrice = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseDescriptionCertificate($id, $text) {
+    $query = "UPDATE course SET courseDescriptionCertificate = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+  
 	private function addTopic($name) {
 		$query = "INSERT INTO sqms_topic (name) VALUES (?);";
 		$stmt = $this->db->prepare($query); // prepare statement
