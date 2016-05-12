@@ -12,6 +12,7 @@
         <th>ID</th>
         <th>Name</th>
         <th>Topic</th>
+        <th>Test</th>
         <th>Min. Participants</th>
         <th>Deprecated</th>
         <th>Price</th>
@@ -28,6 +29,7 @@
         <td>{{c.ID}}</td>
         <td style="width: 350px;">{{c.Name}}</td>
         <td>{{c.Topic}}</td>
+        <td>{{c.Test}}</td>
         <td>{{c.MinPart}}</td>
         <td>{{c.Depr}}</td>
         <td>{{c.Price}}</td>
@@ -47,35 +49,39 @@
       <legend>Edit course</legend>
       <div class="form-group">
         <label class="col-sm-2 control-label">Course ID</label>
-        <div class="col-sm-10"><input ng-model="object.data.ID" placeholder="3" class="form-control" type="text" disabled/></div>
+        <div class="col-sm-10"><input ng-model="object.data.ID" class="form-control" type="text" disabled/></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Course name</label>
-        <div class="col-sm-10"><input ng-model="object.data.Name" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.Name" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Topic</label>
-        <div class="col-sm-10"><input ng-model="object.data.Topic" placeholder="IT Sec" class="form-control" type="text" disabled/></div>
+        <div class="col-sm-10"><input ng-model="object.data.Topic" class="form-control" type="text" disabled/></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Course Headline</label>
-        <div class="col-sm-10"><input ng-model="object.data.courseHeadline" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.courseHeadline" class="form-control" type="text" /></div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Test</label>
+        <div class="col-sm-10"><input ng-model="object.data.Test" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Number of Days</label>
-        <div class="col-sm-10"><input ng-model="object.data.number_of_days" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.number_of_days" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Number of Trainers</label>
-        <div class="col-sm-10"><input ng-model="object.data.number_of_trainers" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.number_of_trainers" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Min. Participants</label>
-        <div class="col-sm-10"><input ng-model="object.data.MinPart" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.MinPart" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Deprecated</label>
-        <div class="col-sm-10"><input ng-model="object.data.Depr" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.Depr" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Course Description</label>
@@ -91,7 +97,7 @@
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Course Price</label>
-        <div class="col-sm-10"><input ng-model="object.data.Price" placeholder="Training 1" class="form-control" type="text" /></div>
+        <div class="col-sm-10"><input ng-model="object.data.Price" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Course Description Certificate</label>
@@ -101,8 +107,8 @@
 	  </form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-primary" type="button" ng-click="ok()">Save</button>
-		<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+		<button class="btn btn-primary" type="button" ng-click="ok()"><i class="fa fa-floppy-o"></i> Save</button>
+		<button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
 	</div>
 </script>
 

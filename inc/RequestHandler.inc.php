@@ -56,6 +56,7 @@ class RequestHandler
         $id = $params["ID"];
 				$res = $this->updateCourseName($id, $params["Name"]);
 				$res += $this->updateCourseHeadline($id, $params["courseHeadline"]);
+				$res += $this->updateCourseTest($id, $params["Test"]);
 				$res += $this->updateCourseNbrOfDays($id, $params["number_of_days"]);
 				$res += $this->updateCourseNbrOfTrainers($id, $params["number_of_trainers"]);
 				$res += $this->updateCourseMinParticipants($id, $params["MinPart"]);
@@ -65,7 +66,7 @@ class RequestHandler
 				$res += $this->updateCourseDescriptionMail($id, $params["courseDescriptionMail"]);
 				$res += $this->updateCoursePrice($id, $params["Price"]);
 				$res += $this->updateCourseDescriptionCertificate($id, $params["courseDescriptionCertificate"]);
-				if ($res != 11) return ''; else return $res;
+				if ($res != 12) return ''; else return $res;
 				break;
 
       default:
@@ -90,6 +91,13 @@ class RequestHandler
     $query = "UPDATE course SET courseHeadline = ? WHERE course_id = ?;";
     $stmt = $this->db->prepare($query); // prepare statement
     $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateCourseTest($id, $nbr) {
+    $query = "UPDATE course SET test = ? WHERE course_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
     $result = $stmt->execute(); // execute statement
     return (!is_null($result) ? 1 : 0);
 	}
@@ -178,6 +186,7 @@ class RequestHandler
     course_name AS 'Name',
     aa.topicName AS 'Topic',
     c.courseHeadline,
+    c.test As 'Test',
     c.number_of_days,
     c.number_of_trainers,
     min_participants AS 'MinPart',
