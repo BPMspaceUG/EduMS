@@ -35,6 +35,11 @@ class RequestHandler
 				$return = $this->getCourseList();
 				return json_encode($return);
 				break;
+        
+      case 'topics':
+				$return = $this->getTopicList();
+				return json_encode($return);      
+        break;
 				
 			case 'create_course':
 				return $this->addTopic($params["name"]);
@@ -209,4 +214,22 @@ FROM
         $return['courselist'] = getResultArray($res);
         return $return;
     }
+	private function getTopicList() {
+        $query = "SELECT 
+    topic_id AS 'ID',
+    topicName,
+    topicHeadline,
+    topicDescription,
+    topicDescriptionSidebar,
+    topicImage,
+    topicDescriptionFooter,
+    responsibleTrainer_id,
+    deprecated
+FROM
+    topic;";
+		$res = $this->db->query($query);
+        $return['topiclist'] = getResultArray($res);
+        return $return;
+    }
+    
 }

@@ -28,14 +28,15 @@ module.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, cmd,
 // Main Controller
 module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', function($scope, $http, $sce, $uibModal) {
 
-	$scope.setSelectedCourse = function (el) {
-    $scope.actCourse = el;
-  };
+	$scope.setSelectedCourse = function (el) {$scope.actCourse = el;};
+	$scope.setSelectedTopic = function (el) {$scope.actTopic = el;};
 
 	//------------------------------- Courses
 	
   $scope.courses = false;
+  $scope.topics = false;
   $scope.actCourse = false;
+  $scope.actTopic = false;
   
   // ------ Modal forms
 
@@ -66,12 +67,17 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
     $scope.setSelectedCourse(el);
     $scope.open('modalEditCourse.html', 'update_course');
   }
-
+  
   $scope.getCourses = function() {
     return $scope.courses.length ? null : $http.get('getjson.php?c=courses').success(function(data) {
       $scope.courses = data.courselist;
     });
   };
+  $scope.getTopics = function() {
+    return $scope.topics.length ? null : $http.get('getjson.php?c=topics').success(function(data) {
+      $scope.topics = data.topiclist;
+    });
+  };  
 
 	//********************* WRITE data to server
 	$scope.writeData = function (command, data) {
@@ -92,4 +98,5 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
   
 	//---- Initial functions
 	$scope.getCourses();
+	$scope.getTopics();
 }]);
