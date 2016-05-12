@@ -79,6 +79,7 @@
             <li><a href="topic.php" title='Topic'  class="btn btn-large btn-primary"><i class="fa fa-folder-o"></i>&nbsp;Topic</a></li>
             <li><a href="trainer.php" title='Trainer' class="btn btn-large btn-primary"><i class="fa fa-graduation-cap"></i>&nbsp;Trainer</a></li>
             <li><a href="course.php" title='Course' class="btn btn-large btn-primary"><i class="fa fa-university"></i>&nbsp;Course</a></li>
+            <li><a href="brand.php" title='Brand' class="btn btn-large btn-primary"><i class="fa fa-star"></i>&nbsp;Brand</a></li>
           </ul>
       </li>
       <li><a href="../phpSecureLogin/includes/logout.php" title='Logout' class="btn btn-large btn-primary"><i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>

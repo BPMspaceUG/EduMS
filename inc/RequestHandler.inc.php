@@ -87,12 +87,20 @@ class RequestHandler
 	}
 	private function getCourseList() {
         $query = "SELECT 
-    c.course_id AS 'ID',
+    c.course_id AS 'ID',    
     course_name AS 'Name',
     aa.topicName AS 'Topic',
+    c.courseHeadline,
+    c.number_of_days,
+    c.number_of_trainers,
     min_participants AS 'MinPart',
     c.deprecated AS 'Depr',
-    coursePrice AS 'Price'
+    c.courseDescription,
+    c.courseImage,
+    c.courseDescriptionMail,
+    coursePrice AS 'Price',
+    c.courseDescriptionCertificate,
+    max_participants
 FROM
     (SELECT 
         course_id, topicName
