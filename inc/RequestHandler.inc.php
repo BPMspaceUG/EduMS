@@ -209,7 +209,7 @@ FROM
         topic_course AS a
     INNER JOIN topic AS b ON a.topic_id = b.topic_id) AS aa
         INNER JOIN
-    course AS c ON aa.course_id = c.course_id;";
+    course AS c ON aa.course_id = c.course_id  ORDER BY deprecated, aa.topicName, c.course_id ;";
 		$res = $this->db->query($query);
         $return['courselist'] = getResultArray($res);
         return $return;
