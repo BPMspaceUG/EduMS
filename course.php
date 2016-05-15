@@ -47,64 +47,67 @@
 	  <form class="form-horizontal">
 	  <fieldset>
       <legend>Edit course</legend>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course ID</label>
-        <div class="col-sm-10"><input ng-model="object.data.ID" class="form-control" type="text" disabled/></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course name</label>
-        <div class="col-sm-10"><input ng-model="object.data.Name" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Topic</label>
-        <div class="col-sm-10"><input ng-model="object.data.Topic" class="form-control" type="text" disabled/></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course Headline</label>
-        <div class="col-sm-10"><input ng-model="object.data.courseHeadline" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Test</label>
-        <div class="col-sm-10"><input ng-model="object.data.Test" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Number of Days</label>
-        <div class="col-sm-10"><input ng-model="object.data.number_of_days" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Number of Trainers</label>
-        <div class="col-sm-10"><input ng-model="object.data.number_of_trainers" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Min. Participants</label>
-        <div class="col-sm-10"><input ng-model="object.data.MinPart" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Deprecated</label>
-        <div class="col-sm-10"><input ng-model="object.data.Depr" class="form-control" type="text" /></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course Description</label>
-        <div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescription"></textarea></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course Image</label>
-        <div class="col-sm-10"><textarea class="form-control" ng-model="object.data.courseImage"></textarea></div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course Description Mail</label>
-        <div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionMail"></textarea></div>
-      </div>
-      <div class="form-group">
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Course ID</label>
+        <div class="col-sm-4"><input ng-model="object.data.ID" class="form-control" type="text" disabled/></div>
         <label class="col-sm-2 control-label">Course Price</label>
-        <div class="col-sm-10"><input ng-model="object.data.Price" class="form-control" type="text" /></div>
+        <div class="col-sm-4"><input ng-model="object.data.Price" class="form-control" type="text" /></div>
+	</div>
+	  <div class="form-group">
+	  	<label class="col-sm-2 control-label">Course name</label>
+        <div class="col-sm-4"><input ng-model="object.data.Name" class="form-control" type="text" /></div>
+		<label class="col-sm-2 control-label">Topic</label>
+        <div class="col-sm-4"><input ng-model="object.data.Topic" class="form-control" type="text" disabled/></div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Course Description Certificate</label>
-        <div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionCertificate"></textarea></div>
+	  <div class="form-group">
+        <div class="col-sm-1"></div><label class="col-sm-1 control-label">Test</label>
+        <div class="col-sm-1"><input ng-model="object.data.Test" class="form-control" type="text" /></div>
+        <label class="col-sm-1 control-label">Number of Days</label>
+        <div class="col-sm-1"><input ng-model="object.data.number_of_days" class="form-control" type="text" /></div>
+        <label class="col-sm-1 control-label">Number of Trainers</label>
+        <div class="col-sm-1"><input ng-model="object.data.number_of_trainers" class="form-control" type="text" /></div>
+        <label class="col-sm-1 control-label">Min. Participants</label>
+        <div class="col-sm-1"><input ng-model="object.data.MinPart" class="form-control" type="text" /></div>
+        <label class="col-sm-1 control-label">Deprecated</label>
+        <div class="col-sm-1"><input ng-model="object.data.Depr" class="form-control" type="text" /></div>
       </div>
-	  </fieldset>
-	  </form>
+	  
+	  
+	<ul class="nav nav-tabs">
+	  <li><a data-toggle="tab" href="#InternetDescription">Internet Description</a></li>
+	  <li><a data-toggle="tab" href="#MailDescription">Mail Description</a></li>
+	  <li><a data-toggle="tab" href="#CertificateDescription">Certificate Description</a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="InternetDescription" class="tab-pane fade in active">
+			<div class="form-group">
+			<label class="col-sm-2 control-label">Course Headline Internet</label>
+			<div class="col-sm-10"><input ng-model="object.data.courseHeadline" class="form-control" type="text" /></div>
+			</div>
+			<div class="form-group">
+			<label class="col-sm-2 control-label ">Course Description Internet</label>
+			<div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescription"></textarea></div>
+			</div>
+			<div class="form-group">
+			<label class="col-sm-2 control-label">Course Image Internet</label>
+			<div class="col-sm-10"><textarea class="form-control" ng-model="object.data.courseImage"></textarea></div>
+			</div>
+		</div>
+		<div id="MailDescription" class="tab-pane fade">
+		  <div class="form-group">
+			<label class="col-sm-2 control-label">Mail Course Description</label>
+			<div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionMail"></textarea></div>
+		  </div>
+		</div>
+		<div id="CertificateDescription" class="tab-pane fade">
+			<div class="form-group">
+			<label class="col-sm-2 control-label">Certificate Course Description</label>
+			<div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionCertificate"></textarea></div>
+			</div>
+		</div>
+	</div>
+	</fieldset>
+	</form>
 	</div>
 	<div class="modal-footer">
 		<button class="btn btn-primary" type="button" ng-click="ok()"><i class="fa fa-floppy-o"></i> Save</button>
