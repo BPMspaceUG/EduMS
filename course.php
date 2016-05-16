@@ -38,7 +38,7 @@
   </table>
 </div>
 
-<!-- Template Modal "Edit Syllabus" -->
+<!-- Template Modal "Edit Course" -->
 <script type="text/ng-template" id="modalEditCourse.html">
 	<div class="modal-header">
 		<h3 class="modal-title">Edit course</h3>
@@ -72,40 +72,43 @@
         <div class="col-sm-1"><input ng-model="object.data.Depr" class="form-control" type="text" /></div>
       </div>
 	  
-	  
-	<ul class="nav nav-tabs">
-	  <li><a data-toggle="tab" href="#InternetDescription">Internet Description</a></li>
-	  <li><a data-toggle="tab" href="#MailDescription">Mail Description</a></li>
-	  <li><a data-toggle="tab" href="#CertificateDescription">Certificate Description</a></li>
-	</ul>
-	<div class="tab-content">
-		<div id="InternetDescription" class="tab-pane fade in active">
-			<div class="form-group">
-			<label class="col-sm-2 control-label">Course Headline Internet</label>
-			<div class="col-sm-10"><input ng-model="object.data.courseHeadline" class="form-control" type="text" /></div>
-			</div>
-			<div class="form-group">
-			<label class="col-sm-2 control-label ">Course Description Internet</label>
-			<div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescription"></textarea></div>
-			</div>
-			<div class="form-group">
-			<label class="col-sm-2 control-label">Course Image Internet</label>
-			<div class="col-sm-10"><textarea class="form-control" ng-model="object.data.courseImage"></textarea></div>
-			</div>
-		</div>
-		<div id="MailDescription" class="tab-pane fade">
-		  <div class="form-group">
-			<label class="col-sm-2 control-label">Mail Course Description</label>
-			<div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescriptionMail"></textarea></div>
-		  </div>
-		</div>
-		<div id="CertificateDescription" class="tab-pane fade">
-			<div class="form-group">
-			<label class="col-sm-2 control-label">Certificate Course Description</label>
-			<div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescriptionCertificate"></textarea></div>
-			</div>
-		</div>
-	</div>
+	<div class="col-sm-2">&nbsp;</div>
+  <div class="col-sm-10">
+    <ul class="nav nav-tabs">
+      <li><a data-toggle="tab" href="#InternetDescription">Internet Description</a></li>
+      <li><a data-toggle="tab" href="#MailDescription">Mail Description</a></li>
+      <li><a data-toggle="tab" href="#CertificateDescription">Certificate Description</a></li>
+    </ul>
+  </div>
+  <!-- TabContent -->
+  <div class="tab-content">
+    <div id="InternetDescription" class="tab-pane fade in active">
+      <div class="form-group">
+      <label class="col-sm-2 control-label">Course Headline Internet</label>
+      <div class="col-sm-10"><input ng-model="object.data.courseHeadline" class="form-control" type="text" /></div>
+      </div>
+      <div class="form-group">
+      <label class="col-sm-2 control-label ">Course Description Internet</label>
+      <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescription"></textarea></div>
+      </div>
+      <div class="form-group">
+      <label class="col-sm-2 control-label">Course Image Internet</label>
+      <div class="col-sm-10"><textarea class="form-control" ng-model="object.data.courseImage"></textarea></div>
+      </div>
+    </div>
+    <div id="MailDescription" class="tab-pane fade">
+      <div class="form-group">
+      <label class="col-sm-2 control-label">Mail Course Description</label>
+      <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescriptionMail"></textarea></div>
+      </div>
+    </div>
+    <div id="CertificateDescription" class="tab-pane fade">
+      <div class="form-group">
+      <label class="col-sm-2 control-label">Certificate Course Description</label>
+      <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescriptionCertificate"></textarea></div>
+      </div>
+    </div>
+  </div>
 	</fieldset>
 	</form>
 	</div>

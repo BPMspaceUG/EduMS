@@ -49,14 +49,6 @@ class RequestHandler
 				return $this->delTopic($params["sqms_topic_id"]);
 				break;
 
-			case 'update_course_name':
-				$res = $this->updateCourseName(
-					$params["ID"],
-					$params["Name"]
-				);
-				if ($res != 1) return ''; else return $res;
-				break;
-        
 			case 'update_course':
         $id = $params["ID"];
 				$res = $this->updateCourseName($id, $params["Name"]);

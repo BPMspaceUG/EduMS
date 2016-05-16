@@ -76,7 +76,10 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
           return command;
         },
         element: function () {
-          return $scope.actCourse;
+          if (command == 'update_course')
+            return $scope.actCourse;
+          else if (command == 'update_topic')
+            return $scope.actTopic;
         }
       }
     });
@@ -92,6 +95,10 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
   $scope.editcourse = function(el) {
     $scope.setSelectedCourse(el);
     $scope.open('modalEditCourse.html', 'update_course');
+  }
+  $scope.edittopic = function(el) {
+    $scope.setSelectedTopic(el);
+    $scope.open('modalEditTopic.html', 'update_topic');
   }
   
   $scope.getCourses = function() {
