@@ -86,7 +86,7 @@
 			</div>
 			<div class="form-group">
 			<label class="col-sm-2 control-label ">Course Description Internet</label>
-			<div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescription"></textarea></div>
+			<div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescription"></textarea></div>
 			</div>
 			<div class="form-group">
 			<label class="col-sm-2 control-label">Course Image Internet</label>
@@ -96,13 +96,13 @@
 		<div id="MailDescription" class="tab-pane fade">
 		  <div class="form-group">
 			<label class="col-sm-2 control-label">Mail Course Description</label>
-			<div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionMail"></textarea></div>
+			<div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescriptionMail"></textarea></div>
 		  </div>
 		</div>
 		<div id="CertificateDescription" class="tab-pane fade">
 			<div class="form-group">
 			<label class="col-sm-2 control-label">Certificate Course Description</label>
-			<div class="col-sm-10"><textarea data-ui-tinymce ng-model="object.data.courseDescriptionCertificate"></textarea></div>
+			<div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.courseDescriptionCertificate"></textarea></div>
 			</div>
 		</div>
 	</div>
