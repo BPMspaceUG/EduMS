@@ -133,9 +133,10 @@ $scope.sidebarselect = 'start'
     
 
 var getTest = function(id, courseToTest, courses) {
-   // log(id);  //log(courseToTest);  log(courses)
+   // log(id);  log(courseToTest);  log(courses)
   _.each(courseToTest, function(cttRef){
-    // log(id == cttRef.course_id)
+    // log(id)
+    // log(cttRef.course_id)
     if (id == cttRef.course_id) {   
       res = _.find(courses, function(course){ return course.course_id == cttRef.test_id }); 
       log('res') ; log(res)
@@ -205,6 +206,10 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.sysName = course.course_name.replace(/\W+/g,''); //PanelIds
           course.test= getTest(course.course_id, courseToTest, courses)
           course.test_id=getTestID(course.course_id, courseToTest)
+
+          course.exam = courseToTest.filter((ref) =>{log(ref.course_id); return ref.course_id == course.course_id})
+          if (course.exam.length>0) {log(course.exam)};
+
           course.events=getDateSortedEventsToCourse(course.course_id)
 
           if (course.course_id == course.test_id) {
@@ -370,17 +375,12 @@ $scope.tablesearchchange = function(name){
 
 
 /*ng-models for imputs*/
-$scope.rinfo={organisation : '', contactname : '', contactsname : '', 
-  contactpersonemail : '', street : '', housenr : '', city : '',
-    zip : '', country : '', courses:[]}
-/*add and remove Partitioner namefields in the Modal*/
-$scope.reserveparticipants = [{name:'', sname:'', email:'', certificate:''}];
-$scope.addInput = function(){
-    $scope.reserveparticipants.push({name:'', sname:'', email:'', certificate:''});
+$scope.rinfo={contactpersonemail : '', courses:[]}
+$scope.teilnehmerZahlcountDown = function() {
+  if ($scope.rinfo.mTeilnehmerZahl>1) {$scope.rinfo.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl-1};
 }
-$scope.removeInput = function(index){
-    $scope.reserveparticipants.splice(index,1);
-}
+
+
 $scope.sortType = 'start_date'
 $scope.sortReverse = false
 
@@ -388,16 +388,26 @@ $scope.sortReverse = false
 /*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
 the responsible person in the Brand (DB-change -> registermail)*/
 $scope.reservationlistupdate = function(c) { //c = course
-var reslist = $scope.rinfo.courses
-  if (c.checked) {
+var reslist = $scope.rinfo.courses, duplicate = false
+
+  //search for duplicates
+  _.each(reslist, function(course){
+    if (course.event_id == c.event_id || duplicate) {
+      duplicate=true
+    };
+  })
+
+  //handle input
+  if (c.checked && !duplicate) {
     reslist.push(c)
     // _.extend(reslist, c) /*als Objekt*/
   }else{
     // delete reslist.c /*als Objekt*/
     for (var i = 0; i < reslist.length; i++) {
-      if (reslist[i].event_id) {reslist.splice(i,1)};    
+      if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
     };
   }
+
 }
 /*On click 'Weitere Kurse' add course to reservation list and open T&A-Modal for more courseoptions*/
 $scope.initreslistfromsidebar = function(c) { //c = course
@@ -405,23 +415,24 @@ $scope.initreslistfromsidebar = function(c) { //c = course
   $scope.reservationlistupdate(c)
 }
 $scope.reservate = function() {
-  _.each($scope.topics, function(topic){
-    _.each(topic.eventlist, function(event){
-      if (event.checked) {
-        $scope.rinfo.courses.push(event)
-      };
-    })
-  })
-  for (var i = 0; i < $scope.topics.length; i++) {
-      for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
-        if ($scope.topics[i].eventList[j].checked) {
-          $scope.rinfo.courses.push($scope.topics[i].eventList[j])
-        };
-      };
-  };
+  //cleanflag 
+  // _.each($scope.topics, function(topic){
+  //   _.each(topic.eventlist, function(event){
+  //     if (event.checked) {
+  //       $scope.rinfo.courses.push(event)
+  //     };
+  //   })
+  // })
+  // for (var i = 0; i < $scope.topics.length; i++) {
+  //     for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
+  //       if ($scope.topics[i].eventList[j].checked) {
+  //         $scope.rinfo.courses.push($scope.topics[i].eventList[j])
+  //       };
+  //     };
+  // };
 
 
- $scope.rinfo.reserveparticipants = $scope.reserveparticipants
+ // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush: ')
  console.log($scope.rinfo)
  $http.post('/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve', $scope.rinfo).
