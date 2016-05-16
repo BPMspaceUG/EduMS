@@ -231,32 +231,36 @@
 
 
          <div class="modal-body" class="col-md-12">
+          <div class="row">
+            <div class="col-md-9"><h2>1. Terminauswahl</h2></div>
+            <div class="col-md-3"><h2>2. Anmeldung</h2></div>
+          </div>
+           
 
-           <h2>Termine und Anmeldung</h2>
-
+          <div class="row">
            <div class="col-md-9">
 
-             <form>
-               <div class="input-group">
-                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                 <input type="text" class="form-control" placeholder="search in table" ng-model="tablesearch">
-               </div> 
-             </form>
+            <div class="row">
+              <div class="col-md-8" id="spacersearchbar"></div>
+              <div class="col-md-4">
+               <form>
+                 <div class="input-group">
+                   <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                   <input type="text" class="form-control" placeholder="search in table" ng-model="tablesearch">
+                 </div> 
+               </form>
+              </div>
+            </div>
 
 
 
             <table class="table table-responsive table-hover table-striped" style="width: 98%;">
             <thead>
-                <th><a href="#"><h4>Auswahl</h4></a></th>
-                <th><a href="#" ng-click="sortType = 'eventguaranteestatus'; sortReverse = !sortReverse"><h4>Status</h4>
-                 <span ng-show="sortType == 'eventguaranteestatus' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'eventguaranteestatus' && sortReverse" class="fa fa-caret-up"></span>
-                </a></th>
-                <th><a href="#" ng-click="sortType = 'start_date'; sortReverse = !sortReverse"><h4>von - bis</h4>
+                <th><a href="#" ng-click="sortType = 'start_date'; sortReverse = !sortReverse"><h4>Termin</h4>
                  <span ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
-                <th><a href="#" ng-click="sortType = 'namefortable'; sortReverse = !sortReverse"><h4>Name</h4>
+                <th><a href="#" ng-click="sortType = 'namefortable'; sortReverse = !sortReverse"><h4>Schulung</h4>
                  <span ng-show="sortType == 'namefortable' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'namefortable' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
@@ -264,29 +268,34 @@
                  <span ng-show="sortType == 'location_name' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'location_name' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
-                <th><a href="#" ng-click="sortType = 'trainer'; sortReverse = !sortReverse"><h4>Trainer</h4>
-                 <span ng-show="sortType == 'trainer' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'trainer' && sortReverse" class="fa fa-caret-up"></span>
-                </a></th>
                 <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Preis</h4>
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
-                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Brutto</h4>
+                <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>inkl. Mwst.</h4>
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
+                <th><a href="#"><h4>Auswahl</h4></a></th>
+<!-- cleanflag  <th><a href="#" ng-click="sortType = 'trainer'; sortReverse = !sortReverse"><h4>Trainer</h4>
+                 <span ng-show="sortType == 'trainer' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'trainer' && sortReverse" class="fa fa-caret-up"></span>
+                </a></th>
+                <th><a href="#" ng-click="sortType = 'eventguaranteestatus'; sortReverse = !sortReverse"><h4>Status</h4>
+                 <span ng-show="sortType == 'eventguaranteestatus' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'eventguaranteestatus' && sortReverse" class="fa fa-caret-up"></span>
+                </a></th> -->
               </thead>
               <tbody>
                 <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch">
-                  <td><input type="checkbox" class="checkbox" type="checkbox" ng-model="event.checked" name="userAgree" ng-change="reservationlistupdate(event)"></td>
-                  <td>{{event.eventguaranteestatus}}</td>               
-                  <td>{{event.start_date | date:"dd/MM/yy"}} - {{event.finish_date | date:"dd/MM/yy"}}</td>
+                  <td>{{event.start_date | date:"dd.MM."}} - {{event.finish_date | date:"dd.MM.yy"}}</td>
                   <td>{{event.namefortable}}</td>
                   <td>{{event.location_name}}</td>
-                  <td>{{event.trainer}}</td>
                   <td>{{event.price}},-</td>               
                   <td>{{Math.round(event.price*1.19)}},-</td>               
+                  <td><input type="checkbox" class="checkbox" ng-model="event.checked" name="userAgree" ng-change="reservationlistupdate(event)"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
+                  <!-- <td>{{event.eventguaranteestatus}}</td>               
+                  <td>{{event.trainer}}</td> -->
                 </tr>
               </tbody>
           </table>
@@ -299,9 +308,35 @@
            </div><!-- end md9 (table) -->
 
 
+          
            <div class="col-md-3">
+            <h3>Ausgewählte Termine</h3>
             <form name="formReg" class="form-horizontal" novalidate>
               <div class="form-group">
+                <div class="row" style="margin-top: 15px;" ng-if="rinfo.courses.length>0">
+                  <h4>Ausgewählte Termine:</h4>
+                  <div ng-repeat="picked in rinfo.courses track by $index">
+                    <h4>{{picked.course_name}}</h4>
+                    <div class="row">
+                      <div class="col-md-12">
+                        {{picked.internet_location_name}}, {{picked.start_date | date:"dd.MM."}} - {{picked.finish_date | date:"dd.MM.yy"}}
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                      <div class="col-md-2">Kurs</div>
+                      <div class="col-md-9">{{picked.price}},- €</div>
+                    </div>
+
+                    <div class="row" ng-if="picked.test.price>1">
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                      <div class="col-md-2">Prüfung</div>
+                      <div class="col-md-9">{{picked.test.price}},- €</div>
+                    </div>
+
+                  </div>
+               </div>
                 <div class="row" style="margin-top: 10px; ">
 
                   <div class="col-md-1"> </div>
@@ -309,11 +344,16 @@
                   <div class="col-md-8" >
 
                   <div class="row">
-                    <div class="col-md-8" style="text-align:left"><h4>Teilnehmerzahl</h4></div>
-                    <div class="col-md-4" style="align:right">
-                      <input type="number" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="0" 
+                    <div class="col-md-6"><h4>Teilnehmerzahl</h4></div>
+                    <div class="col-md-4" >
+                      <input type="number" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="1" 
                        ng-model="rinfo.mTeilnehmerZahl">
                     </div>
+                       
+                    
+                       <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>
+                       <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>
+                    
                   </div>
                   <div class="row" class="input-group" class="form-input">
                     <div>
@@ -325,7 +365,7 @@
                     <div>
                       <button type="button" class="btn btn-block" ng-model="reservate" 
                         style="margin-top: 6px;" ng-click="reservate()">
-                        <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> One-Click Anmeldung
+                        <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> Anmeldung
                       </button>
                     </div>
                   </div>
@@ -335,17 +375,15 @@
               </div>
               </form>
 
-              <div class="row" style="margin-top: 15px;" ng-if="rinfo.courses.length>0">
-                <h4>Ausgewählte Events:</h4>
-                <h5 ng-repeat="picked in rinfo.courses track by $index" style="color:#333">
-                  <b>-Nr.: {{picked.event_id}}:</b> {{picked.start_date}} - {{picked.course_name}}</h5>
-             </div>
+
            </div>
+
 
 
 
          </div><!-- end registerform -->
 
+        </div><!-- end  -->
 
 
        </div> <!-- end afterbutton -->
@@ -353,17 +391,13 @@
 
         <div class="modal-footer">
 
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
-         schließen</button>
-
-
-         <a id="modal-2" href="#modal-container-2" data-toggle="modal">
-
-         <button type="button" class="btn btn-success" ng-click="reservate()">
-
-          <i class="fa fa-arrow-circle-right"></i> Anmeldung
-         </button>
-     </a>
+          <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-1"><button type="button" class="btn btn-danger" data-dismiss="modal">schließen</button></div>
+            <div class="col-md-1"><button type="button" class="btn btn-block" ng-click="reservate()">
+              <i class="fa fa-caret-right"></i> Anmeldung</button>
+            </div>
+          </div>
 
         </div>
      </div> <!-- end modal-content -->
