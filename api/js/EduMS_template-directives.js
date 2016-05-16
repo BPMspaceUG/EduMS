@@ -12,12 +12,12 @@ app.directive('rightBarCourseAll', function() {
  return{
 template:
 `<div class="list-group " >
-          <div class="list-group-item event" style="background-color:#E7E8E6; border:0px">
+          <div class="list-group-item event">
           
             <div class="row">
               <div class="col-md-1">
                 <div class="row"><br><br></div>
-                <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" style="color:#68B32E;"></i> </div>
+                <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" ></i> </div>
                 </div>
                 
               <div class="col-md-7" style="text-align: left;">
@@ -25,18 +25,18 @@ template:
                 <div class="row" ><b>{{e.course_name}}</b></div>
                 <div class="row"><button type="button" class="btn btn-block" ng-model="reservate" 
                   style="margin-top: 15px; " ng-hide="e.btnRegister" ng-click= "e.btnRegister=!e.btnRegister">
-                  <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> Anmelden!
+                  <i class="fa fa-caret-right" aria-hidden="true"></i> Anmelden!
                 </button></div>
               </div>
               
               <div class="col-md-3">
                 <div class="row" ng-if="e.eventguaranteestatus == 2">
-                  <div class="panel" style="background-color:#fff; color: #68B32E; margin-top: 10px; margin-bottom: 0px; margin-right: -10px; margin-left: 5px;">
+                  <div class="panel" style=" margin-top: 10px; margin-bottom: 0px; margin-right: -10px; margin-left: 5px;">
                     <b>TERMIN-<br>GARANTIE</b>
                   </div>
                 </div>
                 <div class="row" ng-if="e.eventguaranteestatus == 5">
-                  <div class="panel" style="background-color:#fff; color: #E85C5C; margin-top: 10px; margin-bottom: 0px; margin-right: -10px; margin-left: 5px;">
+                  <div class="panel" style=" margin-top: 10px; margin-bottom: 0px; margin-right: -10px; margin-left: 5px;">
                     <b>WARTELISTE</b>
                   </div>
                 </div>
@@ -83,7 +83,7 @@ template:`
       <div class="row">
         <div class="col-md-8" style="text-align:left"> Teilnehmerzahl </div>
         <div class="col-md-4" style="align:right">
-          <input type="number" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="0" 
+          <input type="number" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="1" 
            ng-model="rinfo.mTeilnehmerZahl">
         </div>
       </div>
@@ -104,7 +104,7 @@ template:`
         <div>
           <button type="button" class="btn btn-block" ng-model="reservate" 
             style="margin-top: 6px;" ng-click="reservate(e.sysName)">
-            <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> One-Click Anmeldung
+            <i class="fa fa-caret-right" aria-hidden="true" ></i> One-Click Anmeldung
           </button>
         </div>
       </div>
@@ -154,7 +154,7 @@ app.directive('coursePanelBody', function(){
       <div ng-bind-html="panelcourse.courseDescription"></div>
     </div>
     <div role="tabpanel" class="tab-pane" id="prüfung{{panelcourse.sysName}}">
-      <h3>{{panelcourse.test.courseHeadline || "¯|_(ツ)_/¯"}}</h3>
+      <h3>{{panelcourse.test.courseHeadline || "\u2b55\u2b55\u2b55¯|_(ツ)_/¯\u2b55\u2b55\u2b55"}}</h3>
       <p>{{panelcourse.test.courseDescription || "Hier folgt in Kürze eine Testbeschreibung"}}</p>
       <div ng-bind-html="panelcourse.test.courseDescription"></div>
     </div>
@@ -165,13 +165,13 @@ app.directive('coursePanelBody', function(){
             <th><h4>Nettopreis</h4></th>
             <th><h4>Bruttopreis</h4></th>
           </thead>
-          <tbody style="color:#78b433">
+          <tbody>
             <tr>
               <td>{{panelcourse.course_name}}</td>
               <td>{{panelcourse.coursePrice}},- €</td>
               <td>{{panelcourse.brutto}},- €</td>
             </tr>
-            <tr style="color:#FFA639"> 
+            <tr> 
               <td>Prüfungsvorbereitung    inklusive</td>
             </tr>
             <tr>
@@ -179,7 +179,7 @@ app.directive('coursePanelBody', function(){
               <td>{{panelcourse.test.coursePrice || "- ? "}},- €</td>
               <td>{{panelcourse.test.brutto || "- ? "}},- €</td>
             </tr>
-            <tr style="color:#FFA639">
+            <tr>
               <td>Mittagessen & Pausenverpflegung   inklusive</td>
             </tr>
             <tr>
@@ -199,12 +199,12 @@ app.directive('coursePanelBody', function(){
               <th><h4>Ende</h4></th>
               <th><h4>Ort</h4></th>
             </thead>
-            <tbody style="color:#ff9900">
+            <tbody>
               <tr ng-repeat="event in panelcourse.events | limitTo:5">
                 <td>{{panelcourse.course_name}}</td>
                 <td>{{event.start_date | date:"dd/MM/yyyy"}} {{event.start_time | date:"hh"}} Uhr</td>
                 <td>{{event.finish_date | date:"dd/MM/yyyy"}}</td>
-                <td>{{event.location_name}}</td>
+                <td>{{event.internet_location_name}}</td>
               </tr>
             </tbody>
       </table>
