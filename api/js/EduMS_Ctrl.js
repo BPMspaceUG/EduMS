@@ -207,7 +207,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.test= getTest(course.course_id, courseToTest, courses)
           course.test_id=getTestID(course.course_id, courseToTest)
 
-          course.exam = courseToTest.filter((ref) =>{log(ref.course_id); return ref.course_id == course.course_id})
+          course.exam = courseToTest.filter((ref) =>{return ref.course_id == course.course_id})
           if (course.exam.length>0) {log(course.exam)};
 
           course.events=getDateSortedEventsToCourse(course.course_id)
