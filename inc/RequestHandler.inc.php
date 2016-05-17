@@ -161,7 +161,7 @@ class RequestHandler
     $result = $stmt->execute(); // execute statement
     return (!is_null($result) ? 1 : 0);
 	}
-  
+  /* TODO:
 	private function addTopic($name) {
 		$query = "INSERT INTO sqms_topic (name) VALUES (?);";
 		$stmt = $this->db->prepare($query); // prepare statement
@@ -176,7 +176,7 @@ class RequestHandler
         $result = $this->db->query($query);
 		//if (!$result) $this->db->error;
 		return (!is_null($result) ? 1 : null);
-	}
+	} */
 	private function getCourseList() {
         $query = "SELECT 
     c.course_id AS 'ID',    
@@ -206,6 +206,65 @@ FROM
         $return['courselist'] = getResultArray($res);
         return $return;
     }
+  /********************************************
+    Topics
+  *********************************************/
+	private function updateTopicName($id, $name) {
+    $query = "UPDATE topic SET topicName = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $name, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicHeadline($id, $text) {
+    $query = "UPDATE topic SET topicHeadline = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicDescription($id, $text) {
+    $query = "UPDATE topic SET topicDescription = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicDescriptionSidebar($id, $text) {
+    $query = "UPDATE topic SET topicDescriptionSidebar = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicImage($id, $text) {
+    $query = "UPDATE topic SET topicImage = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicDescriptionFooter($id, $text) {
+    $query = "UPDATE topic SET topicDescriptionFooter = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicResponsibleTrainerID($id, $nbr) {
+    $query = "UPDATE topic SET responsibleTrainer_id = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateTopicDeprecated($id, $nbr) {
+    $query = "UPDATE topic SET deprecated = ? WHERE topic_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
 	private function getTopicList() {
         $query = "SELECT 
     topic_id AS 'ID',
