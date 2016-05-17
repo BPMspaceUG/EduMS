@@ -3,22 +3,23 @@
 
 
 <div ng-repeat="event in xlist|limitTo:5">
-<div itemscope itemtype="http://schema.org/EducationEvent"> 
-<!-- meta muss wahrsch. in head -> head wird in index ausgeführt weil gesamt brand in div liegt -> keine xlist in index verfügbar: Entweder ohne meta itemprop an sidebar binden oder sidebar in requesthandler vorsortieren Außerdem ISO´s prüfen-->
- <meta itemprop="startDate" content="{{event.start_date}}"/>
- <meta itemprop="endDate" content="{{event.finish_date}}"/>
- <meta itemprop="location" content="{{event.location}} ({{event.eventgarantiestatus}})"/>
- <meta itemprop="name" content="{{event.name}}"/>
- <!-- URL notwendig? (hoher Aufwand)-->
- <!-- <meta itemprop="url" content="https://www.mitsm.de/kursname" />
- <a href="https://www.mitsm.de/kursname" target="_self"></a> -->
-</div> 
+  <div itemscope itemtype="http://schema.org/EducationEvent"> 
+  <!-- meta muss wahrsch. in head -> head wird in index ausgeführt weil gesamt brand in div liegt -> keine xlist in index verfügbar: Entweder ohne meta itemprop an sidebar binden oder sidebar in requesthandler vorsortieren Außerdem ISO´s prüfen-->
+   <meta itemprop="startDate" content="{{event.start_date}}"/>
+   <meta itemprop="endDate" content="{{event.finish_date}}"/>
+   <meta itemprop="location" content="{{event.location}} ({{event.eventgarantiestatus}})"/>
+   <meta itemprop="name" content="{{event.name}}"/>
+   <!-- URL notwendig? (hoher Aufwand)-->
+   <!-- <meta itemprop="url" content="https://www.mitsm.de/kursname" />
+   <a href="https://www.mitsm.de/kursname" target="_self"></a> -->
+  </div> 
 </div>
 
 
-  <div class="row" >
-   <!----content & sidebar-->
-   <div class="col-md-8" id="container-content" >
+<div class="row" >
+   <!---- menu -->
+   <div class="row" >
+   <div class="col-md-12" id="container-menu" >
     <div class="tabbable" >
      <ul class="nav nav-tabs" id="navbar" >
 
@@ -40,8 +41,13 @@
         <i class="fa fa-location-arrow"></i> Standorte</a>
       </li>
      </ul>
-	<p></p>
-	
+  <p></p>
+  </div></div></div>
+  
+  <!----content & sidebar-->
+  <div class="row" >
+    <div class="col-md-8" id="container-content" >
+   
      <div class="tab-content">
       <div class="tab-pane active" id="panel-brand">
         <div ng-bind-html="brandinfo.brandDescription"></div>
@@ -178,7 +184,7 @@
       </div>
      </div>
     </div>
-   </div>
+
 
 
 
@@ -210,14 +216,7 @@
 
      </div>
     </div>
-
-
-
-
-
-
-
-
+</div></div>
 
 
 
@@ -252,8 +251,6 @@
               </div>
             </div>
 
-
-
             <table class="table table-responsive table-hover table-striped" style="width: 98%;">
             <thead>
                 <th><a href="#" ng-click="sortType = 'start_date'; sortReverse = !sortReverse"><h4>Termin</h4>
@@ -264,9 +261,9 @@
                  <span ng-show="sortType == 'namefortable' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'namefortable' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
-                <th><a href="#" ng-click="sortType = 'location_name'; sortReverse = !sortReverse"><h4>Ort</h4>
-                 <span ng-show="sortType == 'location_name' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'location_name' && sortReverse" class="fa fa-caret-up"></span>
+                <th><a href="#" ng-click="sortType = 'internet_location_name'; sortReverse = !sortReverse"><h4>Ort</h4>
+                 <span ng-show="sortType == 'internet_location_name' && !sortReverse" class="fa fa-caret-down"></span>
+                 <span ng-show="sortType == 'internet_location_name' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
                 <th><a href="#" ng-click="sortType = 'price'; sortReverse = !sortReverse"><h4>Preis</h4>
                  <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
@@ -277,25 +274,15 @@
                  <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>
                 <th><a href="#"><h4>Auswahl</h4></a></th>
-<!-- cleanflag  <th><a href="#" ng-click="sortType = 'trainer'; sortReverse = !sortReverse"><h4>Trainer</h4>
-                 <span ng-show="sortType == 'trainer' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'trainer' && sortReverse" class="fa fa-caret-up"></span>
-                </a></th>
-                <th><a href="#" ng-click="sortType = 'eventguaranteestatus'; sortReverse = !sortReverse"><h4>Status</h4>
-                 <span ng-show="sortType == 'eventguaranteestatus' && !sortReverse" class="fa fa-caret-down"></span>
-                 <span ng-show="sortType == 'eventguaranteestatus' && sortReverse" class="fa fa-caret-up"></span>
-                </a></th> -->
               </thead>
               <tbody>
                 <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch">
                   <td>{{event.start_date | date:"dd.MM."}} - {{event.finish_date | date:"dd.MM.yy"}}</td>
                   <td>{{event.namefortable}}</td>
-                  <td>{{event.location_name}}</td>
+                  <td>{{event.internet_location_name}}</td>
                   <td>{{event.price}},-</td>               
                   <td>{{Math.round(event.price*1.19)}},-</td>               
                   <td><input type="checkbox" class="checkbox" ng-model="event.checked" name="userAgree" ng-change="reservationlistupdate(event)"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-                  <!-- <td>{{event.eventguaranteestatus}}</td>               
-                  <td>{{event.trainer}}</td> -->
                 </tr>
               </tbody>
           </table>
@@ -329,11 +316,33 @@
                       <div class="col-md-9">{{picked.price}},- €</div>
                     </div>
 
+
+<!-- einer von beiden codeblöcken bleibt -->
                     <div class="row" ng-if="picked.test.price>1">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
                       <div class="col-md-2">Prüfung</div>
                       <div class="col-md-9">{{picked.test.price}},- €</div>
                     </div>
+
+                    <div class="row" ng-if="picked.exam.price>1">
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                      <div class="col-md-2">Prüfung</div>
+                      <div class="col-md-9">{{picked.exam.price}},- €</div>
+                    </div>
+                    
+                    <div class="row" ng-if="picked.test.coursePrice>1">
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                      <div class="col-md-2">Prüfung</div>
+                      <div class="col-md-9">{{picked.test.coursePrice}},- €</div>
+                    </div>
+
+                    <div class="row" ng-if="picked.exam.coursePrice>1">
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                      <div class="col-md-2">Prüfung</div>
+                      <div class="col-md-9">{{picked.exam.coursePrice}},- €</div>
+                    </div>
+<!--  -->
+
 
                   </div>
                </div>
@@ -349,10 +358,9 @@
                       <input type="number" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="1" 
                        ng-model="rinfo.mTeilnehmerZahl">
                     </div>
-                       
-                    
-                       <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>
-                       <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>
+                                           
+                     <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>
+                     <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>
                     
                   </div>
                   <div class="row" class="input-group" class="form-input">
@@ -375,16 +383,11 @@
               </div>
               </form>
 
-
            </div>
-
-
-
 
          </div><!-- end registerform -->
 
         </div><!-- end  -->
-
 
        </div> <!-- end afterbutton -->
 
@@ -393,7 +396,8 @@
 
           <div class="row">
             <div class="col-md-10"></div>
-            <div class="col-md-1"><button type="button" class="btn btn-danger" data-dismiss="modal">schließen</button></div>
+            <div class="col-md-1"><button type="button" class="btn btn-danger" data-dismiss="modal">schließen
+            </button></div>
             <div class="col-md-1"><button type="button" class="btn btn-block" ng-click="reservate()">
               <i class="fa fa-caret-right"></i> Anmeldung</button>
             </div>
@@ -431,11 +435,4 @@
      </div> <!-- end modal-content -->
    </div> <!-- end modal-dialog-->
  </div> <!-- modal fade -->
-   <!----external footer-->
-<!--   <div class="row">
-   <div class="col-md-12" id="footer">
-    <div class="">
-
-   </div>
-  </div> -->
- </div>
+</div>
