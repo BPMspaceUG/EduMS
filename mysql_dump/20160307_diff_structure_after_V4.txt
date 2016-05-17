@@ -9,4 +9,11 @@ ALTER TABLE `course`
 CHANGE COLUMN `courseImage` `courseImage` LONGTEXT NULL DEFAULT NULL ;
 
 
-
+CREATE or replace
+VIEW `v_testcourse` AS
+SELECT 
+`course_test`.`course_test_id` AS `course_test_id`,
+`course_test`.`course_id` AS `course_id`,
+`course_test`.`test_id` AS `test_id`
+FROM
+`course_test`;
