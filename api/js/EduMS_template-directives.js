@@ -146,6 +146,7 @@ app.directive('coursePanelBody', function(){
 
   <!-- Tab panes -->
   <div class="tab-content">
+
     <div role="tabpanel" class="tab-pane active" id="inhalt{{panelcourse.sysName}}">
       <div class="panel-body" ng-if="panelcourse.test=0"> 
         <h3>{{panelcourse.courseHeadline}}</h3>
@@ -153,9 +154,10 @@ app.directive('coursePanelBody', function(){
       </div>
       <div ng-bind-html="panelcourse.courseDescription"></div>
     </div>
+
     <div role="tabpanel" class="tab-pane" id="prüfung{{panelcourse.sysName}}">
-      <h3>{{panelcourse.test.courseHeadline || "\u2b55\u2b55\u2b55¯|_(ツ)_/¯\u2b55\u2b55\u2b55"}}</h3>
-      <p>{{panelcourse.test.courseDescription || "Hier folgt in Kürze eine Testbeschreibung"}}</p>
+      <h3>{{panelcourse.test.courseHeadline || panelcourse.exam.courseHeadline || "\u2b55\u2b55\u2b55¯|_(ツ)_/¯\u2b55\u2b55\u2b55"}}</h3>
+      <p>{{panelcourse.test.courseDescription || panelcourse.exam.courseDescription || "Hier folgt in Kürze eine Testbeschreibung"}}</p>
       <div ng-bind-html="panelcourse.test.courseDescription"></div>
     </div>
     <div role="tabpanel" class="tab-pane" id="kosten{{panelcourse.sysName}}">
@@ -176,20 +178,21 @@ app.directive('coursePanelBody', function(){
             </tr>
             <tr>
               <td>Prüfungsgebühr</td>
-              <td>{{panelcourse.test.coursePrice || "- ? "}},- €</td>
-              <td>{{panelcourse.test.brutto || "- ? "}},- €</td>
+              <td>{{panelcourse.test.coursePrice || panelcourse.exam.coursePrice || "- ? "}},- €</td>
+              <td>{{panelcourse.test.brutto || panelcourse.exam.coursePrice*1.19 || "- ? "}},- €</td>
             </tr>
             <tr>
               <td>Mittagessen & Pausenverpflegung   inklusive</td>
             </tr>
             <tr>
               <td>Gesamtpreis:</td>
-              <td>{{panelcourse.coursePrice + panelcourse.test.coursePrice}},- €</td>
+              <td>{{panelcourse.coursePrice + panelcourse.exam.coursePrice + panelcourse.test.coursePrice}},- €</td>
               <td>{{panelcourse.brutto + panelcourse.test.brutto}},- €</td>
             </tr>
           </tbody>
       </table>
     </div>
+
     <div role="tabpanel" class="tab-pane" id="termine{{panelcourse.sysName}}">
       <div>
         <table class="table table-responsive table-hover table-striped" style="width: 80%;">
