@@ -155,27 +155,6 @@ var getTestID = function(id, courseToTest) {
 }
  pl=[], priceListBase=[];
  ta=[], TundA=[], termineAnmeldung=[];
- /*The primary sortfunction adds to the topicobject its courses and define its test-status.
-  It also define pl for createPrizeList, ta for createModalList & finishEventlist as referenceobjects*/
-
-var setCourseList = function (topics, topiccourseCourse, courses, courseToTest){
-  _.each(topics, function(topic){
-    topic.courseList = defineCourseList(topic, topiccourseCourse, courses, courseToTest)
-    // log('topic.courseList:');
-    // _.each(topic.courseList, function(course){log(course.level+' | '+course.rank)})
-    // log(topic.courseList);
-    // log('aftersort:');                                   topic.courseList, 'level' )
-    topic.courseList =  _(topic.courseList).chain().sortBy(function(course) {
-        return course.rank;
-    }).sortBy(function(course) {
-        return course.level;
-    }).value();
-    topic.courseToggle
-
-    // _.each(topic.courseList, function(course){log(course.level+' | '+course.rank)})
-    // log(topic.courseList);
-  })
-}
 
 var getDateSortedEventsToCourse = function(id){
   var events = _.filter($scope.eventlist, function(event){ return event.course_id == id });
@@ -186,6 +165,26 @@ var getDateSortedEventsToCourse = function(id){
   return events
 }
 
+
+/* Expect: 
+*topic as Number
+
+*topiccourseCourse as [{course_id, course_name, level, topicName, topic_course_id, topic_id}] 
+  from $scope.topiccourseCourse
+
+*courses as           [{courseDescription, courseDescriptionCertificate, courseDescriptionMail, courseHeadline, coursePrice, 
+*                       course_id, course_name, internet_course_article_id, min_participants, number_of_days}] 
+  from $scope.courses
+
+*courseToTest as      [{course_id, test_id}] 
+  from $scope.courseToTest
+
+**Description:
+** Search to a given topic all topic-to-course entrys, define their propertys, search in courses for test/exam,
+** define propertys for TundA.
+
+* return courselist Array[course-Object 1-n]
+*/
 var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest){
   var courselist = []
   // log('topic:');
@@ -207,8 +206,9 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.test= getTest(course.course_id, courseToTest, courses)
           course.test_id=getTestID(course.course_id, courseToTest)
 
-          course.exam = courseToTest.filter((ref) =>{return ref.course_id == course.course_id})
-          if (course.exam.length>0) {log(course.exam)};
+          course.examRef = courseToTest.filter((ref) =>{return ref.course_id == course.course_id})
+          course.exam = courses.filter((c) =>{return c.course_id == course.examRef.test_id})
+          if (course.exam.length>0) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
 
           course.events=getDateSortedEventsToCourse(course.course_id)
 
@@ -236,6 +236,29 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
   })
   return courselist
 }
+
+
+/*The primary sortfunction adds to the topicobject its courses and define its test-status.
+It also define pl for createPrizeList, ta for createModalList & finishEventlist as referenceobjects*/
+
+var setCourseList = function (topics, topiccourseCourse, courses, courseToTest){
+  _.each(topics, function(topic){
+    topic.courseList = defineCourseList(topic, topiccourseCourse, courses, courseToTest)
+    // log('topic.courseList:');
+    // _.each(topic.courseList, function(course){log(course.level+' | '+course.rank)})
+    // log(topic.courseList);
+    // log('aftersort:');                                   topic.courseList, 'level' )
+    topic.courseList =  _(topic.courseList).chain().sortBy(function(course) {
+        return course.rank;
+    }).sortBy(function(course) {
+        return course.level;
+    }).value();
+    topic.courseToggle
+
+    // _.each(topic.courseList, function(course){log(course.level+' | '+course.rank)})
+    // log(topic.courseList);
+  })
+}
 setCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.courseToTest)
 
 
@@ -244,20 +267,20 @@ setCourseList($scope.topics, $scope.topiccourseCourse, $scope.courses, $scope.co
 
 
 
-   /*search matches in course- and eventlist and push them to the Topic*/
-   var cereateEventList = function(top, eve){
-     for (var i = 0; i < top.length; i++) {
-      top[i].eventList=[]
-       for (var j = 0; j < top[i].courseList.length; j++) {
-         for (var k = 0; k < eve.length; k++) {
-           if (eve[k].course_id == top[i].courseList[j].course_id) {
-             top[i].eventList.push(eve[k])
-           };
-         };
+/*search matches in course- and eventlist and push them to the Topic*/
+var cereateEventList = function(top, eve){
+ for (var i = 0; i < top.length; i++) {
+  top[i].eventList=[]
+   for (var j = 0; j < top[i].courseList.length; j++) {
+     for (var k = 0; k < eve.length; k++) {
+       if (eve[k].course_id == top[i].courseList[j].course_id) {
+         top[i].eventList.push(eve[k])
        };
      };
-   }
-   cereateEventList($scope.topics, $scope.eventlist)
+   };
+ };
+}
+cereateEventList($scope.topics, $scope.eventlist)
 
 
 
