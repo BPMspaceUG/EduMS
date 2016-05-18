@@ -19,7 +19,11 @@
 <div class="row" >
    <!---- menu -->
    <div class="row" >
+<<<<<<< HEAD
    <div class="col-md-12" id="container-menu" >
+=======
+   <div class="col-md-12 id="container-menu" >
+>>>>>>> 5ff17aba9193d0e9de6d031048c5c2f077f0b2c1
     <div class="tabbable" >
      <ul class="nav nav-tabs" id="navbar" >
 
@@ -41,17 +45,29 @@
         <i class="fa fa-location-arrow"></i> Standorte</a>
       </li>
      </ul>
+<<<<<<< HEAD
   <p></p>
   </div></div></div>
   
   <!----content & sidebar-->
   <div class="row" >
     <div class="col-md-8" id="container-content" >
+=======
+	<p></p>
+	</div></div></div>
+	
+	<!----content & sidebar-->
+	<div class="row" >
+    <div class="col-md-8 id="container-content" >
+>>>>>>> 5ff17aba9193d0e9de6d031048c5c2f077f0b2c1
    
      <div class="tab-content">
       <div class="tab-pane active" id="panel-brand">
         <div ng-bind-html="brandinfo.brandDescription"></div>
-
+        <div class="col-md-12" id="container-footer">
+          <h4>{{brandinfo.brand_name}}</h4>
+          <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
+       </div>
       </div>
 
       <div ng-repeat="topicpanel in topics" class="tab-pane" id="panel-{{topicpanel.topic_name}}">
@@ -213,14 +229,17 @@
 
      </div>
     </div>
-</div>
+</div></div>
+<<<<<<< HEAD
+=======
 
-<div class="col-md-12" id="container-footer">
-  <h4>{{brandinfo.brand_name}}</h4>
-  <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
-</div>
 
-</div>
+
+
+
+
+
+>>>>>>> 5ff17aba9193d0e9de6d031048c5c2f077f0b2c1
 
 
 
@@ -333,7 +352,7 @@
                       <div class="col-md-2">Prüfung</div>
                       <div class="col-md-9">{{picked.exam.price}},- €</div>
                     </div>
-
+                    
                     <div class="row" ng-if="picked.test.coursePrice>1">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
                       <div class="col-md-2">Prüfung</div>
@@ -359,7 +378,7 @@
                   <div class="row">
                     <div class="col-md-6"><h4>Teilnehmerzahl</h4></div>
                     <div class="col-md-4" >
-                      <input type="text" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="1" 
+                      <input type="number" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="1" 
                        ng-model="rinfo.mTeilnehmerZahl">
                     </div>
                                            
@@ -370,16 +389,15 @@
                   <div class="row" class="input-group" class="form-input">
                     <div>
                       <input type="email" class="form-control" style="margin-top: 10px; " id="inputEmailIdModal" 
-                       placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
+                       placeholder="Kontakt E-Mail" ng-model="rinfo.mAdresse">
                     </div>
                   </div>
                   <div class="row">
                     <div>
-                      <button type="button" class="btn btn-block" ng-model="reservate"  href="#modal-container-2"
-                        style="margin-top: 6px;" ng-click="reservate()" data-toggle="modal">
+                      <button type="button" class="btn btn-block" ng-model="reservate" 
+                        style="margin-top: 6px;" ng-click="reservate()">
                         <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> Anmeldung
                       </button>
-
                     </div>
                   </div>
                   </div>
@@ -403,8 +421,7 @@
             <div class="col-md-10"></div>
             <div class="col-md-1"><button type="button" class="btn btn-danger" data-dismiss="modal">schließen
             </button></div>
-            <div class="col-md-1"><button type="button" class="btn btn-block" ng-click="reservate()" 
-              href="#modal-container-2" data-toggle="modal">
+            <div class="col-md-1"><button type="button" class="btn btn-block" ng-click="reservate()">
               <i class="fa fa-caret-right"></i> Anmeldung</button>
             </div>
           </div>
@@ -417,7 +434,7 @@
 
 
 
-<div class="modal fade" id="modal-container-2" role="dialog" class="col-md-4" style="width:35%; height:35%;">
+<div class="modal fade" id="modal-container-2" role="dialog" class="col-md-4" >
    <div class="modal-dialog">
      <div class="modal-content ">
 

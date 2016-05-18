@@ -24,7 +24,7 @@ template:
                 <div class="row" >{{e.start_date | date:"dd/MM/yyyy"}}<br>{{e.internet_location_name}}</div>
                 <div class="row" ><b>{{e.course_name}}</b></div>
                 <div class="row"><button type="button" class="btn btn-block" ng-model="reservate" 
-                  style="margin-top: 15px; " ng-hide="e.btnRegister" ng-click= "e.btnRegister=!e.btnRegister">
+                  style="margin-top: 15px; " ng-hide="e.btnRegister" ng-click= "btnRegFkt(e)">
                   <i class="fa fa-caret-right" aria-hidden="true"></i> Anmelden!
                 </button></div>
               </div>
@@ -81,16 +81,21 @@ template:`
       <div class="col-md-8" >
 
       <div class="row">
-        <div class="col-md-8" style="text-align:left"> Teilnehmerzahl </div>
+        <div class="col-md-7" style="text-align:left"> Teilnehmerzahl </div>
+
         <div class="col-md-4" style="align:right">
-          <input type="number" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="1" 
+          <input type="text" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="1" 
            ng-model="rinfo.mTeilnehmerZahl">
         </div>
+                               
+         <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>
+         <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>
+
       </div>
       <div class="row" class="input-group" class="form-input">
         <div>
           <input type="email" class="form-control" style="margin-top: 10px; " id="inputEmailId{{e.sysName}}" 
-           placeholder="Kontakt E-Mail" ng-model="rinfo.mAdresse">
+           placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
         </div>
       </div>
       <div class="row">
@@ -102,10 +107,11 @@ template:`
       </div>
       <div class="row">
         <div>
-          <button type="button" class="btn btn-block" ng-model="reservate" 
-            style="margin-top: 6px;" ng-click="reservate(e.sysName)">
+          <button type="button" class="btn btn-block" ng-model="reservate" href="#modal-container-2"
+            style="margin-top: 6px;" ng-click="reservate(e)" data-toggle="modal">
             <i class="fa fa-caret-right" aria-hidden="true" ></i> One-Click Anmeldung
           </button>
+
         </div>
       </div>
 
@@ -163,7 +169,7 @@ app.directive('coursePanelBody', function(){
     <div role="tabpanel" class="tab-pane" id="kosten{{panelcourse.sysName}}">
       <table class="table table-responsive table-hover table-striped" style="width: 80%;">
         <thead>
-            <th><h4>Kurs (Dauer)</h4></th>
+            <th><h4>Kurs ({{panelcourse.duration}})</h4></th>
             <th><h4>Nettopreis</h4></th>
             <th><h4>Bruttopreis</h4></th>
           </thead>
@@ -243,7 +249,7 @@ return{
 template:
 `
 <div class="row" style="margin-top: 10px; ">
-  <div class="col-md-2"></div>
+  
   <div class="col-md-6" style="font-size=14px" ng-if="rinfo.contactpersonemail && rinfo.courses">
     <h2>Ihr Anfrage wurde gesendet.</h2>
     <p><b>Vielen Dank </b>für die Reservierung von </p>

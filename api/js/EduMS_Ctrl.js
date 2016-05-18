@@ -211,6 +211,8 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           if (course.exam.length>0) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
 
           course.events=getDateSortedEventsToCourse(course.course_id)
+          if(course.events[0]){course.duration = _.isDate(course.events[0].start_date)}//-course.events[0].finish_date}
+          
 
           if (course.course_id == course.test_id) {
             log('testcourse')
@@ -437,7 +439,13 @@ $scope.initreslistfromsidebar = function(c) { //c = course
   c.checked = true
   $scope.reservationlistupdate(c)
 }
+$scope.btnRegFkt = function(e) { //c = event
+  log(e)
+  $scope.rinfo.courses.push(e)
+  e.btnRegister=!e.btnRegister
+}
 $scope.reservate = function() {
+  
   //cleanflag 
   // _.each($scope.topics, function(topic){
   //   _.each(topic.eventlist, function(event){
