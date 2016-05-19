@@ -41,6 +41,11 @@ class RequestHandler
 				return json_encode($return);      
         break;
 				
+      case 'brands':
+        $return = $this->getBrandList();
+        return json_encode($return);
+        break;
+        
 			case 'create_course':
 				return $this->addTopic($params["name"]);
 				break;
@@ -90,6 +95,10 @@ class RequestHandler
     ####################### Definition der Handles
     ###################################################################################################################
 
+  /********************************************
+    Courses
+  *********************************************/
+  
 	private function updateCourseName($id, $name) {
     $query = "UPDATE course SET course_name = ? WHERE course_id = ?;";
     $stmt = $this->db->prepare($query); // prepare statement
@@ -174,22 +183,6 @@ class RequestHandler
     $result = $stmt->execute(); // execute statement
     return (!is_null($result) ? 1 : 0);
 	}
-  /* TODO:
-	private function addTopic($name) {
-		$query = "INSERT INTO sqms_topic (name) VALUES (?);";
-		$stmt = $this->db->prepare($query); // prepare statement
-		$stmt->bind_param("s", $name); // bind params
-        $result = $stmt->execute(); // execute statement
-		return (!is_null($result) ? 1 : null);
-	}
-	private function delTopic($id) {
-		// Deleten darf der user dann sowieso nicht
-		// TODO: Prepare statement
-		$query = "UPDATE sqms_topic SET name = 'XXXXXXX' WHERE sqms_topic_id = ".$id.";";
-        $result = $this->db->query($query);
-		//if (!$result) $this->db->error;
-		return (!is_null($result) ? 1 : null);
-	} */
 	private function getCourseList() {
         $query = "SELECT 
     c.course_id AS 'ID',    
@@ -219,9 +212,11 @@ FROM
         $return['courselist'] = getResultArray($res);
         return $return;
     }
+    
   /********************************************
     Topics
-  *********************************************/  
+  *********************************************/
+  
 	private function updateTopicName($id, $name) {
     $query = "UPDATE topic SET topicName = ? WHERE topic_id = ?;";
     $stmt = $this->db->prepare($query); // prepare statement
@@ -295,5 +290,52 @@ FROM
         $return['topiclist'] = getResultArray($res);
         return $return;
     }
+    
+    /* TODO:
+	private function addTopic($name) {
+		$query = "INSERT INTO sqms_topic (name) VALUES (?);";
+		$stmt = $this->db->prepare($query); // prepare statement
+		$stmt->bind_param("s", $name); // bind params
+        $result = $stmt->execute(); // execute statement
+		return (!is_null($result) ? 1 : null);
+	}
+	private function delTopic($id) {
+		// Deleten darf der user dann sowieso nicht
+		// TODO: Prepare statement
+		$query = "UPDATE sqms_topic SET name = 'XXXXXXX' WHERE sqms_topic_id = ".$id.";";
+        $result = $this->db->query($query);
+		//if (!$result) $this->db->error;
+		return (!is_null($result) ? 1 : null);
+	} */
+    
+  /********************************************
+    Brands
+  *********************************************/
+
+	private function getBrandList() {
+        $query = "SELECT
+    brand_id,
+    brand_name,
+    discount,
+    event_partner_id,
+    `css-style`,
+    accesstoken,
+    login,
+    brandDescription,
+    brandDescriptionFooter,
+    deprecated,
+    brandImage,
+    brandHeadline,
+    brandDescriptionSidebar,
+    imprint,
+    `protection of data privacy`,
+    `terms and conditions`,
+    email
+FROM brand;";
+		$res = $this->db->query($query);
+    $return['brandlist'] = getResultArray($res);
+    return $return;
+  }
+  
     
 }

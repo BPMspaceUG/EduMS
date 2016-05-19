@@ -56,13 +56,17 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
 
 	$scope.setSelectedCourse = function (el) {$scope.actCourse = el;};
 	$scope.setSelectedTopic = function (el) {$scope.actTopic = el;};
+	$scope.setSelectedBrand = function (el) {$scope.actBrand = el;};
 
 	//------------------------------- Courses
 	
   $scope.courses = false;
   $scope.topics = false;
+  $scope.brands = false;
+  
   $scope.actCourse = false;
   $scope.actTopic = false;
+  $scope.actBrand = false;
   
   // ------ Modal forms
 
@@ -92,6 +96,7 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
     });
   };
 
+  /********************************************* Edit */
   $scope.editcourse = function(el) {
     $scope.setSelectedCourse(el);
     $scope.open('modalEditCourse.html', 'update_course');
@@ -100,7 +105,11 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
     $scope.setSelectedTopic(el);
     $scope.open('modalEditTopic.html', 'update_topic');
   }
-  
+  $scope.editbrand = function(el) {
+    $scope.setSelectedBrand(el);
+    $scope.open('modalEditBrand.html', 'update_brand');
+  }
+  /********************************************* Read */
   $scope.getCourses = function() {
     return $scope.courses.length ? null : $http.get('getjson.php?c=courses').success(function(data) {
       $scope.courses = data.courselist;
@@ -110,7 +119,12 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
     return $scope.topics.length ? null : $http.get('getjson.php?c=topics').success(function(data) {
       $scope.topics = data.topiclist;
     });
-  };  
+  };
+  $scope.getBrands = function() {
+    return $scope.brands.length ? null : $http.get('getjson.php?c=brands').success(function(data) {
+      $scope.brands = data.brandlist;
+    });
+  }; 
 
 	//********************* WRITE data to server
 	$scope.writeData = function (command, data) {
@@ -132,4 +146,5 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
 	//---- Initial functions
 	$scope.getCourses();
 	$scope.getTopics();
+	$scope.getBrands();
 }]);
