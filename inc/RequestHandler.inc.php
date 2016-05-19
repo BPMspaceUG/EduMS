@@ -65,6 +65,19 @@ class RequestHandler
 				$res += $this->updateCourseDescriptionCertificate($id, $params["courseDescriptionCertificate"]);
 				if ($res != 12) return ''; else return $res;
 				break;
+        
+      case 'update_topic':
+        $id = $params["ID"];
+        $res = $this->updateTopicName($id, $params["topicName"]);
+        $res += $this->updateTopicHeadline($id, $params["topicHeadline"]);
+        $res += $this->updateTopicDescription($id, $params["topicDescription"]);
+        $res += $this->updateTopicDescriptionSidebar($id, $params["topicDescriptionSidebar"]);
+        $res += $this->updateTopicImage($id, $params["topicImage"]);
+        $res += $this->updateTopicDescriptionFooter($id, $params["topicDescriptionFooter"]);
+        $res += $this->updateTopicResponsibleTrainerID($id, $params["responsibleTrainer_id"]);
+        $res += $this->updateTopicDeprecated($id, $params["deprecated"]);
+        if ($res != 8) return ''; else return $res;
+        break;
 
       default:
 				return ""; // empty string
@@ -208,7 +221,7 @@ FROM
     }
   /********************************************
     Topics
-  *********************************************/
+  *********************************************/  
 	private function updateTopicName($id, $name) {
     $query = "UPDATE topic SET topicName = ? WHERE topic_id = ?;";
     $stmt = $this->db->prepare($query); // prepare statement
