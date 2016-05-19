@@ -162,8 +162,8 @@ app.directive('coursePanelBody', function(){
     </div>
 
     <div role="tabpanel" class="tab-pane" id="prüfung{{panelcourse.sysName}}">
-      <h3>{{panelcourse.test.courseHeadline || panelcourse.exam.courseHeadline || "\u2b55\u2b55\u2b55¯|_(ツ)_/¯\u2b55\u2b55\u2b55"}}</h3>
-      <p>{{panelcourse.test.courseDescription || panelcourse.exam.courseDescription || "Hier folgt in Kürze eine Testbeschreibung"}}</p>
+      <h2>{{panelcourse.exam.courseHeadline}}</h2>
+      <div>{{panelcourse.exam.courseDescription}}</div>
       <div ng-bind-html="panelcourse.test.courseDescription"></div>
     </div>
     <div role="tabpanel" class="tab-pane" id="kosten{{panelcourse.sysName}}">
@@ -184,16 +184,16 @@ app.directive('coursePanelBody', function(){
             </tr>
             <tr>
               <td>Prüfungsgebühr</td>
-              <td>{{panelcourse.test.coursePrice || panelcourse.exam.coursePrice || "- ? "}},- €</td>
-              <td>{{panelcourse.test.brutto || panelcourse.exam.coursePrice*1.19 || "- ? "}},- €</td>
+              <td>{{ panelcourse.exam.coursePrice || "- ? "}},- €</td>
+              <td>{{ panelcourse.exam.coursePrice*1.19 || "- ? "}},- €</td>
             </tr>
             <tr>
               <td>Mittagessen & Pausenverpflegung   inklusive</td>
             </tr>
             <tr>
               <td>Gesamtpreis:</td>
-              <td>{{panelcourse.coursePrice + panelcourse.exam.coursePrice + panelcourse.test.coursePrice}},- €</td>
-              <td>{{panelcourse.brutto + panelcourse.test.brutto}},- €</td>
+              <td>{{panelcourse.exam.coursePrice*1 + panelcourse.coursePrice*1}},- €</td>
+              <td>{{panelcourse.brutto + panelcourse.exam.brutto}},- €</td>
             </tr>
           </tbody>
       </table>

@@ -64,7 +64,7 @@
 
             <div class="panel-group" id="accordion{{topicpanel.topic_name}}" role="tablist" >
               <div class="panel panel-default"  
-                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
+                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"  ng-if="panelcourse.exam">
                 <div class="panel-heading" role="tab" id="heading{{panelcourse.sysName}}">
                   <h3 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#accordion{{topicpanel.topic_name}}" 
@@ -317,31 +317,14 @@
                     <div class="row">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
                       <div class="col-md-2">Kurs</div>
-                      <div class="col-md-9">{{picked.price}},- €</div>
+                      <div class="col-md-9">{{picked.price}}{{picked.exam}},- €</div>
                     </div>
 
 
 <!-- einer von beiden codeblöcken bleibt -->
-                    <div class="row" ng-if="picked.test.price>1">
-                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
-                      <div class="col-md-2">Prüfung</div>
-                      <div class="col-md-9">{{picked.test.price}},- €</div>
-                    </div>
 
-                    <div class="row" ng-if="picked.exam.price>1">
-                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
-                      <div class="col-md-2">Prüfung</div>
-                      <div class="col-md-9">{{picked.exam.price}},- €</div>
-                    </div>
-
-                    <div class="row" ng-if="picked.test.coursePrice>1">
-                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
-                      <div class="col-md-2">Prüfung</div>
-                      <div class="col-md-9">{{picked.test.coursePrice}},- €</div>
-                    </div>
-
-                    <div class="row" ng-if="picked.exam.coursePrice>1">
-                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                    <div class="row" ng-if="picked.exam">
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ></div>
                       <div class="col-md-2">Prüfung</div>
                       <div class="col-md-9">{{picked.exam.coursePrice}},- €</div>
                     </div>
@@ -417,7 +400,7 @@
 
 
 
-<div class="modal fade" id="modal-container-2" role="dialog" class="col-md-4" style="width:35%; height:35%;">
+<div class="modal fade" id="modal-container-2" role="dialog" class="col-md-4" >
    <div class="modal-dialog">
      <div class="modal-content ">
 
