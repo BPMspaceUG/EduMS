@@ -17,3 +17,12 @@ SELECT
 `course_test`.`test_id` AS `test_id`
 FROM
 `course_test`;
+
+create or replace
+view `v_brand_and_partner_reservationmail` as
+select a.brand_id, a.email as brandmail, a.event_partner_id as partner_id, 
+a.brand_name, a.`protection of data privacy` as prot_data_priv, 
+a.`terms and conditions` as terms_and_cond, a.brandImage, a.imprint, 
+b.email as partnermail, b.brand_name as partnername
+from brand a, brand b
+where a.event_partner_id = b.brand_id and a.deprecated != 1
