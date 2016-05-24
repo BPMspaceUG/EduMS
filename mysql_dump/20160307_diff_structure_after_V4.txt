@@ -26,3 +26,29 @@ a.`terms and conditions` as terms_and_cond, a.brandImage, a.imprint,
 b.email as partnermail, b.brand_name as partnername
 from brand a, brand b
 where a.event_partner_id = b.brand_id and a.deprecated != 1
+
+CREATE or replace
+VIEW `v_eventcourselocation_reservationmail` AS
+SELECT
+e.event_id AS event_id,
+e.start_date AS start_date,
+e.finish_date AS finish_date,
+e.start_time AS start_time,
+e.finish_time AS finish_time,
+e.event_status_id AS event_status_id,
+e.eventguaranteestatus AS eventguaranteestatus,
+e.inhouse AS eventinhouse,
+c.coursePrice AS coursePrice,
+c.course_id AS course_id,
+c.course_name AS course_name,
+c.max_participants AS courseMaxParticipants,
+l.location_name AS location_name,
+l.internet_location_name AS internet_location_name,
+l.location_description AS location_description,
+l.max_participants AS locationMaxParticipants
+FROM
+event e, course c, location l
+WHERE 
+e.course_id = c.course_id
+AND e.location_id = l.location_id
+
