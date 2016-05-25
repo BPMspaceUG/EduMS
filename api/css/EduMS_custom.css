@@ -1,5 +1,7 @@
 <style type="text/css">
+/*
 
+*/
 .modal {
     position: fixed;
     top: 3%;
@@ -8,6 +10,7 @@
     left: 5%;
     overflow: hidden;
 }
+
 
 .modal-dialog {
     display: inline-block;
@@ -76,5 +79,169 @@ body {
 	background-color: #FFF;
 	border-color: grey;
 }
- 
+
+
+/*Classes
+** .edums classes define a 
+>> Formatdescription: .=class-selector, edums-=namespace, 
+    middle-segment=parent, -last segment=name of area
+-- Example: .edums-accordion-heading{}
+    -> rules with this selector affect labels of the accordion view
+     (containing course[x].courseHeadline)
+## possible elementselectors: coursedescr, topicdescr;
+*/
+.edums-content{}
+.edums-menu{}
+.edums-menu-container{}
+.edums-navbar{}
+.edums-navbar-brandtab{}
+.edums-navbar-topictab{}
+.edums-navbar-sonstiges{}
+.edums-navbar-locations{}
+.edums-infocore{}
+.edums-infocore-tabpanels{}
+.edums-tabpanels-tabcontent{}
+.edums-tabcontent-brandpanel{}
+.edums-tabcontent-topicpanel{}
+.edums-tabcontent-topicdescription{}
+.edums-tabcontent-topicimage{}
+.edums-tabcontent-panelcontainer{}
+.edums-panelcontainer-accordion{}
+.edums-accordion{}
+.edums-accordion-heading{}
+.edums-accordion-collapse{}
+.edums-collapse-panelbody{}
+.edums-panelbody-pricetable{
+    width: 80%;
+}
+.edums-panelbody-eventtable{
+    width: 80%;
+}
+.edums-topicpanel-footer{}
+.edums-tabpanels-location{}
+.edums-location-descriptiongroup{}
+.edums-tabpanels-sonstiges{}
+.edums-sonstiges-group{}
+.edums-sonstiges-panel{}
+.edums-infocore-sidebar{}
+.edums-infocore-btnta{
+    margin-bottom: 15px; 
+}
+.edums-btnta-icon{}
+.edums-sidebar-sidebarpanels{}
+.edums-sidebarpanels-allevents{}
+.edums-allevents-event{}
+.edums-event-content{
+    text-align: left;
+}
+.edums-event-content{}
+.edums-event-date{}
+.edums-event-name{}
+.edums-event-btnreserve{
+    margin-top: 15px; 
+}
+.edums-event-garantie{
+     margin-top: 10px; 
+     margin-bottom: 0px; 
+     margin-right: -10px; 
+     margin-left: 5px;
+}
+.edums-event-waitlist{
+     margin-top: 10px; 
+     margin-bottom: 0px; 
+     margin-right: -10px; 
+     margin-left: 5px;
+}
+.edums-event-btnregform{
+    width: 100%;
+}
+.edums-sideregform{}
+.edums-sideregform-body{
+    margin-top: 10px; 
+}
+.edums-sideregform-partitionertext{
+    text-align:left;
+}
+.edums-sideregform-partitionernumber{
+    align:right;
+}
+.edums-sideregform-email{
+    margin-top: 10px; 
+}
+.edums-sideregform-btnta{
+    margin-top: 10px; 
+}
+.edums-sideregform-btnreserve{
+    margin-top: 6px;
+}
+
+.edums-sidebarpanels-topicevents{}
+.edums-topicevents-event{}
+.edums-footer{}
+.edums-tamodal{}
+.edums-tamodal-tacontent{}
+.edums-tacontent-btnclose{}
+.edums-tacontent{}
+.edums-tacontent-headrow{}
+.edums-tacontent-tabody{}
+.edums-tabody{}
+.edums-tabody-searchgroup{}
+.edums-searchgroup-inputfield{}
+.edums-tabody-tatable{
+    width: 98%;
+}
+.edums-tatable-head{}
+.edums-tatable-body{}
+.edums-tacontent-tareserve{}
+.edums-tareserve{}
+.edums-tareserve-taformgroup{}
+.edums-taformgroup{
+    margin-top: 15px;
+}
+.edums-taformgroup-tapicklist{}
+.edums-tapicklist-info{}
+.edums-tapicklist-exam{}
+.edums-tapicklist-course{}
+.edums-taformgroup{}
+.edums-taformgroup-participants{}
+.edums-taformgroup-email{
+    margin-top: 10px; 
+}
+.edums-taformgroup-btnreserve{
+    margin-top: 6px;
+}
+.edums-taformgroup-icon{
+    color:#fff;
+}
+.edums-tamodal-tafooter{}
+.edums-tafooter-btnclose{}
+.edums-tafooter-btnreservate{}
+.edums-finishmodal{}
+.edums-finishmodal-btnclose{}
+.edums-finishmodal-body{}
+.edums-finishmodal-footer{}
+.edums-finishmodal-btnclose{}
+.edums-finishmodal-btnreserve{} 
+.edums-finishmodal-content{
+    margin-top: 10px; 
+} 
+.edums-finishmodal-positivetext{
+    font-size : 14px;
+} 
+.edums-finishmodal-negativetext{
+    font-size : 14px;
+} 
+
+/**ID´s:
+** Specific elements in repeating ng-repeat lists can be edited by ID.
+>> Formatdescription: #=ID-selector, name=elementselector, number=ID-key -> #namenumber
+-- Example: #coursedesc1{} 
+    -> rules with this selector affect only the description field from 
+     the course with 'course[x].course_id = 1'
+## possible elementselectors: coursedescr, topicdescr;
+*/
+#coursedescr43{color : red;}
+#topicdescr2{color : green;}
+/*alle Klassen roh in einer Zeile:;
+.edums-content{} .edums-menu{} .edums-menu-container{} .edums-navbar{} .edums-navbar-brandtab{} .edums-navbar-topictab{} .edums-navbar-sonstiges{} .edums-navbar-locations{} .edums-infocore{} .edums-infocore-tabpanels{} .edums-tabpanels-tabcontent{} .edums-tabcontent-brandpanel{} .edums-tabcontent-topicpanel{} .edums-tabcontent-topicdescription{} .edums-tabcontent-topicimage{} .edums-tabcontent-panelcontainer{} .edums-panelcontainer-accordion{} .edums-accordion{} .edums-accordion-heading{} .edums-accordion-collapse{} .edums-collapse-panelbody{} .edums-topicpanel-footer{} .edums-tabpanels-location{} .edums-location-descriptiongroup{} .edums-tabpanels-sonstiges{} .edums-sonstiges-group{} .edums-sonstiges-panel{} .edums-infocore-sidebar{} .edums-infocore-btnta{} .edums-btnta-icon{} .edums-sidebar-sidebarpanels{} .edums-sidebarpanels-allevents{} .edums-allevents-event{} .edums-sidebarpanels-topicevents{} .edums-topicevents-event{} .edums-footer{} .edums-tamodal{} .edums-tamodal-tacontent{} .edums-tacontent-btnclose{} .edums-tacontent{} .edums-tacontent-headrow{} .edums-tacontent-tabody{} .edums-tabody{} .edums-tabody-searchgroup{} .edums-searchgroup-inputfield{} .edums-tabody-tatable{} .edums-tatable-head{} .edums-tatable-body{} .edums-tacontent-tareserve{} .edums-tareserve{} .edums-tareserve-taformgroup{} .edums-taformgroup{} .edums-taformgroup-tapicklist{} .edums-tapicklist-info{} .edums-tapicklist-exam{} .edums-tapicklist-course{} .edums-taformgroup{} .edums-taformgroup-participants{} .edums-taformgroup-email{} .edums-taformgroup-btnreserve{} .edums-tamodal-tafooter{} .edums-tafooter-btnclose{} .edums-tafooter-btnreservate{} .edums-finishmodal{} .edums-finishmodal-btnclose{} .edums-finishmodal-body{} .edums-finishmodal-footer{} .edums-finishmodal-btnclose{} .edums-finishmodal-btnreserve{} */
 </style>
