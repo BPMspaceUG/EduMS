@@ -39,7 +39,7 @@ $scope.sidebarselect = 'start'
   $scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionFooter+'</div>')
   $scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionSidebar+'</div>')
   $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandImage+'</div>')
-
+  $scope.rinfo={contactpersonemail : '', courses:[], brand:response.brandinfo[0].login}
 
   //topiclist RAW: 
   /*$$hashKey: "object:953", deprecated: "0", topicDescriptionFooter: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
@@ -69,7 +69,10 @@ $scope.sidebarselect = 'start'
     $scope.courses[i].courseDescription = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescription+'</div>')
     $scope.courses[i].courseDescriptionCertificate = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionCertificate+'</div>')
     $scope.courses[i].courseDescriptionMail = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionMail+'</div>')
-    
+    $scope.courses[i].coursePrice=$scope.courses[i].coursePrice*1
+    $scope.courses[i].course_id=$scope.courses[i].course_id*1
+    $scope.courses[i].min_participants=$scope.courses[i].min_participants*1
+    $scope.courses[i].number_of_days=$scope.courses[i].number_of_days*1
     if ($scope.courses[i].courseHeadline.length<2) {
      $scope.courses[i].courseHeadline=$scope.courses[i].course_name
      
@@ -139,11 +142,12 @@ var getTest = function(id, courseToTest, courses) {
     if (id == cttRef.course_id) {   
       res = _.find(courses, function(course){ return course.course_id == cttRef.test_id }); 
       // log('res') ; log(res)
-
     };
+
   })
-  return 0
+  return 
 }
+
 
 var getTestID = function(id, courseToTest) {
   _.each(courseToTest, function(cttRef){
@@ -191,7 +195,6 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
   _.each(topiccourseCourse, function(mntopiccourse){
       // log('mntopiccourse:');
       // log(mntopiccourse);
-      // log('.');
       // log(mntopiccourse.topic_id+' - '+topic.topic_id);
     if (mntopiccourse.topic_id == topic.topic_id) {
       _.each(courses, function(course){
@@ -401,7 +404,7 @@ $scope.tablesearchchange = function(name){
 
 
 /*ng-models for imputs*/
-$scope.rinfo={contactpersonemail : '', courses:[]}
+//cleanflag $scope.rinfo={contactpersonemail : '', courses:[], brand:$scope.brandinfo.login}
 $scope.teilnehmerZahlcountDown = function() {
   if ($scope.rinfo.mTeilnehmerZahl>1) {$scope.rinfo.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl-1};
 }
@@ -442,35 +445,34 @@ $scope.initreslistfromsidebar = function(c) { //c = course
 }
 $scope.btnRegFkt = function(e) { //c = event
   log(e)
+  e.checked = true
   $scope.rinfo.courses.push(e)
   e.btnRegister=!e.btnRegister
 }
-$scope.reservate = function() {
-  
-  //cleanflag 
-  // _.each($scope.topics, function(topic){
-  //   _.each(topic.eventlist, function(event){
-  //     if (event.checked) {
-  //       $scope.rinfo.courses.push(event)
-  //     };
-  //   })
-  // })
-  // for (var i = 0; i < $scope.topics.length; i++) {
-  //     for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
-  //       if ($scope.topics[i].eventList[j].checked) {
-  //         $scope.rinfo.courses.push($scope.topics[i].eventList[j])
-  //       };
-  //     };
-  // };
-
-
+$scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
- console.log('reservepush: ')
+ console.log('reservepush; rinfo: ')
+ $scope.rinfo.eventIds=[]
+ _.each($scope.rinfo.courses, function(c){$scope.rinfo.eventIds.push(c.event_id)} )
  console.log($scope.rinfo)
- $http.post('/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve', $scope.rinfo).
- 
-        then(function(response) {
-          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve')
+
+ log('e: '); log(e)
+ $http({
+      method: 'POST',
+      //http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/EqpajbuuID9/5b35716ce1ff524b662dfbb160e293a3/reserve
+      url: 'http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve'+'?A=a',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}, //json
+      transformRequest: function(obj) {
+          var str = [];
+          for(var p in obj)
+          str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
+          return str.join("&");
+      },
+      data:  $scope.rinfo
+  }).then(function(response) {
+         
+          // console.log(reservefinal='http://dev.bpmspace.org:4040/~cedric/EduMS/api/reservemail.php')
+          // console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve')
         }, function(response) {
           $scope.data = response || "Request failed";
           $scope.status = response.status;
