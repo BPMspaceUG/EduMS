@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<div class="container-fluid" ng-controller="navCtrl">
+<div class="container-fluid " ng-controller="navCtrl">
 
 
 <div ng-repeat="event in xlist|limitTo:5">
@@ -16,27 +16,27 @@
 </div>
 
 
-<div class="row" >
+<div class="row edums-content" >
    <!---- menu -->
-   <div class="row" >
-   <div class="col-md-12" id="container-menu" >
+   <div class="row edums-menu" >
+   <div class="col-md-12 edums-menu-container" >
     <div class="tabbable" >
-     <ul class="nav nav-tabs" id="navbar" >
+     <ul class="nav nav-tabs edums-navbar">
 
-      <li class="active">
+      <li class="active edums-navbar-brandtab">
        <a data-target="#panel-brand" ng-click="sidebarselect = 'start'" data-toggle="tab">
         <i class="fa fa-university"></i>
        </a>
       </li>
-      <li ng-repeat="topic in topics">
+      <li class="edums-navbar-topictab" ng-repeat="topic in topics">
        <a data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
          {{topic.topic_name_raw}}</a>
       </li>
-      <li class="pull-right">
+      <li class="pull-right edums-navbar-sonstiges">
        <a data-toggle="tab" data-target="#panel-sonstiges" ng-click="sidebarselect = 'start'">
         sonstiges</a>
       </li>
-      <li class="pull-right">
+      <li class="pull-right edums-navbar-locations">
        <a data-toggle="tab" data-target="#panel-standort" ng-click="sidebarselect = 'start'">
         <i class="fa fa-location-arrow"></i> Standorte</a>
       </li>
@@ -45,27 +45,27 @@
   </div></div></div>
   
   <!----content & sidebar-->
-  <div class="row" >
-    <div class="col-md-8" id="container-content" >
+  <div class="row edums-infocore" >
+    <div class="col-md-8 edums-infocore-tabpanels">
    
-     <div class="tab-content">
-      <div class="tab-pane active" id="panel-brand">
+     <div class="tab-content edums-tabpanels-tabcontent">
+      <div class="tab-pane active edums-tabcontent-brandpanel" id="panel-brand">
         <div ng-bind-html="brandinfo.brandDescription"></div>
 
       </div>
 
-      <div ng-repeat="topicpanel in topics" class="tab-pane" id="panel-{{topicpanel.topic_name}}">
+      <div ng-repeat="topicpanel in topics" class="tab-pane edums-tabcontent-topicpanel" id="panel-{{topicpanel.topic_name}}">
        <div class="col-md-12">
        <h2>{{topicpanel.topicHeadline}}</h2>
-       <div ng-bind-html="topicpanel.topicDescription"></div>
-       <div ng-bind-html="topicpanel.topicImage"></div>
+       <div ng-bind-html="topicpanel.topicDescription" class="edums-tabcontent-topicdescription" id="topicdescr{{topicpanel.topic_id}}"></div>
+       <div ng-bind-html="topicpanel.topicImage" class="edums-tabcontent-topicimage"></div>
         <nav class="navbar navbar-default">
-         <div class="container-fluid">
+         <div class="container-fluid edums-tabcontent-panelcontainer">
 
-            <div class="panel-group" id="accordion{{topicpanel.topic_name}}" role="tablist" >
-              <div class="panel panel-default"  
-                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"  ng-if="panelcourse.exam">
-                <div class="panel-heading" role="tab" id="heading{{panelcourse.sysName}}">
+            <div class="panel-group edums-panelcontainer-accordion" id="accordion{{topicpanel.topic_name}}" role="tablist" >
+              <div class="panel panel-default edums-accordion"  
+                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
+                <div class="panel-heading edums-accordion-heading" role="tab" id="heading{{panelcourse.sysName}}">
                   <h3 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#accordion{{topicpanel.topic_name}}" 
                     href="#collapse{{panelcourse.sysName}}" aria-expanded="false" 
@@ -74,9 +74,9 @@
                     </a>
                   </h3> 
                 </div>
-                <div id="collapse{{panelcourse.sysName}}"  class="panel-collapse collapse" role="tabpanel" 
+                <div id="collapse{{panelcourse.sysName}}"  class="panel-collapse collapse edums-accordion-collapse" role="tabpanel" 
                   aria-labelledby="heading{{panelcourse.sysName}}">
-                  <div class="panel-body">
+                  <div class="panel-body edums-collapse-panelbody">
                     <course-panel-body ></course-panel-body>
                     
                   </div>
@@ -87,13 +87,13 @@
          </div>
         </nav>
        </div>
-       <div ng-bind-html="topicpanel.footer"></div>
+       <div ng-bind-html="topicpanel.footer" class="edums-topicpanel-footer"></div>
       </div>
       
 
-      <div class="tab-pane" id="panel-standort">
+      <div class="tab-pane edums-tabpanels-location" id="panel-standort">
        <p>Standortbeschreibung aus EduMS und dazugehörige Termine</p>
-        <div ng-repeat="loc in location">        
+        <div ng-repeat="loc in location" class="edums-location-descriptiongroup">        
          <h2><font color="#660000"><b>{{loc.name}} ~ </b><span class="badge">Teilnehmerkapazität: {{loc.locationMaxPart}} Personen</span></font></h2>   
          <div  ng-bind-html="loc.description"></div>           
         <div class="progress">
@@ -104,9 +104,9 @@
        </div>       
       </div>
 
-      <div class="tab-pane" id="panel-sonstiges">
-       <div class="panel-group" id="panel-493447">
-        <div class="panel panel-default">
+      <div class="tab-pane edums-tabpanels-sonstiges" id="panel-sonstiges">
+       <div class="panel-group edums-sonstiges-group" id="panel-493447">
+        <div class="panel panel-default edums-sonstiges-panel">
          <div class="panel-heading">
           <a class="panel-title collapsed" data-toggle="collapse"
            data-parent="#panel-497725" href="#panel-element-9675257"><span
@@ -123,7 +123,7 @@
          </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default edums-sonstiges-panel">
          <div class="panel-heading">
           <a class="panel-title collapsed" data-toggle="collapse"
            data-parent="#panel-493447" href="#panel-element-678923"><span
@@ -140,7 +140,7 @@
          </div>
         </div> 
 
-        <div class="panel panel-default">
+        <div class="panel panel-default edums-sonstiges-panel">
          <div class="panel-heading">
           <a class="panel-title collapsed" data-toggle="collapse"
            data-parent="#panel-493447" href="#panel-element-236342874"><span
@@ -158,23 +158,25 @@
          </div>
         </div>
 
-        <div class="panel-heading">
-          <a class="panel-title collapsed" data-toggle="collapse"
-            data-parent="#panel-493447" href="#panel-element-scripte">
-          <span class="badge">4</span> verwendete scripte</a>
-        </div>
-        <div id="panel-element-scripte" 
-        class="panel-collapse collapse">
-        <div class="panel-body">
-          <div class="container-fluid">
-          <div class="row">
-            <a href="http://getbootstrap.com">Bootstrap v3.3.6</a>
-            <a href="http://angularjs.org">AngularJS v1.4.9</a>
-            <a href="https://jquery.com/download/">jQuery 2.2.1</a>
-            <a href="http://underscorejs.org/">Underscore 1.8.3</a>
+        <div class="panel panel-default edums-sonstiges-panel">
+          <div class="panel-heading ">
+            <a class="panel-title collapsed" data-toggle="collapse"
+              data-parent="#panel-493447" href="#panel-element-scripte">
+            <span class="badge">4</span> verwendete scripte</a>
+          </div>
+          <div id="panel-element-scripte" 
+          class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="container-fluid">
+            <div class="row">
+              <a href="http://getbootstrap.com">Bootstrap v3.3.6</a>
+              <a href="http://angularjs.org">AngularJS v1.4.9</a>
+              <a href="https://jquery.com/download/">jQuery 2.2.1</a>
+              <a href="http://underscorejs.org/">Underscore 1.8.3</a>
+            </div>
+            </div>
           </div>
           </div>
-        </div>
         </div>
 
        </div>
@@ -188,26 +190,26 @@
 
 
 
-   <div class="col-md-4 text-center" id="sidebar"> 
+   <div class="col-md-4 text-center edums-infocore-sidebar" id="sidebar"> 
 
 
-     <a id="modal-1" href="#modal-container-1" role="button" class="btn btn-primary btn-block" data-toggle="modal" style="margin-bottom: 15px; ">
-       <i class="fa fa-arrow-circle-right"></i> Termine &amp; Anmeldung
-     </a>
+     <button type="button" id="modal-1" href="#modal-container-1" role="button" class="btn btn-block edums-infocore-btnta" data-toggle="modal">
+       <i class="fa fa-arrow-circle-right edums-btnta-icon"></i> Termine &amp; Anmeldung
+     </button>
 
 
-     <div class="tabbable" class="tab-content">
-       <div class="tab-pane active" id="panel-brand-sidebar" role="tabpanel" ng-if="sidebarselect == 'start'">
+     <div class="tabbable" class="tab-content edums-sidebar-sidebarpanels">
+       <div class="tab-pane active edums-sidebarpanels-allevents" id="panel-brand-sidebar" role="tabpanel" ng-if="sidebarselect == 'start'">
         <h3 class="text-center">
          <i class="fa fa-calendar-check-o"></i> Aktuelle Termine
         </h3>
-        <right-bar-course-all ng-repeat="e in nextEvents | limitTo:5"></right-bar-course-all>
+        <right-bar-course-all ng-repeat="e in nextEvents | limitTo:5" class="edums-allevents-event"></right-bar-course-all>
        </div>
 
-       <div ng-repeat="topic in topics">
+       <div ng-repeat="topic in topics" class="edums-sidebarpanels-topicevents">
          <div class="tab-pane" id="panel-sidebar-{{topic.topic_name}}" role="tabpanel" 
          ng-if="sidebarselect == topic.topic_name_raw">
-          <right-bar-course-all ng-repeat="e in topic.eventList | limitTo:5"></right-bar-course-all>
+          <right-bar-course-all ng-repeat="e in topic.eventList | limitTo:5" class="edums-topicevents-event"></right-bar-course-all>
          </div>
        </div>
 
@@ -215,7 +217,7 @@
     </div>
 </div>
 
-<div class="col-md-12" id="container-footer">
+<div class="col-md-12 edums-footer" id="container-footer">
   <h4>{{brandinfo.brand_name}}</h4>
   <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
 </div>
@@ -224,39 +226,39 @@
 
 
 
- <div class="modal fade" id="modal-container-1" role="dialog" >
+ <div class="modal fade edums-tamodal" id="modal-container-1" role="dialog" >
    <div class="modal-dialog">
-     <div class="modal-content ">
+     <div class="modal-content edums-tamodal-tacontent">
 
-       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X </button>
+       <button type="button" class="close edums-tacontent-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
 
        <div> <!-- afterbutton -->
 
 
-         <div class="modal-body" class="col-md-12">
-          <div class="row">
+         <div class="modal-body edums-tacontent col-md-12">
+          <div class="row edums-tacontent-headrow">
             <div class="col-md-9"><h2>1. Terminauswahl</h2></div>
             <div class="col-md-3"><h2>2. Anmeldung</h2></div>
           </div>
            
 
-          <div class="row">
-           <div class="col-md-9">
+          <div class="row edums-tacontent-tabody">
+           <div class="col-md-9 edums-tabody">
 
-            <div class="row">
+            <div class="row edums-tabody-searchgroup">
               <div class="col-md-8" id="spacersearchbar"></div>
-              <div class="col-md-4">
+              <div class="col-md-4 edums-searchgroup">
                <form>
                  <div class="input-group">
-                   <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                   <input type="text" class="form-control" placeholder="search in table" ng-model="tablesearch">
+                   <div class="input-group-addon"><i class="fa fa-search "></i></div>
+                   <input type="text" class="form-control edums-searchgroup-inputfield" placeholder="search in table" ng-model="tablesearch">
                  </div> 
                </form>
               </div>
             </div>
 
-            <table class="table table-responsive table-hover table-striped" style="width: 98%;">
-            <thead>
+            <table class="table table-responsive table-hover table-striped edums-tabody-tatable">
+            <thead class="edums-tatable-head">
                 <th><a href="#" ng-click="sortType = 'start_date'; sortReverse = !sortReverse"><h4>Termin</h4>
                  <span ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-up"></span>
@@ -279,7 +281,7 @@
                 </a></th>
                 <th><a href="#"><h4>Auswahl</h4></a></th>
               </thead>
-              <tbody>
+              <tbody class="edums-tatable-body">
                 <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch">
                   <td>{{event.start_date | date:"dd.MM."}} - {{event.finish_date | date:"dd.MM.yy"}}</td>
                   <td>{{event.namefortable}}</td>
@@ -289,7 +291,7 @@
                   <td><input type="checkbox" class="checkbox" ng-model="event.checked" name="userAgree" ng-change="reservationlistupdate(event)"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
                 </tr>
               </tbody>
-          </table>
+            </table>
 
 
 
@@ -300,21 +302,21 @@
 
 
           
-           <div class="col-md-3">
+           <div class="col-md-3 edums-tacontent-tareserve">
             <h3>Ausgewählte Termine</h3>
-            <form name="formReg" class="form-horizontal" novalidate>
-              <div class="form-group">
-                <div class="row" style="margin-top: 15px;" ng-if="rinfo.courses.length>0">
+            <form name="formReg" class="form-horizontal edums-tareserve" novalidate>
+              <div class="form-group edums-tareserve-taformgroup">
+                <div class="row edums-taformgroup" ng-if="rinfo.courses.length>0">
                   <h4>Ausgewählte Termine:</h4>
-                  <div ng-repeat="picked in rinfo.courses track by $index">
+                  <div class="row edums-taformgroup-tapicklist" ng-repeat="picked in rinfo.courses track by $index">
                     <h4>{{picked.course_name}}</h4>
-                    <div class="row">
+                    <div class="row edums-tapicklist-info">
                       <div class="col-md-12">
                         {{picked.internet_location_name}}, {{picked.start_date | date:"dd.MM."}} - {{picked.finish_date | date:"dd.MM.yy"}}
                       </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row edums-tapicklist-exam">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
                       <div class="col-md-2">Kurs</div>
                       <div class="col-md-9">{{picked.price}}{{picked.exam}},- €</div>
@@ -323,7 +325,7 @@
 
 <!-- einer von beiden codeblöcken bleibt -->
 
-                    <div class="row" ng-if="picked.exam">
+                    <div class="row edums-tapicklist-course" ng-if="picked.exam">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ></div>
                       <div class="col-md-2">Prüfung</div>
                       <div class="col-md-9">{{picked.exam.coursePrice}},- €</div>
@@ -333,13 +335,13 @@
 
                   </div>
                </div>
-                <div class="row" style="margin-top: 10px; ">
+                <div class="row edums-taformgroup">
 
                   <div class="col-md-1"> </div>
 
                   <div class="col-md-8" >
 
-                  <div class="row">
+                  <div class="row  edums-taformgroup-participants">
                     <div class="col-md-6"><h4>Teilnehmerzahl</h4></div>
                     <div class="col-md-4" >
                       <input type="text" class="form-control" id="inputAnzahlIdModal" placeholder="1" min="1" 
@@ -352,15 +354,14 @@
                   </div>
                   <div class="row" class="input-group" class="form-input">
                     <div>
-                      <input type="email" class="form-control" style="margin-top: 10px; " id="inputEmailIdModal" 
+                      <input type="email" class="form-control edums-taformgroup-email" id="inputEmailIdModal" 
                        placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
                     </div>
                   </div>
                   <div class="row">
                     <div>
-                      <button type="button" class="btn btn-block" ng-model="reservate"  href="#modal-container-2"
-                        style="margin-top: 6px;" ng-click="reservate()" data-toggle="modal">
-                        <i class="fa fa-caret-right" aria-hidden="true" style="color:#fff;"></i> Anmeldung
+                      <button type="button" class="btn btn-block edums-taformgroup-btnreserve" ng-model="reservate"  href="#modal-container-2" ng-click="reservate()" data-toggle="modal">
+                        <i class="fa fa-caret-right edums-taformgroup-icon" aria-hidden="true"></i> Anmeldung
                       </button>
 
                     </div>
@@ -380,13 +381,13 @@
        </div> <!-- end afterbutton -->
 
 
-        <div class="modal-footer">
+        <div class="modal-footer edums-tamodal-tafooter">
 
           <div class="row">
             <div class="col-md-10"></div>
-            <div class="col-md-1"><button type="button" class="btn btn-danger" data-dismiss="modal">schließen
+            <div class="col-md-1"><button type="button" class="btn btn-danger edums-tafooter-btnclose" data-dismiss="modal">schließen
             </button></div>
-            <div class="col-md-1"><button type="button" class="btn btn-block" ng-click="reservate()" 
+            <div class="col-md-1"><button type="button" class="btn btn-block edums-tafooter-btnreservate" ng-click="reservate()" 
               href="#modal-container-2" data-toggle="modal">
               <i class="fa fa-caret-right"></i> Anmeldung</button>
             </div>
@@ -400,23 +401,23 @@
 
 
 
-<div class="modal fade" id="modal-container-2" role="dialog" class="col-md-4" >
+  <div class="modal fade edums-finishmodal" id="modal-container-2" role="dialog" class="col-md-4" >
    <div class="modal-dialog">
      <div class="modal-content ">
 
-       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X </button>
+       <button type="button" class="close edums-finishmodal-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
 
        <div> <!-- afterbutton -->
          <div class="modal-body" >
-           <after-reserve></after-reserve>    
+           <after-reserve class="edums-finishmodal-body"></after-reserve>    
          </div><!-- end registerform -->
        </div> <!-- end afterbutton -->
 
 
-        <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <div class="modal-footer edums-finishmodal-footer">
+        <button type="button" class="btn btn-danger edums-finishmodal-btnclose" data-dismiss="modal">
          schließen</button>
-         <button type="button" class="btn btn-success" ng-click="reservate()">
+         <button type="button" class="btn btn-success edums-finishmodal-btnreserve" ng-click="reservate()">
           <i class="fa fa-arrow-circle-right"></i> Anmeldung
          </button>
 
