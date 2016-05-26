@@ -1,6 +1,6 @@
 <?php
 // require_once 'PHPMailer/PHPMailerAutoload.php';
- 
+
 // $mail = new PHPMailer(true);
 // class phpmailerAppException extends phpmailerException {}
 class RequestHandler 
@@ -178,7 +178,7 @@ class RequestHandler
 
  public function reservationprocess(){  
     
-    // return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
+    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
   } 
 
 
@@ -217,6 +217,9 @@ class RequestHandler
     return $return;
   }
 
+  private function gettestarray(){  
+    return  array('a' => 7, 'b' => array('bg' => '1', 'cb' => 'cc'));
+  } 
   private function getFutureCourses(){  
     return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
   }  
@@ -234,9 +237,13 @@ class RequestHandler
     //location_description  locationMaxParticipants event_status_id eventguaranteestatus  eventinhouse
     return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` ");
   }
-  private function v_eventcourselocationReservationmail($eventlist){
+
+
+
+  private function vEventcourselocationReservationmail($eventlist){
      //event_id, start_date, finish_date, start_time, finish_time, event_status_id, eventguaranteestatus, eventinhouse, coursePrice, course_id, course_name, courseMaxParticipants, 
      //location_name, internet_location_name, location_description, locationMxParticipants, 
+    $eventlist = json_decode($eventlist);
     $queryEvents='';
     $rootquery = 'SELECT * FROM `v_eventcourselocation_reservationmail` WHERE ';    
     for ($i=0; $i < count($eventlist); $i++) {           
@@ -245,6 +252,9 @@ class RequestHandler
     $queryEvents = substr($queryEvents,3,strlen($queryEvents));
     return $this->getResultArray($rootquery.$queryEvents);
   }
+
+
+
   /*The courselist contains all not deprecated couses */
   private function getCourseList(){   
     $query = "SELECT * FROM `v_course_notdepercated`";
