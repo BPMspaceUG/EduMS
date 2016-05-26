@@ -94,17 +94,15 @@ $scope.sidebarselect = 'start'
    }
 
   $scope.allNextEvents = response.eventlist //Termine & Anmeldung Modal
-  $scope.nextEvents =  Object.keys(response.eventlist)
-  .map(function (key) {return response.eventlist[key]});
-  $scope.nextEvents = $scope.nextEvents.slice(0,4) //Sidebar-next 'x' Events
 
-  for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
-   $scope.nextEvents[i].btnInfo=false; //Show cleanflag
-   $scope.nextEvents[i].btnRegister=false; //Show
-   if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample cleanflag
-   $scope.nextEvents[i].sysName=$scope.nextEvents[i].course_name.replace(/\W+/g,'');
-   //console.log('nextEvents['+i+']:');console.log($scope.nextEvents[i]); console.log('')
-  };
+  //cleanflag  $scope.nextEvents =  response.eventlist; //Object.keys(response.eventlist).map(function (key) {return response.eventlist[key]});
+  // for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
+  //  $scope.nextEvents[i].btnInfo=false; //Show cleanflag
+  //  $scope.nextEvents[i].btnRegister=false; //Show
+  //  if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample cleanflag
+  //  $scope.nextEvents[i].sysName=$scope.nextEvents[i].course_name.replace(/\W+/g,'');
+  //  //console.log('nextEvents['+i+']:');console.log($scope.nextEvents[i]); console.log('')
+  // };cleanflag
 
   $scope.location=[]
   for (var i = 0; i < response.eventlist.length; i++) {
@@ -230,7 +228,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           location: course.location_name,
           start: course.start_date,
           finish: course.finish_date,
-          trainer: 'Anonym',
+          //cleanflag trainer: 'Anonym',
           topic: i})
 
           if (course.exam) { //wenn kein exam existiert ist es ein exam und hat in der liste nix zu suchen
@@ -307,19 +305,15 @@ function setEventList(TundA) {
         if (tableEntry.course_id == event.course_id) {
           event.price = tableEntry.price
           event.test = tableEntry.test
+          event.exam = tableEntry.exam
           event.test_id = tableEntry.test_id
           //trainerinfo nicht vorhanden
-          event.trainer = topic.responsibleTrainer_id
+          // cleanflag event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
           event.checked = false
           //value for panel-click-serachfield interaction
           event.namefortable = event.course_name +' ('+ topic.topicName+')'          
 
-          //cleanflag Wort anzeigen?
-          //change id-number to status-word
-          // event.eventguaranteestatus = (function(statusnr) {for (var i = 0; i < $scope.stateinfo.length; i++) {
-          //   if ($scope.stateinfo[i].ID==statusnr) {return $scope.stateinfo[i].eventguaranteestatus};
-          // };})(event.eventguaranteestatus)
         };
       })
     })
@@ -347,13 +341,14 @@ return res;
 
 
 $scope.extendedEventlist =  setEventList(TundA);
+// log($scope.extendedEventlist)
+// $scope.extendedEventlist = $scope.extendedEventlist.filter((event) =>{log(typeof event.exam); return typeof event.exam != 'Object'})
+// log($scope.extendedEventlist)
 
 
 
 
-
-
-
+ 
   //HTML5 3.2.3.1: Das id-Attribut darf kein Leerzeichen enthalten deshalb wird der topicName nach name_raw kopiert u. anschließend die Leerzeichen entfernt
   for (var i = 0; i < $scope.topics.length; i++) {
    $scope.topics[i].topic_name_raw = $scope.topics[i].topicName;   
@@ -361,7 +356,7 @@ $scope.extendedEventlist =  setEventList(TundA);
    $scope.topics[i].topic_name = $scope.topics[i].topicName.replace(/\s+/g,'');//löscht alle Leerzeichen   
   }
   /*Suche Kurse und weise sie den Topics zu. Suche events zu den Kursen der Topics und weise sie den Topics zu*/
-  var aNE=$scope.allNextEvents
+  // var aNE=$scope.allNextEvents
   for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
    // console.log('$scope.topics.length: '+$scope.topics.length)
    var t=$scope.topics[i]
@@ -453,9 +448,10 @@ $scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush; rinfo: ')
  $scope.rinfo.eventIds=[]
- _.each($scope.rinfo.courses, function(c){$scope.rinfo.eventIds.push(c.event_id)} )
+ var send = {eventIds:[]} 
+ _.each($scope.rinfo.courses, function(c){send.eventIds.push(c.event_id)} )
  console.log($scope.rinfo)
-
+ send.contactpersonemail = $scope.rinfo.contactpersonemail, send.brandid = $scope.brandinfo[0].brand_id, send.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl
  log('e: '); log(e)
  $http({
       method: 'POST',
@@ -468,7 +464,7 @@ $scope.reservate = function(e) {
           str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
           return str.join("&");
       },
-      data:  $scope.rinfo
+      data:  send
   }).then(function(response) {
          
           // console.log(reservefinal='http://dev.bpmspace.org:4040/~cedric/EduMS/api/reservemail.php')
