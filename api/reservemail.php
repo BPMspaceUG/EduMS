@@ -21,7 +21,7 @@ if (isset($_POST['contactpersonemail'])) {
    $contactpersonemail = $_POST['contactpersonemail'];
 
    $courses = $_POST['courses'];
-    // $validEvents = v_eventcourselocationReservationmail($courses);
+    // $validEvents = $this->v_eventcourselocationReservationmail($courses);
 	 // $courses = gettype($_POST['courses']);
 	//  foreach($_POST['courses'] as $x => $x_value) {
 	//     $courses .= "Key=" . $x . ", Value=" . $x_value.' ++**~~ ';
@@ -67,20 +67,52 @@ foreach($eventIdList as $x => $x_value) {
 }
 
 
+$eventList = $this -> vEventcourselocationReservationmail($_POST['eventIds']);
+$brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".$_POST['brandid']);
 
 //debug $body='type of $_POST - '.gettype($_POST).'|| (keys : values)s of $_POST - '.$postvals.' || '
+// $test=$this -> gettestarray();
+// $body=print_r($_POST,true).
+//   ' ||  $_POST[mTeilnehmerZahl]: '. $_POST['mTeilnehmerZahl'].
+//   ' ||  $_POST[contactpersonemail]: '. $_POST['contactpersonemail'].
+//   ' ||  $_POST[brand] (login): '. $_POST['brandid'].
+//  ' || v_eventcourselocationReservationmail($eventidvals): '.
+//  print_r($eventList ,true).'  ##  '.
+//  print_r($brandMailInfo,true);
 
-$body='$eventidvals '.$eventidvals.
-  ' ||  $_POST[mTeilnehmerZahl]: '. $_POST['mTeilnehmerZahl'].
-  ' ||  $_POST[contactpersonemail]: '. $_POST['contactpersonemail'].
-  ' ||  $_POST[brand] (login): '. $_POST['brand'];
-//  ' || v_eventcourselocationReservationmail($eventidvals): '.v_eventcourselocationReservationmail($eventidvals);
+$confirmationBody = file_get_contents('js/Bootstrap v3.3.6.js');
+
+$confirmationBody .= '<div style="color:red;">confirmationBody<br>Sie haben für '.$_POST['mTeilnehmerZahl'].
+' Personen bei '.$brandMailInfo['brand_name'].' folgende Kurse reserviert:<br></div>';
+$brandBody = '<div style="color:green;">brandBody<br>'.$_POST[contactpersonemail].' hat ';
+$brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$_POST[contactpersonemail].' hat '.
+  'bei '.$brandMailInfo['brand_name'];
+
+$price=0;
+
+foreach($eventList as $e) {
+  $price += intval($e['coursePrice']);
+ $confirmationBody .= 
+ '<br>Kurs: '.$e['course_name'].', von '. $e['start_date'].' bis '.$e['finish_date'].', '.
+ $e['start_time'].' - '.$e['finish_time'].'Uhr. <br>'.
+ '<h3>Standort:</h3>'.'Der Kurs findet '.$e['internet_location_name'].' statt. <br>'.
+ $e['location_description'];
+ $brandBody .= $e['course_name'].' am '. $e['start_date'].'  & ';
+ $brandPartnerBody .= $e['course_name'].' am '. $e['start_date'].'  & ';
+}
+ $confirmationBody .='<h3>Preis:</h3>'.'Netto: '.$price.' | incl. Mwst.: '.
+ $price*1.19.' <br>'.$e['event_status_id'].',  '.$e['eventguaranteestatus'].',  '.$e['eventinhouse'];
+ $brandBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
+  $price*1.19.') reserviert.</div>';
+ $brandPartnerBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
+  $price*1.19 .') reserviert.</div>';
+  
 
 
 
 
 
-
+$body=$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody;
 $mail->WordWrap = 78;
 $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
  
