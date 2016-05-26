@@ -49,6 +49,9 @@ $mail->addReplyTo("echo@tu-berlin.de", "Name");
 // $mail->addReplyTo("office@mitsm.de", "Name");
 $mail->setFrom("mustername.musernachname@gmx.de", "name");
 $mail->addAddress("cnu301@mitsm.de", "aName");
+if (isset($_POST['contactpersonemail'])) {
+  $to = $_POST['contactpersonemail'];
+}
 // $mail->addAddress("Robert.Kuhlig@mitsm.de", "otherName");
 // $mail->addCC("cnu301@mitsm.de");
 $mail->Subject  = "res: ".$subject;
