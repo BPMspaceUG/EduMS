@@ -25,7 +25,7 @@ a.brand_name, a.`protection of data privacy` as prot_data_priv,
 a.`terms and conditions` as terms_and_cond, a.brandImage, a.imprint, 
 b.email as partnermail, b.brand_name as partnername
 from brand a, brand b
-where a.event_partner_id = b.brand_id and a.deprecated != 1
+where a.event_partner_id = b.brand_id and a.deprecated != 1;
 
 CREATE or replace
 VIEW `v_eventcourselocation_reservationmail` AS
@@ -50,5 +50,5 @@ FROM
 event e, course c, location l
 WHERE 
 e.course_id = c.course_id
-AND e.location_id = l.location_id
+AND e.location_id = l.location_id;
 
