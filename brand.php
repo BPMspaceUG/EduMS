@@ -20,9 +20,9 @@
       <tr ng-repeat="b in brands">
         <td style="width: 100px;">
           <span class="btn pull-left" ng-click="setSelectedBrand(b)">
-            <i ng-class="{'fa fa-fw fa-check-square-o': t.ID === actTopic.ID, 'fa fa-fw fa-square-o': t.ID != actTopic.ID}"></i>
+            <i ng-class="{'fa fa-fw fa-check-square-o': b.ID === actBrand.ID, 'fa fa-fw fa-square-o': b.ID != actBrand.ID}"></i>
           </span>
-          <a class="btn pull-left" ng-click="edittopic(t)"><i class="fa fa-fw fa-pencil"></i></a>
+          <a class="btn pull-left" ng-click="editbrand(b)"><i class="fa fa-fw fa-pencil"></i></a>
         </td>
         <td>{{b.brand_id}}</td>
         <td style="width: 350px;">{{b.brand_name}}</td>
@@ -31,21 +31,20 @@
   </table>
 </div>
 
-<!-- Template Modal "Edit Topic" -->
-<!--
-<script type="text/ng-template" id="modalEditTopic.html">
+<!-- Template Modal "Edit Brand" -->
+<script type="text/ng-template" id="modalEditBrand.html">
 	<div class="modal-header">
-		<h3 class="modal-title">Edit topic</h3>
+		<h3 class="modal-title">Edit brand</h3>
 	</div>
 	<div class="modal-body">
 	  <form class="form-horizontal">
 	  <fieldset>
       <legend>Edit topic</legend>
       <div class="form-group">
-        <label class="col-sm-2 control-label">Topic ID</label>
-        <div class="col-sm-4"><input ng-model="object.data.ID" class="form-control" type="text" disabled/></div>
-        <label class="col-sm-2 control-label">Topic Name</label>
-        <div class="col-sm-4"><input ng-model="object.data.topicName" class="form-control" type="text" /></div>
+        <label class="col-sm-2 control-label">Brand ID</label>
+        <div class="col-sm-4"><input ng-model="object.data.brand_id" class="form-control" type="text" disabled/></div>
+        <label class="col-sm-2 control-label">Brand Name</label>
+        <div class="col-sm-4"><input ng-model="object.data.brandName" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Topic Headline</label>
@@ -78,7 +77,6 @@
 		<button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
 	</div>
 </script>
--->
 
 <!-- Custom -->
 <script src="./custom/custom.js"></script>
