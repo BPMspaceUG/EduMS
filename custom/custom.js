@@ -84,6 +84,8 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
             return $scope.actCourse;
           else if (command == 'update_topic')
             return $scope.actTopic;
+          else if (command == 'update_brand')
+            return $scope.actBrand;
         }
       }
     });

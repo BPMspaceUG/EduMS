@@ -25,7 +25,7 @@
           <a class="btn pull-left" ng-click="editbrand(b)"><i class="fa fa-fw fa-pencil"></i></a>
         </td>
         <td>{{b.brand_id}}</td>
-        <td style="width: 350px;">{{b.brand_name}}</td>
+        <td>{{b.brand_name}}</td>
       </tr>
     </tbody>
   </table>
