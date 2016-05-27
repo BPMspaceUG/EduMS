@@ -39,7 +39,7 @@ $scope.sidebarselect = 'start'
   $scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionFooter+'</div>')
   $scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionSidebar+'</div>')
   $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandImage+'</div>')
-
+  $scope.rinfo={contactpersonemail : '', courses:[], brand:response.brandinfo[0].login}
 
   //topiclist RAW: 
   /*$$hashKey: "object:953", deprecated: "0", topicDescriptionFooter: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
@@ -69,7 +69,10 @@ $scope.sidebarselect = 'start'
     $scope.courses[i].courseDescription = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescription+'</div>')
     $scope.courses[i].courseDescriptionCertificate = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionCertificate+'</div>')
     $scope.courses[i].courseDescriptionMail = $sce.trustAsHtml('<div>'+$scope.courses[i].courseDescriptionMail+'</div>')
-    
+    $scope.courses[i].coursePrice=$scope.courses[i].coursePrice*1
+    $scope.courses[i].course_id=$scope.courses[i].course_id*1
+    $scope.courses[i].min_participants=$scope.courses[i].min_participants*1
+    $scope.courses[i].number_of_days=$scope.courses[i].number_of_days*1
     if ($scope.courses[i].courseHeadline.length<2) {
      $scope.courses[i].courseHeadline=$scope.courses[i].course_name
      
@@ -79,7 +82,6 @@ $scope.sidebarselect = 'start'
   //coursetotestlist RAW:
   /*v_testcourse - course_id:1, test_id:44*/
   $scope.courseToTest = response.coursetotestlist;
-
 
 
   //eventlist RAW:
@@ -92,17 +94,15 @@ $scope.sidebarselect = 'start'
    }
 
   $scope.allNextEvents = response.eventlist //Termine & Anmeldung Modal
-  $scope.nextEvents =  Object.keys(response.eventlist)
-  .map(function (key) {return response.eventlist[key]});
-  $scope.nextEvents = $scope.nextEvents.slice(0,4) //Sidebar-next 'x' Events
 
-  for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
-   $scope.nextEvents[i].btnInfo=false; //Show cleanflag
-   $scope.nextEvents[i].btnRegister=false; //Show
-   if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample cleanflag
-   $scope.nextEvents[i].sysName=$scope.nextEvents[i].course_name.replace(/\W+/g,'');
-   //console.log('nextEvents['+i+']:');console.log($scope.nextEvents[i]); console.log('')
-  };
+  //cleanflag  $scope.nextEvents =  response.eventlist; //Object.keys(response.eventlist).map(function (key) {return response.eventlist[key]});
+  // for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
+  //  $scope.nextEvents[i].btnInfo=false; //Show cleanflag
+  //  $scope.nextEvents[i].btnRegister=false; //Show
+  //  if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample cleanflag
+  //  $scope.nextEvents[i].sysName=$scope.nextEvents[i].course_name.replace(/\W+/g,'');
+  //  //console.log('nextEvents['+i+']:');console.log($scope.nextEvents[i]); console.log('')
+  // };cleanflag
 
   $scope.location=[]
   for (var i = 0; i < response.eventlist.length; i++) {
@@ -139,17 +139,18 @@ var getTest = function(id, courseToTest, courses) {
     // log(cttRef.course_id)
     if (id == cttRef.course_id) {   
       res = _.find(courses, function(course){ return course.course_id == cttRef.test_id }); 
-      log('res') ; log(res)
-
+      // log('res') ; log(res)
     };
+
   })
-  return 0
+  return 
 }
+
 
 var getTestID = function(id, courseToTest) {
   _.each(courseToTest, function(cttRef){
     // log('id: '+id+' cttRefCourse:'+cttRef.course_id+' ctttest:'+cttRef.test_id)
-    if (id == cttRef.course_id) {log('getTestID: id == cttRef.course_id: '+(id == cttRef.course_id));return cttRef.test_id};
+    if (id == cttRef.course_id) {return cttRef.test_id};
   })
   return false
 }
@@ -192,7 +193,6 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
   _.each(topiccourseCourse, function(mntopiccourse){
       // log('mntopiccourse:');
       // log(mntopiccourse);
-      // log('.');
       // log(mntopiccourse.topic_id+' - '+topic.topic_id);
     if (mntopiccourse.topic_id == topic.topic_id) {
       _.each(courses, function(course){
@@ -203,35 +203,37 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.rank = mntopiccourse.rank
           course.brutto = Math.round(course.coursePrice*1.19)
           course.sysName = course.course_name.replace(/\W+/g,''); //PanelIds
+
           course.test= getTest(course.course_id, courseToTest, courses)
           course.test_id=getTestID(course.course_id, courseToTest)
 
-          course.examRef = courseToTest.filter((ref) =>{return ref.course_id == course.course_id})
-          course.exam = courses.filter((c) =>{return c.course_id == course.examRef.test_id})
-          if (course.exam.length>0) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
+          course.examRef = courseToTest.find((ref) =>{return ref.course_id == course.course_id})
+
+          if (course.examRef) {
+            course.exam = courses.find((c) =>{return c.course_id == course.examRef.test_id})
+            // course.exam.courseDescription = $sce.trustAsHtml('<div>'+course.exam.courseDescription+'</div>')            
+          };
+          // if (course.examRef) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
 
           course.events=getDateSortedEventsToCourse(course.course_id)
           if(course.events[0]){course.duration = _.isDate(course.events[0].start_date)}//-course.events[0].finish_date}
-          
 
-          if (course.course_id == course.test_id) {
-            log('testcourse')
-            log(course)
-          };
 
           TundA.push({name: topic.topicName+' - '+course.course_name,
           sysname: course.sysName,
           course_id: course.course_id,
-          test: course.test,
-          test_id: course.test_id,
+          exam: course.exam,
+          examRef: course.examRef,
           price: course.coursePrice,
           location: course.location_name,
           start: course.start_date,
           finish: course.finish_date,
-          trainer: 'Anonym',
+          //cleanflag trainer: 'Anonym',
           topic: i})
 
-          courselist.push(course)
+          if (course.exam) { //wenn kein exam existiert ist es ein exam und hat in der liste nix zu suchen
+            courselist.push(course)
+          };
         };
       })
     }; 
@@ -303,19 +305,15 @@ function setEventList(TundA) {
         if (tableEntry.course_id == event.course_id) {
           event.price = tableEntry.price
           event.test = tableEntry.test
+          event.exam = tableEntry.exam
           event.test_id = tableEntry.test_id
           //trainerinfo nicht vorhanden
-          event.trainer = topic.responsibleTrainer_id
+          // cleanflag event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
           event.checked = false
           //value for panel-click-serachfield interaction
           event.namefortable = event.course_name +' ('+ topic.topicName+')'          
 
-          //cleanflag Wort anzeigen?
-          //change id-number to status-word
-          // event.eventguaranteestatus = (function(statusnr) {for (var i = 0; i < $scope.stateinfo.length; i++) {
-          //   if ($scope.stateinfo[i].ID==statusnr) {return $scope.stateinfo[i].eventguaranteestatus};
-          // };})(event.eventguaranteestatus)
         };
       })
     })
@@ -343,13 +341,14 @@ return res;
 
 
 $scope.extendedEventlist =  setEventList(TundA);
+// log($scope.extendedEventlist)
+// $scope.extendedEventlist = $scope.extendedEventlist.filter((event) =>{log(typeof event.exam); return typeof event.exam != 'Object'})
+// log($scope.extendedEventlist)
 
 
 
 
-
-
-
+ 
   //HTML5 3.2.3.1: Das id-Attribut darf kein Leerzeichen enthalten deshalb wird der topicName nach name_raw kopiert u. anschließend die Leerzeichen entfernt
   for (var i = 0; i < $scope.topics.length; i++) {
    $scope.topics[i].topic_name_raw = $scope.topics[i].topicName;   
@@ -357,7 +356,7 @@ $scope.extendedEventlist =  setEventList(TundA);
    $scope.topics[i].topic_name = $scope.topics[i].topicName.replace(/\s+/g,'');//löscht alle Leerzeichen   
   }
   /*Suche Kurse und weise sie den Topics zu. Suche events zu den Kursen der Topics und weise sie den Topics zu*/
-  var aNE=$scope.allNextEvents
+  // var aNE=$scope.allNextEvents
   for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
    // console.log('$scope.topics.length: '+$scope.topics.length)
    var t=$scope.topics[i]
@@ -400,7 +399,7 @@ $scope.tablesearchchange = function(name){
 
 
 /*ng-models for imputs*/
-$scope.rinfo={contactpersonemail : '', courses:[]}
+//cleanflag $scope.rinfo={contactpersonemail : '', courses:[], brand:$scope.brandinfo.login}
 $scope.teilnehmerZahlcountDown = function() {
   if ($scope.rinfo.mTeilnehmerZahl>1) {$scope.rinfo.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl-1};
 }
@@ -441,35 +440,35 @@ $scope.initreslistfromsidebar = function(c) { //c = course
 }
 $scope.btnRegFkt = function(e) { //c = event
   log(e)
+  e.checked = true
   $scope.rinfo.courses.push(e)
   e.btnRegister=!e.btnRegister
 }
-$scope.reservate = function() {
-  
-  //cleanflag 
-  // _.each($scope.topics, function(topic){
-  //   _.each(topic.eventlist, function(event){
-  //     if (event.checked) {
-  //       $scope.rinfo.courses.push(event)
-  //     };
-  //   })
-  // })
-  // for (var i = 0; i < $scope.topics.length; i++) {
-  //     for (var j = 0; j < $scope.topics[i].eventList.length; j++) {
-  //       if ($scope.topics[i].eventList[j].checked) {
-  //         $scope.rinfo.courses.push($scope.topics[i].eventList[j])
-  //       };
-  //     };
-  // };
-
-
+$scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
- console.log('reservepush: ')
+ console.log('reservepush; rinfo: ')
+ $scope.rinfo.eventIds=[]
+ var send = {eventIds:[]} 
+ _.each($scope.rinfo.courses, function(c){send.eventIds.push(c.event_id)} )
  console.log($scope.rinfo)
- $http.post('/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve', $scope.rinfo).
- 
-        then(function(response) {
-          console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve')
+ send.contactpersonemail = $scope.rinfo.contactpersonemail, send.brandid = $scope.brandinfo[0].brand_id, send.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl
+ log('e: '); log(e)
+ $http({
+      method: 'POST',
+      //http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/EqpajbuuID9/5b35716ce1ff524b662dfbb160e293a3/reserve
+      url: 'http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve'+'?A=a',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}, //json
+      transformRequest: function(obj) {
+          var str = [];
+          for(var p in obj)
+          str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
+          return str.join("&");
+      },
+      data:  send
+  }).then(function(response) {
+         
+          // console.log(reservefinal='http://dev.bpmspace.org:4040/~cedric/EduMS/api/reservemail.php')
+          // console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve')
         }, function(response) {
           $scope.data = response || "Request failed";
           $scope.status = response.status;
