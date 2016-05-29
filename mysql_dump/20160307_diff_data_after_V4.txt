@@ -89,3 +89,5 @@ UPDATE `bpmspace_edums_v4`.`topic_course` SET `level` = '1' WHERE `topic_course`
 UPDATE `bpmspace_edums_v4`.`topic_course` SET `level` = '1' WHERE `topic_course`.`topic_course_id` = 252;
 UPDATE `bpmspace_edums_v4`.`topic_course` SET `level` = '1' WHERE `topic_course`.`topic_course_id` = 253;
 UPDATE `bpmspace_edums_v4`.`topic_course` SET `level` = '1' WHERE `topic_course`.`topic_course_id` = 254;
+
+UPDATE `registration` SET `brand_id`='1' WHERE TRUE;
