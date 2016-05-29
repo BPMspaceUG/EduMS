@@ -284,7 +284,7 @@
 <!-- einer von beiden codeblöcken bleibt -->
 
                     <div class="row edums-tapicklist-course" ng-if="picked.exam">
-                      <div class="col-md-1"><input type="checkbox" class="checkbox" ></div>
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.exam.checked"></div>
                       <div class="col-md-2">Prüfung</div>
                       <div class="col-md-9">{{picked.exam.coursePrice}},- €</div>
                     </div>

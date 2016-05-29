@@ -211,6 +211,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
 
           if (course.examRef) {
             course.exam = courses.find((c) =>{return c.course_id == course.examRef.test_id})
+
             // course.exam.courseDescription = $sce.trustAsHtml('<div>'+course.exam.courseDescription+'</div>')            
           };
           // if (course.examRef) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
@@ -311,6 +312,7 @@ function setEventList(TundA) {
           // cleanflag event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
           event.checked = false
+          event.exam.checked = false
           //value for panel-click-serachfield interaction
           event.namefortable = event.course_name +' ('+ topic.topicName+')'          
 
@@ -410,7 +412,7 @@ $scope.sortReverse = false
 
 
 /*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
-the responsible person in the Brand (DB-change -> registermail)*/
+the responsible person in the Brand*/
 $scope.reservationlistupdate = function(c) { //c = course
 var reslist = $scope.rinfo.courses, duplicate = false
 
@@ -449,10 +451,15 @@ $scope.reservate = function(e) {
  console.log('reservepush; rinfo: ')
  $scope.rinfo.eventIds=[]
  var send = {eventIds:[]} 
- _.each($scope.rinfo.courses, function(c){send.eventIds.push(c.event_id)} )
+ _.each($scope.rinfo.courses, function(c){
+  send.eventIds.push(c.event_id)
+  if (c.exam.checked) {
+    send.eventIds.push(c.exam.event_id)
+  };
+} )
  console.log($scope.rinfo)
  send.contactpersonemail = $scope.rinfo.contactpersonemail, send.brandid = $scope.brandinfo[0].brand_id, send.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl
- log('e: '); log(e)
+ log('POST: '); log(send);
  $http({
       method: 'POST',
       //http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/EqpajbuuID9/5b35716ce1ff524b662dfbb160e293a3/reserve
