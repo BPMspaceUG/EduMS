@@ -52,3 +52,14 @@ WHERE
 e.course_id = c.course_id
 AND e.location_id = l.location_id;
 
+ALTER TABLE `registration` 
+ADD COLUMN `brand_id` INT NULL AFTER `postcode`;
+
+ALTER TABLE `registration` 
+ADD INDEX `brand_id_6_idx` (`brand_id` ASC);
+ALTER TABLE `registration` 
+ADD CONSTRAINT `brand_id_6`
+  FOREIGN KEY (`brand_id`)
+  REFERENCES `brand` (`brand_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
