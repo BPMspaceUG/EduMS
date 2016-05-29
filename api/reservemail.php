@@ -2,7 +2,7 @@
 // http://dev.bpmspace.org:4040/~cedric/EduMS/api/reservemail.php
 require_once 'PHPMailer/PHPMailerAutoload.php';
  
- $subject="subjecDefault";
+ $subject=$_POST['mTeilnehmerZahl'];
  $contactpersonemail="echo@tu-berlin.de";
  $courses="";
  $mTeilnehmerZahl="";
@@ -31,7 +31,7 @@ if (isset($_POST['contactpersonemail'])) {
 
 
 try {
-$to = 'cnu301@mitsm.de';
+$to = 'cedric.neuland@bpmspace.com';
 if(!PHPMailer::validateAddress($to)) {
   throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
 } 
@@ -48,13 +48,12 @@ $mail->Password   = "Passworrt";
 $mail->addReplyTo("echo@tu-berlin.de", "Name");
 // $mail->addReplyTo("office@mitsm.de", "Name");
 $mail->setFrom("mustername.musernachname@gmx.de", "name");
-$mail->addAddress("cnu301@mitsm.de", "aName");
+$mail->addAddress("cedric.neuland@bpmspace.com", "aName");
 if (isset($_POST['contactpersonemail'])) {
-  $to = $_POST['contactpersonemail'];
+  $to = 'cedric.neuland@bpmspace.com';//$_POST['contactpersonemail'];
 }
 // $mail->addAddress("Robert.Kuhlig@mitsm.de", "otherName");
-// $mail->addCC("cnu301@mitsm.de");
-$mail->Subject  = "res: ".$subject;
+// $mail->addCC("cedric.neuland@bpmspace.com");
 
 $postvals='';
 foreach($_POST as $x => $x_value) {
@@ -94,6 +93,7 @@ $brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$_POST[conta
 $price=0;
 
 foreach($eventList as $e) {
+ $mail->Subject  .=  $e['course_name'].' '. $e['start_date'];
   $price += intval($e['coursePrice']);
  $confirmationBody .= 
  '<br>Kurs: '.$e['course_name'].', von '. $e['start_date'].' bis '.$e['finish_date'].', '.
@@ -115,7 +115,14 @@ foreach($eventList as $e) {
 
 
 
-$body=$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody;
+
+
+
+
+
+
+$body=$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody.' ~~~~~~~ '.print_r($_POST,true).
+' ~~~~~~~ '.print_r($eventList,true).' ~~~~~~~ '.print_r($brandMailInfo,true).'. ';
 $mail->WordWrap = 78;
 $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
  
@@ -126,6 +133,55 @@ try {
 catch (phpmailerException $e) {
   throw new phpmailerAppException('Unable to send to: ' . $to. ': '.$e->getMessage());
 }
+
+
+
+if (isset($brandMailInfo['brandmail'])) {
+  $to = $brandMailInfo['brandmail'];
+  $body=$brandBody.'# '.$brandPartnerBody;
+  $mail->WordWrap = 78;
+  $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
+   
+  try {
+    $mail->send();
+    $results_messages[] = "Message has been sent using SMTP";
+  }
+  catch (phpmailerException $e) {
+    throw new phpmailerAppException('Unable to send to: ' . $to. ': '.$e->getMessage());
+  }
+}
+
+
+if (isset($brandMailInfo['partnermail'])) {
+  $to = $brandMailInfo['partnermail'];
+  $body=$brandPartnerBody;
+  $mail->WordWrap = 78;
+  $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
+   
+  try {
+    $mail->send();
+    $results_messages[] = "Message has been sent using SMTP";
+  }
+  catch (phpmailerException $e) {
+    throw new phpmailerAppException('Unable to send to: ' . $to. ': '.$e->getMessage());
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 catch (phpmailerAppException $e) {
   $results_messages[] = $e->errorMessage();
