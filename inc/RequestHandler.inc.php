@@ -83,6 +83,22 @@ class RequestHandler
         $res += $this->updateTopicDeprecated($id, $params["deprecated"]);
         if ($res != 8) return ''; else return $res;
         break;
+        
+      case 'update_brand':
+        $id = $params["ID"];
+        /*
+        $res = $this->updateTopicName($id, $params["topicName"]);
+        $res += $this->updateTopicHeadline($id, $params["topicHeadline"]);
+        $res += $this->updateTopicDescription($id, $params["topicDescription"]);
+        $res += $this->updateTopicDescriptionSidebar($id, $params["topicDescriptionSidebar"]);
+        $res += $this->updateTopicImage($id, $params["topicImage"]);
+        $res += $this->updateTopicDescriptionFooter($id, $params["topicDescriptionFooter"]);
+        $res += $this->updateTopicResponsibleTrainerID($id, $params["responsibleTrainer_id"]);
+        $res += $this->updateTopicDeprecated($id, $params["deprecated"]);
+        if ($res != 8) return ''; else return $res;
+        */
+        return ''; // TODO
+        break;
 
       default:
 				return ""; // empty string
@@ -312,7 +328,14 @@ FROM
     Brands
   *********************************************/
 
-	private function getBrandList() {
+  private function updateBrandName($id, $text) {
+    $query = "UPDATE brand SET brand_name = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+  }
+  private function getBrandList() {
         $query = "SELECT
     brand_id,
     brand_name,
@@ -336,6 +359,4 @@ FROM brand;";
     $return['brandlist'] = getResultArray($res);
     return $return;
   }
-  
-    
 }
