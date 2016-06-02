@@ -53,8 +53,6 @@ module.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, cmd,
   $scope.object.data = element;
   
   $scope.ok = function () {
-    console.log("ok clicked");
-    console.log($scope.object);
     $uibModalInstance.close($scope.object); // Return result
   };  
   $scope.cancel = function () {
@@ -155,9 +153,7 @@ module.controller('PhoneListCtrl', ['$scope', '$http', '$sce', '$uibModal', func
 			console.log("Error! " + error);
 		});
 	}
-  
-  $scope.testvar = '<img src="http://www.scheida.at/scheida/TV_SEITE/DDR_T101_Monoskop_Testbild_small.jpg" />';
-  
+
 	//---- Initial functions
 	$scope.getCourses();
 	$scope.getTopics();

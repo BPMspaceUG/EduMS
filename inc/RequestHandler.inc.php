@@ -86,18 +86,19 @@ class RequestHandler
         
       case 'update_brand':
         $id = $params["ID"];
-        /*
-        $res = $this->updateTopicName($id, $params["topicName"]);
-        $res += $this->updateTopicHeadline($id, $params["topicHeadline"]);
-        $res += $this->updateTopicDescription($id, $params["topicDescription"]);
-        $res += $this->updateTopicDescriptionSidebar($id, $params["topicDescriptionSidebar"]);
-        $res += $this->updateTopicImage($id, $params["topicImage"]);
-        $res += $this->updateTopicDescriptionFooter($id, $params["topicDescriptionFooter"]);
-        $res += $this->updateTopicResponsibleTrainerID($id, $params["responsibleTrainer_id"]);
-        $res += $this->updateTopicDeprecated($id, $params["deprecated"]);
-        if ($res != 8) return ''; else return $res;
-        */
+        $res = $this->updateBrandName($id, $params["brand_name"]);
+        $res = $this->updateBrandDeprecated($id, $params["deprecated"]);
+        $res = $this->updateBrandHeadline($id, $params["brandHeadline"]);
+        $res = $this->updateBrandDescription($id, $params["brandDescription"]);
+        $res = $this->updateBrandDescriptionSidebar($id, $params["brandDescriptionSidebar"]);
+        $res = $this->updateBrandImage($id, $params["brandImage"]);
+        $res = $this->updateBrandDescriptionFooter($id, $params["brandDescriptionFooter"]);
+        if ($res != 7) return ''; else return $res;
         return ''; // TODO
+        break;
+        
+      case 'test':
+        echo "lolz";
         break;
 
       default:
@@ -327,7 +328,7 @@ FROM
   /********************************************
     Brands
   *********************************************/
-
+  
   private function updateBrandName($id, $text) {
     $query = "UPDATE brand SET brand_name = ? WHERE brand_id = ?;";
     $stmt = $this->db->prepare($query); // prepare statement
@@ -335,9 +336,51 @@ FROM
     $result = $stmt->execute(); // execute statement
     return (!is_null($result) ? 1 : 0);
   }
+	private function updateBrandDeprecated($id, $nbr) {
+    $query = "UPDATE brand SET deprecated = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("ii", $nbr, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateBrandHeadline($id, $text) {
+    $query = "UPDATE brand SET brandHeadline = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateBrandDescription($id, $text) {
+    $query = "UPDATE brand SET brandDescription = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateBrandDescriptionSidebar($id, $text) {
+    $query = "UPDATE brand SET brandDescriptionSidebar = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateBrandImage($id, $text) {
+    $query = "UPDATE brand SET brandImage = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
+	private function updateBrandDescriptionFooter($id, $text) {
+    $query = "UPDATE brand SET brandDescriptionFooter = ? WHERE brand_id = ?;";
+    $stmt = $this->db->prepare($query); // prepare statement
+    $stmt->bind_param("si", $text, $id); // bind params
+    $result = $stmt->execute(); // execute statement
+    return (!is_null($result) ? 1 : 0);
+	}
   private function getBrandList() {
         $query = "SELECT
-    brand_id,
+    brand_id AS 'ID',
     brand_name,
     discount,
     event_partner_id,

@@ -24,7 +24,7 @@
           </span>
           <a class="btn pull-left" ng-click="editbrand(b)"><i class="fa fa-fw fa-pencil"></i></a>
         </td>
-        <td>{{b.brand_id}}</td>
+        <td>{{b.ID}}</td>
         <td>{{b.brand_name}}</td>
       </tr>
     </tbody>
@@ -42,31 +42,31 @@
       <legend>Edit topic</legend>
       <div class="form-group">
         <label class="col-sm-2 control-label">Brand ID</label>
-        <div class="col-sm-4"><input ng-model="object.data.brand_id" class="form-control" type="text" disabled/></div>
+        <div class="col-sm-4"><input ng-model="object.data.ID" class="form-control" type="text" disabled/></div>
         <label class="col-sm-2 control-label">Brand Name</label>
-        <div class="col-sm-4"><input ng-model="object.data.brandName" class="form-control" type="text" /></div>
+        <div class="col-sm-4"><input ng-model="object.data.brand_name" class="form-control" type="text" /></div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">Topic Headline</label>
-        <div class="col-sm-4"><input ng-model="object.data.topicHeadline" class="form-control" type="text" /></div>
+        <label class="col-sm-2 control-label">Brand Headline</label>
+        <div class="col-sm-4"><input ng-model="object.data.brandHeadline" class="form-control" type="text" /></div>
         <label class="col-sm-2 control-label">Deprecated</label>
         <div class="col-sm-4"><input ng-model="object.data.deprecated" class="form-control" type="text" /></div>
       </div> 
       <div class="form-group">
-        <label class="col-sm-2 control-label">Description</label>
-        <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.topicDescription"></textarea></div>
+        <label class="col-sm-2 control-label">Brand Description</label>
+        <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.brandDescription"></textarea></div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label ">Sidebar Description</label>
-        <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.topicDescriptionSidebar"></textarea></div>
+        <label class="col-sm-2 control-label">Brand Sidebar Description</label>
+        <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.brandDescriptionSidebar"></textarea></div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">Image</label>
-        <div class="col-sm-10"><textarea class="form-control" ng-model="object.data.topicImage"></textarea></div>
+        <label class="col-sm-2 control-label">Brand Image</label>
+        <div class="col-sm-10"><textarea class="form-control" ng-model="object.data.brandImage"></textarea></div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label ">Description Footer</label>
-        <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.topicDescriptionFooter"></textarea></div>
+        <label class="col-sm-2 control-label ">Brand Description Footer</label>
+        <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.brandDescriptionFooter"></textarea></div>
       </div>    
     </div>
 	</fieldset>
