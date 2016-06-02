@@ -64,7 +64,8 @@
 
             <div class="panel-group edums-panelcontainer-accordion" id="accordion{{topicpanel.topic_name}}" role="tablist" >
               <div class="panel panel-default edums-accordion"  
-                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'">
+                ng-repeat="panelcourse in topicpanel.courseList | orderBy:'+rank'| orderBy:'+level'"
+                ng-if="panelcourse.exam != 0">
                 <div class="panel-heading edums-accordion-heading" role="tab" id="heading{{panelcourse.sysName}}">
                   <h3 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#accordion{{topicpanel.topic_name}}" 
@@ -161,7 +162,7 @@
        <div ng-repeat="topic in topics" class="edums-sidebarpanels-topicevents">
          <div class="tab-pane" id="panel-sidebar-{{topic.topic_name}}" role="tabpanel" 
          ng-if="sidebarselect == topic.topic_name_raw">
-          <right-bar-course-all ng-repeat="e in topic.eventList | limitTo:5" ng-if="e.exam" class="edums-topicevents-event"></right-bar-course-all>
+          <right-bar-course-all ng-repeat="e in topic.sideBarCourses | limitTo:5"  class="edums-topicevents-event"></right-bar-course-all>
          </div>
        </div>
 
@@ -240,12 +241,12 @@
                 <th><a href="#"><h4>Auswahl</h4></a></th>
               </thead>
               <tbody class="edums-tatable-body">
-                <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch">
+                <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch" ng-if="event.exam != 0">
                   <td>{{event.start_date | date:"dd.MM."}} - {{event.finish_date | date:"dd.MM.yy"}}</td>
                   <td>{{event.namefortable}}</td>
                   <td>{{event.internet_location_name}}</td>
-                  <td>{{event.price}},-</td>               
-                  <td>{{Math.round(event.price*1.19)}},-</td>               
+                  <td>{{event.price | number : 2}} €</td>               
+                  <td>{{event.price*1.19 | number : 2}} €</td>               
                   <td><input type="checkbox" class="checkbox" ng-model="event.checked" name="userAgree" ng-change="reservationlistupdate(event)"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
                 </tr>
               </tbody>
@@ -277,7 +278,7 @@
                     <div class="row edums-tapicklist-exam">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
                       <div class="col-md-2">Kurs</div>
-                      <div class="col-md-9">{{picked.price}},- €</div>
+                      <div class="col-md-9">{{picked.price | number : 2}} €</div>
                     </div>
 
 
@@ -286,7 +287,7 @@
                     <div class="row edums-tapicklist-course" ng-if="picked.exam">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.exam.checked"></div>
                       <div class="col-md-2">Prüfung</div>
-                      <div class="col-md-9">{{picked.exam.coursePrice}},- €</div>
+                      <div class="col-md-9">{{picked.exam.coursePrice | number : 2}} €</div>
                     </div>
 <!--  -->
 

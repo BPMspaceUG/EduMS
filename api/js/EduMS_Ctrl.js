@@ -188,12 +188,9 @@ var getDateSortedEventsToCourse = function(id){
 */
 var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest){
   var courselist = []
-  // log('topic:');
-  // log(topic);
+  // log('topic:');  // log(topic);
   _.each(topiccourseCourse, function(mntopiccourse){
-      // log('mntopiccourse:');
-      // log(mntopiccourse);
-      // log(mntopiccourse.topic_id+' - '+topic.topic_id);
+      // log('mntopiccourse:');      // log(mntopiccourse);      // log(mntopiccourse.topic_id+' - '+topic.topic_id);
     if (mntopiccourse.topic_id == topic.topic_id) {
       _.each(courses, function(course){
         if (course.course_id == mntopiccourse.course_id) {
@@ -201,7 +198,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
 
           course.level = mntopiccourse.level //Anzeigereihenfolge in Panel
           course.rank = mntopiccourse.rank
-          course.brutto = Math.round(course.coursePrice*1.19)
+          course.brutto = course.coursePrice*1.19
           course.sysName = course.course_name.replace(/\W+/g,''); //PanelIds
 
           course.test= getTest(course.course_id, courseToTest, courses)
@@ -211,9 +208,15 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
 
           if (course.examRef) {
             course.exam = courses.find((c) =>{return c.course_id == course.examRef.test_id})
+            if (course.exam) {
+              tmpevent = $scope.eventlist.find((e) =>{return course.exam.course_id == e.course_id})
+              if (tmpevent) {
+                course.exam.event_id = tmpevent.event_id
+              };
+            };
 
             // course.exam.courseDescription = $sce.trustAsHtml('<div>'+course.exam.courseDescription+'</div>')            
-          };
+          }else{course.exam=0;log('course.examRef')}
           // if (course.examRef) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
 
           course.events=getDateSortedEventsToCourse(course.course_id)
@@ -231,10 +234,10 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           finish: course.finish_date,
           //cleanflag trainer: 'Anonym',
           topic: i})
-
-          if (course.exam) { //wenn kein exam existiert ist es ein exam und hat in der liste nix zu suchen
+ 
+          // if (course.exam) { //wenn kein exam existiert ist es ein exam und hat in der liste nix zu suchen
             courselist.push(course)
-          };
+          // };
         };
       })
     }; 
@@ -312,7 +315,9 @@ function setEventList(TundA) {
           // cleanflag event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
           event.checked = false
-          event.exam.checked = false
+          if (event.exam) {
+            event.exam.checked = false
+          };
           //value for panel-click-serachfield interaction
           event.namefortable = event.course_name +' ('+ topic.topicName+')'          
 

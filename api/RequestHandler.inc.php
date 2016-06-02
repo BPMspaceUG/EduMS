@@ -36,7 +36,14 @@ class RequestHandler
       $results_array[] = $row;
     }
     if((count($results_array)<1)){ //evtl. obsolet
-      file_put_contents('logs/failQueryLog.log', date("d.m.Y - H:i:s",time())."\nQuery: ".$query."\nResult: ".$results_array."\n-----------\n", FILE_APPEND | LOCK_EX);
+      file_put_contents('logs/failQueryLog.log', 
+        date("d.m.Y - H:i:s",time()).
+        "\nQuery: ".
+        $query.
+        "\nResult: ".
+        print_r($results_array).
+        "\n-----------\n", 
+        FILE_APPEND | LOCK_EX);
     }
     return $results_array;
   }
@@ -243,13 +250,16 @@ class RequestHandler
   private function vEventcourselocationReservationmail($eventlist){
      //event_id, start_date, finish_date, start_time, finish_time, event_status_id, eventguaranteestatus, eventinhouse, coursePrice, course_id, course_name, courseMaxParticipants, 
      //location_name, internet_location_name, location_description, locationMxParticipants, 
-    $eventlist = json_decode($eventlist);
+    // $eventlist = json_decode($eventlist);
     $queryEvents='';
     $rootquery = 'SELECT * FROM `v_eventcourselocation_reservationmail` WHERE ';    
-    for ($i=0; $i < count($eventlist); $i++) {           
-      $queryEvents .= ' or event_id = '.$eventlist[$i];
+    for ($i=0; $i < count($eventlist); $i++) {     
+      // if ($eventlist[$i]!=null) {
+              $queryEvents .= ' or event_id = '.$eventlist[$i];
+            // }      
     }
     $queryEvents = substr($queryEvents,3,strlen($queryEvents));
+  //bsp SELECT * FROM `v_eventcourselocation_reservationmail` WHERE  event_id = "4260" or event_id = "4261" or event_id = "3851"
     return $this->getResultArray($rootquery.$queryEvents);
   }
 

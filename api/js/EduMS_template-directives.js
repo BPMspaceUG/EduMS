@@ -193,24 +193,24 @@ app.directive('coursePanelBody', function(){
           <tbody>
             <tr>
               <td>{{panelcourse.course_name}}</td>
-              <td>{{panelcourse.coursePrice}},- €</td>
-              <td>{{panelcourse.brutto}},- €</td>
+              <td>{{panelcourse.coursePrice | number : 2}} €</td>
+              <td>{{panelcourse.brutto | number : 2}} €</td>
             </tr>
             <tr> 
               <td>Prüfungsvorbereitung    inklusive</td>
             </tr>
             <tr>
               <td>Prüfungsgebühr</td>
-              <td>{{ panelcourse.exam.coursePrice || "- ? "}},- €</td>
-              <td>{{ panelcourse.exam.coursePrice*1.19 || "- ? "}},- €</td>
+              <td>{{ panelcourse.exam.coursePrice || "- ? " | number : 2}} €</td>
+              <td>{{ panelcourse.exam.coursePrice*1.19 || "- ? " | number : 2}} €</td>
             </tr>
             <tr>
               <td>Mittagessen & Pausenverpflegung   inklusive</td>
             </tr>
             <tr>
               <td>Gesamtpreis:</td>
-              <td>{{panelcourse.exam.coursePrice*1 + panelcourse.coursePrice*1}},- €</td>
-              <td>{{panelcourse.brutto + panelcourse.exam.brutto}},- €</td>
+              <td>{{panelcourse.exam.coursePrice*1 + panelcourse.coursePrice*1 | number : 2}} €</td>
+              <td>{{panelcourse.brutto + panelcourse.exam.brutto | number : 2}} €</td>
             </tr>
           </tbody>
       </table>
