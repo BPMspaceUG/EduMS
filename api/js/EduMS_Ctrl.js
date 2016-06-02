@@ -92,7 +92,8 @@ $scope.sidebarselect = 'start'
   for (var i = 0; i < response.eventlist.length; i++) {
     $scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.eventlist[i].location_description+'</div>')
    }
-
+  $scope.eventlist = $scope.eventlist.sort(function(x,y){return new Date(x.start_date) - new Date(y.start_date)})
+        _.each($scope.eventlist, function(e) {log(e.start_date)} )
   $scope.allNextEvents = response.eventlist //Termine & Anmeldung Modal
 
   //cleanflag  $scope.nextEvents =  response.eventlist; //Object.keys(response.eventlist).map(function (key) {return response.eventlist[key]});
@@ -376,23 +377,39 @@ $scope.extendedEventlist =  setEventList(TundA);
     //Wenn die id's identisch sind füge dem aktuellen SidebarArray das Event hinzu
     if (t.topic_id == tcC.topic_id) { //wenn ids gleich sind
      if (!$scope.topics[i].sideBarCourses){$scope.topics[i].sideBarCourses=[]}//lege sidebarArray für topic an
-      for (var k = 0; k < $scope.eventlist.length; k++) { //für alle allNextEvents-Einträge           
-      if ($scope.topics[i].sideBarCourses.length<5) { //sidebar soll 5 elemente haben           
-       if (tcC.course_id == $scope.eventlist[k].course_id) { //nur Events die zur aktuellen course_id passen
-        $scope.topics[i].sideBarCourses.push($scope.eventlist[k]) //befülle SideBar-Array
-        var newentry = $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
-        newentry.sysName=newentry.course_name.replace(/\W+/g,''); 
-        newentry.start_time=newentry.start_time.slice(0,5); //cut seconds
-        newentry.finish_time=newentry.finish_time.slice(0,5); //cut seconds
-        // console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
-       };
-      };
-     };
+
+      $scope.eventlist.forEach(function(event){
+        if($scope.topics[i].sideBarCourses.length<5 && tcC.course_id==event.course_id) {
+          $scope.topics[i].sideBarCourses.push(event)
+          var newentry = $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
+          newentry.sysName=newentry.course_name.replace(/\W+/g,''); 
+          newentry.start_time=newentry.start_time.slice(0,5); //cut seconds
+          newentry.finish_time=newentry.finish_time.slice(0,5); //cut seconds
+        };
+      })
+     $scope.topics[i].sideBarCourses = $scope.topics[i].sideBarCourses.sort(function(x,y){return new Date(x.start_date) - new Date(y.start_date)})
+
+
+
+     //  for (var k = 0; k < $scope.eventlist.length; k++) { //für alle allNextEvents-Einträge           
+     //  if ($scope.topics[i].sideBarCourses.length<5) { //sidebar soll 5 elemente haben
+     //   if (tcC.course_id == $scope.eventlist[k].course_id) { //nur Events die zur aktuellen course_id passen
+     //    $scope.topics[i].sideBarCourses.push($scope.eventlist[k]) //befülle SideBar-Array
+     //    var newentry = $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
+     //    newentry.sysName=newentry.course_name.replace(/\W+/g,''); 
+     //    newentry.start_time=newentry.start_time.slice(0,5); //cut seconds
+     //    newentry.finish_time=newentry.finish_time.slice(0,5); //cut seconds
+     //    log(newentry.start_date)
+     //    log(new Date(newentry.start_date))
+     //    // console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
+     //   };
+     //  };
+     // };
     };
    };
   };
 
-  console.log('fertiges $scope.topics: ');console.log($scope.topics); 
+  console.log('fertiges $scope.topics: ', $scope.topics); 
   }
  //  ,function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
  // )
@@ -506,8 +523,6 @@ $scope.reservate = function(e) {
 
 orderbranddata(response);
 }]);
-
-
 
 
 

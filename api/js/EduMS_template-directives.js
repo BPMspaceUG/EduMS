@@ -30,11 +30,11 @@ template:
         </div>
         
         <div class="col-md-3">
-          <div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">
+          <!--div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">
             <div class="panel">
               <b>*</b>
             </div>
-          </div>
+          </div -->
           <div class="row edums-event-garantie" ng-if="e.eventguaranteestatus == 2 || e.eventguaranteestatus == 4 || e.eventguaranteestatus == 3">
             <div class="panel">
               <b>TERMIN-<br>GARANTIE</b>

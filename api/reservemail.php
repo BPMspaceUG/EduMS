@@ -1,12 +1,11 @@
 <?php
+try {
 // http://dev.bpmspace.org:4040/~cedric/EduMS/api/reservemail.php
 require_once 'PHPMailer/PHPMailerAutoload.php';
- 
-$to = 'cedric.neuland@bpmspace.com'; //default
 
 $mTeilnehmerZahl="? ";
 if (isset($_POST['mTeilnehmerZahl'])) {
-  $mTeilnehmerZahl = $_POST['mTeilnehmerZahl'];
+  $mTeilnehmerZahl = json_decode($_POST['mTeilnehmerZahl'], true);
 }
 
 $subject=$mTeilnehmerZahl;
@@ -15,23 +14,27 @@ $subject=$mTeilnehmerZahl;
 $contactpersonemail=false;
 if (isset($_POST['contactpersonemail'])) {
   $contactpersonemail = $_POST['contactpersonemail'];
-  $to = $_POST['contactpersonemail'][0];
+  $to = json_decode($_POST['contactpersonemail'][0], true);
 }
 
 $courses = false;
 if (isset($_POST['courses'])) {
-   $courses = $_POST['courses'];  
+   $courses = json_decode($_POST['courses'], true);  
 }
 
 $brandMailInfo = false;
 if (isset($_POST['brandid'])) {
-  $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".$_POST['brandid']);
+  $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".json_decode($_POST['brandid']),true);
+  print_r($brandMailInfo,true);
 }
 
 $eventList= false;
 if (isset($_POST['eventIds'])) {
   if ($_POST['eventIds']) {
-    $eventList = $this -> vEventcourselocationReservationmail($_POST['eventIds']);
+    $eveids = json_decode($_POST['eventIds'], true);
+    // error_log(print_r($_POST['eventIds'],true));
+    $eventList = $this -> vEventcourselocationReservationmail($eveids);
+
   }
 }
 
@@ -43,7 +46,7 @@ ini_set('default_charset', 'UTF-8');
  
 class phpmailerAppException extends phpmailerException {}
 
-try {
+$to = 'cedric.neuland@bpmspace.com'; //default
 
   if(!PHPMailer::validateAddress($to)) {
     throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
@@ -85,7 +88,7 @@ try {
   //  print_r($brandMailInfo,true);
 
   // $confirmationBody = file_get_contents('js/Bootstrap v3.3.6.js');
-
+$confirmationBody ='';
   $confirmationBody .= '<div style="color:red;">confirmationBody<br>Sie haben für '.$mTeilnehmerZahl.
   ' Personen bei '.$brandMailInfo[0]['brand_name'].' folgende Kurse reserviert:<br></div>';
   $brandBody = '<div style="color:green;">brandBody<br>'.$contactpersonemail.' hat ';
@@ -123,12 +126,14 @@ try {
 
 
   $body=$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody.' ~~~~~~~ '.print_r($_POST,true).
-  ' ~~~~~~~ '.print_r($eventList,true).' ~~~~~~~ '.print_r($brandMailInfo,true).'. '.isset($_POST['contactpersonemail']).'*'.isset($_POST['contactpersone']);
+  ' ~~~~~~~ '.print_r($eventList,true).' ~~~~~~~ '.print_r($brandMailInfo,true).'. '.
+  isset($_POST['contactpersonemail']).'*';
+  // error_log(print_r($body,true));
   $mail->WordWrap = 78;
   $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
-   
   try {
     $mail->send();
+    error_log(print_r('sent.\n',true));
     $results_messages[] = "Message has been sent using SMTP";
   }
   catch (phpmailerException $e) {
