@@ -71,15 +71,15 @@
       <div class="form-group">
         <label class="col-sm-2 control-label ">Description Footer</label>
         <div class="col-sm-10"><textarea data-ui-tinymce="tinymceOptions" ng-model="object.data.topicDescriptionFooter"></textarea></div>
-      </div>    
+      </div>
     </div>
-	</fieldset>
-	</form>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" type="button" ng-click="ok()"><i class="fa fa-floppy-o"></i> Save</button>
-		<button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
-	</div>
+  </fieldset>
+  </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()"><i class="fa fa-floppy-o"></i> Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+  </div>
 </script>
 
 <!-- Custom -->
