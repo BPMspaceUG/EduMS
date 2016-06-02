@@ -248,17 +248,23 @@ class RequestHandler
 
 
   private function vEventcourselocationReservationmail($eventlist){
+
      //event_id, start_date, finish_date, start_time, finish_time, event_status_id, eventguaranteestatus, eventinhouse, coursePrice, course_id, course_name, courseMaxParticipants, 
      //location_name, internet_location_name, location_description, locationMxParticipants, 
     // $eventlist = json_decode($eventlist);
-    $queryEvents='';
     $rootquery = 'SELECT * FROM `v_eventcourselocation_reservationmail` WHERE ';    
-    for ($i=0; $i < count($eventlist); $i++) {     
-      // if ($eventlist[$i]!=null) {
-              $queryEvents .= ' or event_id = '.$eventlist[$i];
-            // }      
+    $queryEvents='event_id = ';
+    if (count($eventlist)>0) {
+      $queryEvents .= implode(' or event_id = ', $eventlist );
     }
-    $queryEvents = substr($queryEvents,3,strlen($queryEvents));
+     // error_log($eventlist);
+     // error_log($rootquery.$queryEvents);
+    // for ($i=0; $i < count($eventlist); $i++) {     
+    //   // if ($eventlist[$i]!=null) {
+    //           $queryEvents .= ' or event_id = '.$eventlist[$i];
+    //         // }      
+    // }
+    // $queryEvents = substr($queryEvents,3,strlen($queryEvents));
   //bsp SELECT * FROM `v_eventcourselocation_reservationmail` WHERE  event_id = "4260" or event_id = "4261" or event_id = "3851"
     return $this->getResultArray($rootquery.$queryEvents);
   }
