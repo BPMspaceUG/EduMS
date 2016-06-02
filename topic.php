@@ -5,6 +5,8 @@
 <div class="clearfix"></div>
 <div class="container">
 
+  <pre>{{testvar}}</pre>
+
   <!-- Table -->
   <table class="table table-condensed table-striped">
     <thead>
