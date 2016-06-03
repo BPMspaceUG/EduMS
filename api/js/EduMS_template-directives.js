@@ -28,33 +28,41 @@ template:
             <i class="fa fa-caret-right" aria-hidden="true"></i> Anmelden!
           </button></div>
         </div>
-        
+
+
         <div class="col-md-3">
           <!--div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">
-            <div class="panel">
               <b>*</b>
-            </div>
           </div -->
           <div class="row edums-event-garantie" ng-if="e.eventguaranteestatus == 2 || e.eventguaranteestatus == 4 || e.eventguaranteestatus == 3">
-            <div class="panel">
-              <b>TERMIN-<br>GARANTIE</b>
-            </div>
+            <span class="label label-success">
+              <b>TERMIN-&nbsp</b>
+            </span>
+            <span class="label label-success">
+              <b>GARANTIE</b>
+            </span>
           </div>
           <div class="row edums-event-waitlist" ng-if="e.eventguaranteestatus == 3">
-            <div class="panel">
-              <b>3 PLÄTZE<br>FREI</b>
-            </div>
+            <span class="label label-primary">
+              <b>3 PLÄTZE</b>
+            </span>
+            <span class="label label-primary">
+              <b>FREI</b>
+            </span>
           </div>
           <div class="row edums-event-onefree" ng-if="e.eventguaranteestatus == 4">
-            <div class="panel">
-              <b>1 PLATZ<br>FREI</b>
-            </div>
+            <span class="label label-warning">
+              <b>1 PLATZ</b>
+            </span>
+            <span class="label label-warning">
+              <b>FREI</b>
+            </span>
           </div>
         </div>
         <div class="row edums-event-threefree" ng-if="e.eventguaranteestatus == 5">
-          <div class="panel">
+          <span class="label label-danger">
             <b>WARTELISTE</b>
-          </div>
+          </span>
         </div>
       
       </div>
@@ -116,7 +124,7 @@ template:`
       <div class="row">
         <div>
           <button type="submit" class="btn btn-block edums-sideregform-btnta" href="#modal-container-1" 
-           data-toggle="modal" ng-click="initreslistfromsidebar(e)"><i class="fa fa-cart-plus" aria-hidden="true">
+           data-toggle="modal"><i class="fa fa-cart-plus" aria-hidden="true">
            </i> Weitere Kurse</button>
         </div>
       </div>
@@ -235,7 +243,7 @@ app.directive('coursePanelBody', function(){
                   <div ng-if="event.eventguaranteestatus == 5"><b>WARTELISTE</b></div>
                 </td>
                 <td>{{panelcourse.course_name}}</td>
-                <td>{{event.start_date | date:"dd/MM/yyyy"}} {{event.start_time | date:"hh"}} Uhr</td>
+                <td>{{event.start_date | date:"dd/MM/yyyy"}}</td>
                 <td>{{event.internet_location_name}}</td>
               </tr>
             </tbody>
