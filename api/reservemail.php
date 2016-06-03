@@ -160,11 +160,3 @@ foreach ($results_messages as $result) {
 }
 echo "</ul>\n";
 }
-
-
-
-
-
-
-
-
