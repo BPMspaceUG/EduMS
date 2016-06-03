@@ -368,47 +368,17 @@ $scope.extendedEventlist =  setEventList(TundA);
   for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
    // console.log('$scope.topics.length: '+$scope.topics.length)
    var t=$scope.topics[i]
-   for (var j = 0; j < $scope.topiccourseCourse.length; j++) { //für alle topiccourCourse-Einträge
-    var tcC=$scope.topiccourseCourse[j]
-
-    //Wenn die topic_id des Elements aus der Topicliste == der topic_id des Elements aus der m:n-TopicCourses-Liste ist
-    //dann lege in der Topicliste ein Array für die Sidebarelemente an. 
-    //Vergleiche darauf hin die tc_course_id des TopicCourse Elements mit den course_id's aus der AllNextEvents-Liste.
-    //Wenn die id's identisch sind füge dem aktuellen SidebarArray das Event hinzu
-    if (t.topic_id == tcC.topic_id) { //wenn ids gleich sind
-     if (!$scope.topics[i].sideBarCourses){$scope.topics[i].sideBarCourses=[]}//lege sidebarArray für topic an
-
-      $scope.eventlist.forEach(function(event){
-        if($scope.topics[i].sideBarCourses.length<5 && tcC.course_id==event.course_id) {
-          $scope.topics[i].sideBarCourses.push(event)
-          var newentry = $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
-          newentry.sysName=newentry.course_name.replace(/\W+/g,''); 
-          newentry.start_time=newentry.start_time.slice(0,5); //cut seconds
-          newentry.finish_time=newentry.finish_time.slice(0,5); //cut seconds
-        };
-      })
-     $scope.topics[i].sideBarCourses = $scope.topics[i].sideBarCourses.sort(function(x,y){return new Date(x.start_date) - new Date(y.start_date)})
-
-
-
-     //  for (var k = 0; k < $scope.eventlist.length; k++) { //für alle allNextEvents-Einträge           
-     //  if ($scope.topics[i].sideBarCourses.length<5) { //sidebar soll 5 elemente haben
-     //   if (tcC.course_id == $scope.eventlist[k].course_id) { //nur Events die zur aktuellen course_id passen
-     //    $scope.topics[i].sideBarCourses.push($scope.eventlist[k]) //befülle SideBar-Array
-     //    var newentry = $scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1]//Definiere ID-name ohne Leerzeichen
-     //    newentry.sysName=newentry.course_name.replace(/\W+/g,''); 
-     //    newentry.start_time=newentry.start_time.slice(0,5); //cut seconds
-     //    newentry.finish_time=newentry.finish_time.slice(0,5); //cut seconds
-     //    log(newentry.start_date)
-     //    log(new Date(newentry.start_date))
-     //    // console.log('sysName: '+$scope.topics[i].sideBarCourses[$scope.topics[i].sideBarCourses.length-1].course_name.replace(/\W+/g,''))
-     //   };
-     //  };
-     // };
-    };
-   };
+   if (!$scope.topics[i].sideBarCourses){$scope.topics[i].sideBarCourses=[]}//lege sidebarArray für topic an
+   var courseZuTopic = $scope.topiccourseCourse.filter((x)=>{return t.topic_id == x.topic_id})
+   var eventZuCourse = $scope.eventlist.filter((x)=>{
+                      var isInList = false
+                      courseZuTopic.forEach(function(c){if(c.course_id == x.course_id && x.exam != 0){
+                        isInList=true}})
+                    return isInList})
+   eventZuCourse.forEach((e)=>{e.sysName = e.course_name.replace(/\W+/g,'')})
+   $scope.topics[i].sideBarCourses = eventZuCourse;
   };
-
+  $scope.sideBarCoursesStart = $scope.eventlist.filter((x)=>{return x.exam != 0})
   console.log('fertiges $scope.topics: ', $scope.topics); 
   }
  //  ,function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
@@ -447,26 +417,25 @@ var reslist = $scope.rinfo.courses, duplicate = false
 
   //handle input
   if (c.checked && !duplicate) {
+    if (c.exam != 0) {c.exam.checked=true};
     reslist.push(c)
     // _.extend(reslist, c) /*als Objekt*/
   }else{
     // delete reslist.c /*als Objekt*/
+    if (c.exam != 0) {c.exam.checked=false};
     for (var i = 0; i < reslist.length; i++) {
       if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
     };
   }
 
 }
-/*On click 'Weitere Kurse' add course to reservation list and open T&A-Modal for more courseoptions*/
-$scope.initreslistfromsidebar = function(c) { //c = course
-  c.checked = true
-  $scope.reservationlistupdate(c)
-}
+
 $scope.btnRegFkt = function(e) { //c = event
-  log(e)
   e.checked = true
+  if (e.exam != 0) {e.exam.checked=true};
   $scope.rinfo.courses.push(e)
   e.btnRegister=!e.btnRegister
+  log($scope.rinfo.courses)
 }
 $scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
