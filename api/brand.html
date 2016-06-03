@@ -156,13 +156,13 @@
         <h3 class="text-center">
          <i class="fa fa-calendar-check-o"></i> Aktuelle Termine
         </h3>
-        <right-bar-course-all ng-repeat="e in eventlist | limitTo:5"  class="edums-allevents-event"></right-bar-course-all>
+        <right-bar-course-all ng-repeat="e in sideBarCoursesStart | limitTo:5"  class="edums-allevents-event"></right-bar-course-all>
        </div>
 
        <div ng-repeat="topic in topics" class="edums-sidebarpanels-topicevents">
          <div class="tab-pane" id="panel-sidebar-{{topic.topic_name}}" role="tabpanel" 
          ng-if="sidebarselect == topic.topic_name_raw">
-          <right-bar-course-all ng-repeat="e in topic.sideBarCourses"  class="edums-topicevents-event"></right-bar-course-all>
+          <right-bar-course-all ng-repeat="e in topic.sideBarCourses  | limitTo:5"  class="edums-topicevents-event"></right-bar-course-all>
          </div>
        </div>
 
@@ -267,7 +267,7 @@
             <h3>Ausgewählte Termine</h3>
             <form name="formReg" class="form-horizontal edums-tareserve" novalidate>
               <div class="form-group edums-tareserve-taformgroup">
-                <div class="row edums-taformgroup" ng-if="rinfo.courses.length>0">
+                <div class="row edums-taformgroup" >
                   <h4>Ausgewählte Termine:</h4>
                   <div class="row edums-taformgroup-tapicklist" ng-repeat="picked in rinfo.courses track by $index">
                     <h4>{{picked.course_name}}</h4>
@@ -317,6 +317,23 @@
                     <div>
                       <input type="email" class="form-control edums-taformgroup-email" id="inputEmailIdModal" 
                        placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="panel panel-default edums-agbunddatenschutz-panel">
+                     <div class="panel-heading">
+                      <a class="panel-title collapsed" data-toggle="collapse" href="#panel-element-9675258"><span
+                       class="badge"> <i class="fa fa-caret-down edums-taformgroup-icon"></i></span> SchulungsAGB</a>
+                     </div>
+                     <div id="panel-element-9675258" class="panel-collapse collapse">
+                      <div class="panel-body">
+                       <div class="container-fluid">
+                        <div class="row">
+                         <agb></agb>
+                        </div>
+                       </div>
+                      </div>
+                     </div>
                     </div>
                   </div>
                   <div class="row">
@@ -378,9 +395,9 @@
         <div class="modal-footer edums-finishmodal-footer">
         <button type="button" class="btn btn-danger edums-finishmodal-btnclose" data-dismiss="modal">
          schließen</button>
-         <button type="button" class="btn btn-success edums-finishmodal-btnreserve" ng-click="reservate()">
+         <!-- <button type="button" class="btn btn-success edums-finishmodal-btnreserve" ng-click="reservate()">
           <i class="fa fa-arrow-circle-right"></i> Anmeldung
-         </button>
+         </button> -->
 
         </div>
      </div> <!-- end modal-content -->
