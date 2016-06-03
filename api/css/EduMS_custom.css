@@ -175,24 +175,20 @@ body {
 
 .edums-event-garantie{
      margin: 10px 0px -10px 5px;
-     color: #5cb85c;
 }
 .edums-event-waitlist{
      margin: 10px 0px -10px 5px;
-     color: #d9534f;
 }
 .edums-event-none{
     margin: 10px 0px -10px 5px;
 }
 .edums-event-onefree{
     margin: 10px 0px -10px 5px;
-     color: #f0ad4e;
 
 }
 .edums-event-threefree{
     margin: 10px 0px -10px 5px;
-     color: #428bca;
-
+     
 }
 .edums-event-btnregform{
     width: 100%;
