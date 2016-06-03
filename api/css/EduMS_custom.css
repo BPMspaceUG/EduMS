@@ -74,13 +74,17 @@ body {
 }
 
 .event{
-	z-index: 2;
-	color: #000;
-	background-color: #FFF;
-	border-color: grey;
+    z-index: 2;
+    color: #000;
+    background-color: #FFF;
+    border-color: grey;
 }
 
-
+.container-fluid {
+    padding: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
 /*Classes
 ** .edums classes define a 
 >> Formatdescription: .=class-selector, edums-=namespace, 
@@ -127,11 +131,22 @@ body {
 .edums-infocore-btnta{
     margin-bottom: 15px; 
     width:100%;
-    color:#006dcc;
+    color: #428bca;
     background-color: transparent;
     border-color: currentcolor;
     border-width:2px;
+    transition: all .5s;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #428bca;      }
 }
+
+.edums-infocore-btnta:hover {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
 .edums-btnta-icon{}
 .edums-sidebar-sidebarpanels{}
 .edums-sidebarpanels-allevents{}
@@ -144,22 +159,39 @@ body {
 .edums-event-name{}
 .edums-event-btnreserve{
     margin-top: 15px; 
+    background-color: transparent;
+    color: #428bca;
+    transition: all .5s;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #428bca;      
 }
+
+.edums-event-btnreserve:hover {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
 .edums-event-garantie{
      margin: 10px 0px -10px 5px;
+     color: #5cb85c;
 }
 .edums-event-waitlist{
      margin: 10px 0px -10px 5px;
+     color: #d9534f;
 }
 .edums-event-none{
     margin: 10px 0px -10px 5px;
 }
 .edums-event-onefree{
     margin: 10px 0px -10px 5px;
+     color: #fcf8e3;
 
 }
 .edums-event-threefree{
     margin: 10px 0px -10px 5px;
+     color: #428bca;
 
 }
 .edums-event-btnregform{
