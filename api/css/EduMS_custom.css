@@ -135,10 +135,17 @@ body {
     background-color: transparent;
     border-color: currentcolor;
     border-width:2px;
+<<<<<<< HEAD
     transition: all .5s;
     border-width: 2px;
     border-radius: 10px;
     border-color: #428bca;      }
+=======
+	transition: all .5s;
+	border-width: 2px;
+	border-radius: 10px;
+	border-color: #428bca;		}
+>>>>>>> a903a28c60a089be1de9519c7fd0e87931fa8438
 }
 
 .edums-infocore-btnta:hover {
@@ -159,12 +166,21 @@ body {
 .edums-event-name{}
 .edums-event-btnreserve{
     margin-top: 15px; 
+<<<<<<< HEAD
     background-color: transparent;
     color: #428bca;
     transition: all .5s;
     border-width: 2px;
     border-radius: 10px;
     border-color: #428bca;      
+=======
+	background-color: transparent;
+    color: #428bca;
+    transition: all .5s;
+	border-width: 2px;
+    border-radius: 10px;
+	border-color: #428bca;		
+>>>>>>> a903a28c60a089be1de9519c7fd0e87931fa8438
 }
 
 .edums-event-btnreserve:hover {
