@@ -93,7 +93,7 @@ $scope.sidebarselect = 'start'
     $scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.eventlist[i].location_description+'</div>')
    }
   $scope.eventlist = $scope.eventlist.sort(function(x,y){return new Date(x.start_date) - new Date(y.start_date)})
-        _.each($scope.eventlist, function(e) {log(e.start_date)} )
+        // _.each($scope.eventlist, function(e) {log(e.start_date)} )
   $scope.allNextEvents = response.eventlist //Termine & Anmeldung Modal
 
   //cleanflag  $scope.nextEvents =  response.eventlist; //Object.keys(response.eventlist).map(function (key) {return response.eventlist[key]});
@@ -485,7 +485,7 @@ $scope.reservate = function(e) {
  $http({
       method: 'POST',
       //http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/EqpajbuuID9/5b35716ce1ff524b662dfbb160e293a3/reserve
-      url: 'http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve'+'?A=a',
+      url: apisvr+'/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}, //json
       transformRequest: function(obj) {
           var str = [];
@@ -502,21 +502,6 @@ $scope.reservate = function(e) {
           $scope.data = response || "Request failed";
           $scope.status = response.status;
       });
-        /*Apache Errorlog:
-
-[Tue Apr 05 00:07:18.177996 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Warning:  mail(): &quot;sendmail_from&quot; not set in php.ini or custom &quot;From:&quot; header missing in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 169, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
-[Tue Apr 05 00:07:18.177996 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Notice:  Array to string conversion in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 170, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
-[Tue Apr 05 00:07:18.209223 2016] [:error] [pid 2480:tid 1164] [client ::1:50659] PHP Notice:  Undefined variable: return in C:\\wampstack-7.0.2-0\\apache2\\htdocs\\EduMS\\api\\RequestHandler.inc.php on line 171, referer: http://localhost:4040/EduMS-client/index.php?navdest=brand
-        */
-
- // $http.post('http://localhost:4041', $scope.rinfo).//then(c).error(console.log('nodemail fail'))
- 
- //        then(function(response) {
- //          console.log(reservefinal='reserveinfo send to:[POST] http://localhost:4041 - (nodemail)')
- //        }, function(response) {
- //          $scope.data = response || "Request failed";
- //          $scope.status = response.status;
- //      });
   }
 
 

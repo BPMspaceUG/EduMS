@@ -186,7 +186,7 @@ app.directive('coursePanelBody', function(){
     <div role="tabpanel" class="tab-pane" id="kosten{{panelcourse.sysName}}">
       <table class="table table-responsive table-hover table-striped edums-panelbody-pricetable">
         <thead>
-            <th><h4>Kurs ({{panelcourse.duration}})</h4></th>
+            <th><h4>Kurs</h4></th>
             <th><h4>Nettopreis</h4></th>
             <th><h4>Bruttopreis</h4></th>
           </thead>
@@ -220,16 +220,22 @@ app.directive('coursePanelBody', function(){
       <div>
         <table class="table table-responsive table-hover table-striped edums-panelbody-eventtable">
           <thead>
+              <th><h4>Status</h4></th>
               <th><h4>Kurs</h4></th>
               <th><h4>Start</h4></th>
-              <th><h4>Ende</h4></th>
               <th><h4>Ort</h4></th>
             </thead>
             <tbody>
-              <tr ng-repeat="event in panelcourse.events | limitTo:5">
+              <tr ng-repeat="event in panelcourse.events">
+                <td>
+                  <div ng-if="event.eventguaranteestatus == 1"><b>*</b></div>
+                  <div ng-if="event.eventguaranteestatus == 2"><b>TERMIN-<br>GARANTIE</b></div>
+                  <div ng-if="event.eventguaranteestatus == 3"><b>3 PLÄTZE<br>FREI</b></div>
+                  <div ng-if="event.eventguaranteestatus == 4"><b>1 PLATZ<br>FREI</b></div>
+                  <div ng-if="event.eventguaranteestatus == 5"><b>WARTELISTE</b></div>
+                </td>
                 <td>{{panelcourse.course_name}}</td>
                 <td>{{event.start_date | date:"dd/MM/yyyy"}} {{event.start_time | date:"hh"}} Uhr</td>
-                <td>{{event.finish_date | date:"dd/MM/yyyy"}}</td>
                 <td>{{event.internet_location_name}}</td>
               </tr>
             </tbody>
