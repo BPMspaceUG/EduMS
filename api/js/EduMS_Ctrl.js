@@ -96,15 +96,6 @@ $scope.sidebarselect = 'start'
         // _.each($scope.eventlist, function(e) {log(e.start_date)} )
   $scope.allNextEvents = response.eventlist //Termine & Anmeldung Modal
 
-  //cleanflag  $scope.nextEvents =  response.eventlist; //Object.keys(response.eventlist).map(function (key) {return response.eventlist[key]});
-  // for (var i = 0; i < $scope.nextEvents.length; i++) { //directive: 'rightBarCourseAll' -> helpVariables init
-  //  $scope.nextEvents[i].btnInfo=false; //Show cleanflag
-  //  $scope.nextEvents[i].btnRegister=false; //Show
-  //  if (i==1) {$scope.nextEvents[i].btnInfo=true}; //Sample cleanflag
-  //  $scope.nextEvents[i].sysName=$scope.nextEvents[i].course_name.replace(/\W+/g,'');
-  //  //console.log('nextEvents['+i+']:');console.log($scope.nextEvents[i]); console.log('')
-  // };cleanflag
-
   $scope.location=[]
   for (var i = 0; i < response.eventlist.length; i++) {
     var push=true;
@@ -133,19 +124,19 @@ $scope.sidebarselect = 'start'
 
     
 
-var getTest = function(id, courseToTest, courses) {
-   // log(id);  log(courseToTest);  log(courses)
-  _.each(courseToTest, function(cttRef){
-    // log(id)
-    // log(cttRef.course_id)
-    if (id == cttRef.course_id) {   
-      res = _.find(courses, function(course){ return course.course_id == cttRef.test_id }); 
-      // log('res') ; log(res)
-    };
+//cleanflag var getTest = function(id, courseToTest, courses) {
+//    // log(id);  log(courseToTest);  log(courses)
+//   _.each(courseToTest, function(cttRef){
+//     // log(id)
+//     // log(cttRef.course_id)
+//     if (id == cttRef.course_id) {   
+//       res = _.find(courses, function(course){ return course.course_id == cttRef.test_id }); 
+//       // log('res') ; log(res)
+//     };
 
-  })
-  return 
-}
+//   })
+//   return 
+// }
 
 
 var getTestID = function(id, courseToTest) {
@@ -161,9 +152,6 @@ var getTestID = function(id, courseToTest) {
 var getDateSortedEventsToCourse = function(id){
   var events = _.filter($scope.eventlist, function(event){ return event.course_id == id });
   var events = _.sortBy(events, 'start_date');
-  // log('events')
-  // log(events)
-  // log('endeevents')
   return events
 }
 
@@ -202,8 +190,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.brutto = course.coursePrice*1.19
           course.sysName = course.course_name.replace(/\W+/g,''); //PanelIds
 
-          course.test= getTest(course.course_id, courseToTest, courses)
-          course.test_id=getTestID(course.course_id, courseToTest)
+          course.test_id= getTestID(course.course_id, courseToTest)
 
           course.examRef = courseToTest.find((ref) =>{return ref.course_id == course.course_id})
 
@@ -309,7 +296,7 @@ function setEventList(TundA) {
       _.each(TundA, function(tableEntry){
         if (tableEntry.course_id == event.course_id) {
           event.price = tableEntry.price
-          event.test = tableEntry.test
+          //clenflag event.test = tableEntry.test
           event.exam = tableEntry.exam
           event.test_id = tableEntry.test_id
           //trainerinfo nicht vorhanden
@@ -369,10 +356,12 @@ $scope.extendedEventlist =  setEventList(TundA);
    // console.log('$scope.topics.length: '+$scope.topics.length)
    var t=$scope.topics[i]
    if (!$scope.topics[i].sideBarCourses){$scope.topics[i].sideBarCourses=[]}//lege sidebarArray für topic an
+
+   //filter events to the topic
    var courseZuTopic = $scope.topiccourseCourse.filter((x)=>{return t.topic_id == x.topic_id})
    var eventZuCourse = $scope.eventlist.filter((x)=>{
                       var isInList = false
-                      courseZuTopic.forEach(function(c){if(c.course_id == x.course_id && x.exam != 0){
+                      courseZuTopic.forEach(function(c){if(c.course_id == x.course_id && x.test != 1){
                         isInList=true}})
                     return isInList})
    eventZuCourse.forEach((e)=>{e.sysName = e.course_name.replace(/\W+/g,'')})
@@ -381,9 +370,6 @@ $scope.extendedEventlist =  setEventList(TundA);
   $scope.sideBarCoursesStart = $scope.eventlist.filter((x)=>{return x.exam != 0})
   console.log('fertiges $scope.topics: ', $scope.topics); 
   }
- //  ,function(response) {$scope.topics = 'Fehler in topicCtrl-$http: '+response}
- // )
-
 
 //If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
 $scope.tablesearchchange = function(name){
@@ -403,33 +389,26 @@ $scope.sortType = 'start_date'
 $scope.sortReverse = false
 
 
-/*A reservation sends an E-Mail to the reservating person with some description and an other E-Mail to 
-the responsible person in the Brand*/
-$scope.reservationlistupdate = function(c) { //c = course
-var reslist = $scope.rinfo.courses, duplicate = false
-
-  //search for duplicates
-  _.each(reslist, function(course){
-    if (course.event_id == c.event_id || duplicate) {
-      duplicate=true
+/*On click a ckeckbox from the TAModal:
+-> Handle 'Picked' list*/
+$scope.reservationlistupdate = function(c) { //c = course/event thats picked
+  var reslist = $scope.rinfo.courses, oneIsChecked = false
+  var isInList = reslist.find((p)=>{return c.event_id==p.event_id})
+  if (c.checked || c.exam.checked) {oneIsChecked=true};
+  if (oneIsChecked) {
+    if (!isInList) {
+      if (c.exam) {c.exam.checked=true};
+      reslist.push(c)
     };
-  })
-
-  //handle input
-  if (c.checked && !duplicate) {
-    if (c.exam != 0) {c.exam.checked=true};
-    reslist.push(c)
-    // _.extend(reslist, c) /*als Objekt*/
   }else{
-    // delete reslist.c /*als Objekt*/
-    if (c.exam != 0) {c.exam.checked=false};
     for (var i = 0; i < reslist.length; i++) {
       if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
     };
   }
-
 }
 
+/*On click 'btnreserve' from a sidebar-element:
+-> set event and exam checked, update reservationlist, hide button */
 $scope.btnRegFkt = function(e) { //c = event
   e.checked = true
   if (e.exam != 0) {e.exam.checked=true};
@@ -437,6 +416,9 @@ $scope.btnRegFkt = function(e) { //c = event
   e.btnRegister=!e.btnRegister
   log($scope.rinfo.courses)
 }
+
+/*On click btn reservate from siderbar-element or Modal:
+-> create a final reservationobject from selections and send it to the api-server*/
 $scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush; rinfo: ')
