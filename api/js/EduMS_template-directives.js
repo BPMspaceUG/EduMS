@@ -282,13 +282,59 @@ template:
 `
 <div class="row edums-finishmodal-content">
   
-  <div class="col-md-6" ng-if="rinfo.contactpersonemail && rinfo.courses">
-    <h2>Ihr Anfrage wurde gesendet.</h2>
-    <p><b>Vielen Dank </b>für die Reservierung von </p>
-    <p ng-repeat="course in rinfo.courses track by $index">- {{course.course_name}} am {{course.start_date}} um {{course.start_time}}</p>
-    Sie bekommen in Kürze eine E-Mail von uns an {{rinfo.contactpersonemail}} gesendet. 
-    Bitte beantworten Sie diese um die Reservierung für {{rinfo.mTeilnehmerZahl}} Personen abzuschließen.    
+  <div ng-if="rinfo.contactpersonemail && rinfo.courses" class="col-md-12">
+
+    <div class="row">
+      <div class="col-md-12">
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="edums-afterreserve-head">Ihre Reservierung wurde gesendet.</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-11 col-md-offset-1">
+        <p><b>Vielen Dank </b>für die Reservierung.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-10 col-md-offset-2">
+        <p>Teilnehmerzahl: {{rinfo.mTeilnehmerZahl}}</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <div ng-repeat="course in rinfo.courses track by $index">
+          <p><b>{{course.course_name}}</b></p><br>
+          <p>{{course.internet_location_name}}, {{course.start_date}} - {{course.finish_date}}</p><br>
+          <div class="row" ng-if="course.checked">
+            <div class="col-md-4">Kurs:</div>
+            <div class="col-md-8">{{course.price * 1.19 | number : 2}} €</div>
+          </div>
+          <div class="row" ng-if="course.exam.checked">
+            <div class="col-md-4">Prüfung:</div>
+            <div class="col-md-8">{{course.exam.brutto | number : 2}} €</div>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    <div class="row">
+      <div class="col-md-12">
+        <p>Sie bekommen in Kürze eine E-Mail von uns an {{rinfo.contactpersonemail}} gesendet.</p> 
+        <p>Wir melden uns in Kürze mit weiteren Informationen zum Kurs und einer Platzbestätigung.</p><br><br>
+        <p>Mit freundlichen Grüßen</p> 
+        <p>Das TEAM von {{rinfo.brand}}</p> 
+      </div>
+    </div>
+
+  </div>
+
   <div class="col-md-6" ng-if="!(rinfo.contactpersonemail && rinfo.courses)">
     <h2>Ihr Anfrage wurde nicht gesendet.</h2>
     <h3>Fast geschafft... </h3>
