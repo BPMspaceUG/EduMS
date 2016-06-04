@@ -8,7 +8,8 @@ require_once 'PHPMailer/PHPMailerAutoload.php';
  $contactpersonemail="echo@tu-berlin.de";
  $courses="";
  $mTeilnehmerZahl="";
-$results_messages = array();
+ $brandMail=""; //Defaultemail
+ $results_messages = array();
  
 $mTeilnehmerZahl="? ";
 if (isset($_POST['mTeilnehmerZahl'])) {
@@ -34,6 +35,10 @@ $brandMailInfo = false;
 // error_log($_POST['brandid']);
 if (isset($_POST['brandid'])) {
   $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".json_decode($_POST['brandid']),true);
+  if (isset($brandMailInfo[0]['brandmail'])) {
+    $partnermail = $brandMailInfo[0]['partnermail'];
+    $brandMail = $brandMailInfo[0]['brandmail'];
+  }
 }
 
 $eventList= false;
@@ -119,6 +124,7 @@ $confirmationBody ='';
 
    $brandPartnerBody .= $e['course_name'].' am '. $e['start_date'].'  & ';
   }
+  $price=$price*intval($mTeilnehmerZahl);
 
    $confirmationBody .='<h3>Preis:</h3>'.'Netto: '.$price.' | incl. Mwst.: '.
    $price*1.19.' <br>'.$e['event_status_id'].',  '.$e['eventguaranteestatus'].',  '.$e['eventinhouse'];
@@ -132,7 +138,7 @@ $confirmationBody ='';
 
 
 
-  $body=$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody.' ~~~~~~~ '.print_r($_POST,true).
+  $body=$brandMail.'  '.$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody.' ~~~~~~~ '.print_r($_POST,true).
   ' ~~~~~~~ '.print_r($eventList,true).' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. '.
   isset($_POST['contactpersonemail']).'*';
 
@@ -151,7 +157,31 @@ catch (phpmailerException $e) {
 catch (phpmailerAppException $e) {
   $results_messages[] = $e->errorMessage();
 }
- 
+
+
+
+$mail->addAddress($brandMail, "Brand");
+ try {
+  $mail->send();
+  $results_messages[] = "Message has been sent using SMTP";
+}
+catch (phpmailerAppException $e) {
+  $results_messages[] = $e->errorMessage();
+}
+
+
+
+$mail->addAddress($partnermail, "Partner");
+ try {
+  $mail->send();
+  $results_messages[] = "Message has been sent using SMTP";
+}
+catch (phpmailerAppException $e) {
+  $results_messages[] = $e->errorMessage();
+}
+
+
+
 if (count($results_messages) > 0) {
   echo "<h2>Run results</h2>\n";
   echo "<ul>\n";
