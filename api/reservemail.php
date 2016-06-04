@@ -53,18 +53,51 @@ if (isset($_POST['eventIds'])) {
 }
 
 
+
+
+
+
+
+
+
+
+
 $mail = new PHPMailer(true);
+$mailBrand = new PHPMailer(true);
+$mailPartner = new PHPMailer(true);
+
 $mail->CharSet = 'utf-8';
+$mailBrand->CharSet = 'utf-8';
+$mailPartner->CharSet = 'utf-8';
 ini_set('default_charset', 'UTF-8');
  
 class phpmailerAppException extends phpmailerException {}
-$rinfo= 'Typ: '.gettype($_POST).count($_POST).'--- ';
-foreach($_POST as $x => $x_value) {
-    $rinfo .= "Key: " . $x . ", Value:" . $x_value.' | ';
-}
 
 
 $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".$_POST['brandid']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 try {
 // $to = 'cedric.neuland@bpmspace.com';
@@ -138,9 +171,9 @@ $confirmationBody ='';
 
 
 
-  $body=$brandMail.'  '.$confirmationBody.'# '.$brandBody.'# '.$brandPartnerBody.' ~~~~~~~ '.print_r($_POST,true).
-  ' ~~~~~~~ '.print_r($eventList,true).' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. '.
-  isset($_POST['contactpersonemail']).'*';
+  $body=$confirmationBody.
+  ' ~~~~~~~ '.print_r($eventList,true).
+  ' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. ';
 
 
 $mail->WordWrap = 78;
@@ -149,6 +182,7 @@ $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embe
 try {
   $mail->send();
   $results_messages[] = "Message has been sent using SMTP";
+
 }
 catch (phpmailerException $e) {
   throw new phpmailerAppException('Unable to send to: ' . $to. ': '.$e->getMessage());
@@ -160,10 +194,100 @@ catch (phpmailerAppException $e) {
 
 
 
-$mail->addAddress($brandMail, "Brand");
- try {
-  $mail->send();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+try {
+$to = $brandMail;
+if(!PHPMailer::validateAddress($to)) {
+  throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
+} 
+$mailBrand->isSMTP();
+$mailBrand->SMTPDebug  = 2;
+ //IMAP-Server imap.gmx.net
+$mailBrand->Host       = "mail.gmx.net";
+$mailBrand->Port       = "587";
+$mailBrand->SMTPSecure = "tls";
+$mailBrand->SMTPAuth   = true;
+$mailBrand->Username   = "mustername.musernachname@gmx.de";
+$mailBrand->Password   = "Passworrt";
+$mailBrand->addReplyTo("echo@tu-berlin.de", "Name");
+// $mailBrand->addReplyTo("office@mitsm.de", "Name");
+//change from email -> no email
+$mailBrand->setFrom("mustername.musernachname@gmx.de", $brandMailInfo[0]['brand_name']);
+$mailBrand->addAddress($brandMail, "aName");
+// $mailBrand->addAddress("Robert.Kuhlig@mitsm.de", "otherName");
+// $mailBrand->addCC("cnu301@mitsm.de");
+$mailBrand->Subject  = "BrandBetreff";
+$postvals='';
+foreach($_POST as $x => $x_value) {
+    $postvals .=  $x . " : " . $x_value.' | ';
+}
+$eventIdList = json_decode($_POST['eventIds']);
+$eventidvals='';
+foreach($eventIdList as $x => $x_value) {
+    $eventidvals .=  $x . " : " . $x_value.' | ';
+}
+// $eventList = $this -> vEventcourselocationReservationmail($_POST['eventIds']);
+
+
+$confirmationBody ='';
+  $brandBody = '<div style="color:green;">brandBody<br>'.$contactpersonemail.' hat ';
+
+  $price=0;
+
+  foreach($eventList as $e) {
+   $mailBrand->Subject  .=  ', '.$e['course_name'].' '. $e['start_date'];
+
+   $price += intval($e['coursePrice']);
+
+   $brandBody .= $e['course_name'].' am '. $e['start_date'].'  & ';
+  }
+  $price=$price*intval($mTeilnehmerZahl);
+
+   $brandBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
+    $price*1.19.') reserviert.</div>';
+    
+
+
+
+  $body='partnermail: '.$partnermail.'\n<br>'.$brandBody.
+  ' ~~~~~~~ '.print_r($eventList,true).
+  ' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. ';
+
+
+$mailBrand->WordWrap = 78;
+$mailBrand->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
+ 
+try {
+  $mailBrand->send();
   $results_messages[] = "Message has been sent using SMTP";
+
+}
+catch (phpmailerException $e) {
+  throw new phpmailerAppException('Unable to send to: ' . $to. ': '.$e->getMessage());
+}
 }
 catch (phpmailerAppException $e) {
   $results_messages[] = $e->errorMessage();
@@ -171,14 +295,109 @@ catch (phpmailerAppException $e) {
 
 
 
-$mail->addAddress($partnermail, "Partner");
- try {
-  $mail->send();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+try {
+
+$to= $partnermail;
+
+if(!PHPMailer::validateAddress($to)) {
+  throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
+} 
+$mailPartner->isSMTP();
+$mailPartner->SMTPDebug  = 2;
+ //IMAP-Server imap.gmx.net
+$mailPartner->Host       = "mail.gmx.net";
+$mailPartner->Port       = "587";
+$mailPartner->SMTPSecure = "tls";
+$mailPartner->SMTPAuth   = true;
+$mailPartner->Username   = "mustername.musernachname@gmx.de";
+$mailPartner->Password   = "Passworrt";
+$mailPartner->addReplyTo("echo@tu-berlin.de", "Name");
+$mailPartner->setFrom("mustername.musernachname@gmx.de", $brandMailInfo[0]['brand_name']);
+$mailPartner->Subject  = "PartnerBetreff";
+$mailPartner->addAddress($partnermail, "Partnername");
+$postvals='';
+foreach($_POST as $x => $x_value) {
+    $postvals .=  $x . " : " . $x_value.' | ';
+}
+$eventIdList = json_decode($_POST['eventIds']);
+$eventidvals='';
+foreach($eventIdList as $x => $x_value) {
+    $eventidvals .=  $x . " : " . $x_value.' | ';
+}
+
+
+  $brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$contactpersonemail.' hat '.
+    'bei '.$brandMailInfo[0]['brand_name'];
+
+  $price=0;
+
+  foreach($eventList as $e) {
+   $mail->Subject  .=  ', '.$e['course_name'].' '. $e['start_date'];
+
+   $price += intval($e['coursePrice']);
+
+   $brandPartnerBody .= $e['course_name'].' am '. $e['start_date'].'  & ';
+  }
+  $price=$price*intval($mTeilnehmerZahl);
+
+
+   $brandPartnerBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
+    $price*1.19 .') reserviert.</div>';
+    
+
+
+
+  $body=$brandPartnerBody;
+
+
+
+$mailPartner->WordWrap = 78;
+$mailPartner->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
+ 
+try {
+  $mailPartner->send();
   $results_messages[] = "Message has been sent using SMTP";
+
+}
+catch (phpmailerException $e) {
+  throw new phpmailerAppException('Unable to send to: ' . $to. ': '.$e->getMessage());
+}
 }
 catch (phpmailerAppException $e) {
   $results_messages[] = $e->errorMessage();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
