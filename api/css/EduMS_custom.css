@@ -50,18 +50,12 @@
 .modal-body {
     position: absolute;
     top: 50px;
-    bottom: 60px;
-    width: 90%;
+    bottom: 1px;
     overflow: auto;
 }
 
 .modal-footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 60px;
-    padding: 10px;
+
 }
 
 table {
@@ -251,8 +245,15 @@ body {
 .edums-taformgroup-icon{
     color:#fff;
 }
+.edums-taformgroup-agb{
+     margin-top: 6px;
+}
+.edums-taformgroup-datenschutz{}
 .edums-tamodal-tafooter{}
-.edums-tafooter-btnclose{}
+.edums-tafooter-btnclose{
+        margin-top: 3px;
+    width: 100%;
+}
 .edums-tafooter-btnreservate{}
 .edums-finishmodal{}
 .edums-finishmodal-btnclose{}
