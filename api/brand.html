@@ -278,20 +278,17 @@
                     </div>
 
                     <div class="row edums-tapicklist-exam">
-                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked"></div>
+                      <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked" ng-click="reservationlistupdate(picked)"></div>
                       <div class="col-md-2">Kurs</div>
                       <div class="col-md-9">{{picked.price | number : 2}} €</div>
                     </div>
 
-
-<!-- einer von beiden codeblöcken bleibt -->
-
-                    <div class="row edums-tapicklist-course" ng-if="picked.exam">
+                    <div class="row edums-tapicklist-course" ng-if="picked.exam" ng-click="reservationlistupdate(picked)">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.exam.checked"></div>
                       <div class="col-md-2">Prüfung</div>
                       <div class="col-md-9">{{picked.exam.coursePrice | number : 2}} €</div>
                     </div>
-<!--  -->
+
 
 
                   </div>
@@ -319,8 +316,9 @@
                        placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="panel panel-default edums-agbunddatenschutz-panel">
+
+                  <div class="row ">
+                    <div class="panel panel-default edums-taformgroup-agb">
                      <div class="panel-heading">
                       <a class="panel-title collapsed" data-toggle="collapse" href="#panel-element-9675258"><span
                        class="badge"> <i class="fa fa-caret-down edums-taformgroup-icon"></i></span> SchulungsAGB</a>
@@ -336,6 +334,28 @@
                      </div>
                     </div>
                   </div>
+
+                  <div class="row">                    
+                  <div class="panel panel-default edums-taformgroup-datenschutz">
+                   <div class="panel-heading">
+                    <a class="panel-title collapsed" data-toggle="collapse"
+                     data-parent="#panel-493447" href="#panel-element-77"><span
+                     class="badge"><i class="fa fa-caret-down edums-taformgroup-icon"></i></span> Datenschutzerklärung</a>
+                   </div>
+                   <div id="panel-element-77" class="panel-collapse collapse">
+                    <div class="panel-body">
+                     <div class="container-fluid">
+                      <div class="row">
+                       <datenschutzerklaerung></datenschutzerklaerung>
+                      </div>
+                     </div>
+                    </div>
+                   </div>
+                  </div> 
+                  </div>
+                  <div class="row">
+                   <p>Mit dem Absenden des Formulars akzeptieren Sie unsere AGB & Datenschutzerklärung.</p>
+                  </div>
                   <div class="row">
                     <div>
                       <button type="button" class="btn btn-block edums-taformgroup-btnreserve" ng-model="reservate"  href="#modal-container-2" ng-click="reservate()" data-toggle="modal">
@@ -343,6 +363,10 @@
                       </button>
 
                     </div>
+                  </div>
+                  <div class="row">
+                    <button type="button" class="btn btn-danger edums-tafooter-btnclose" data-dismiss="modal">schließen
+                    </button>
                   </div>
                   </div>
               </div>
@@ -358,8 +382,8 @@
 
        </div> <!-- end afterbutton -->
 
-
-        <div class="modal-footer edums-tamodal-tafooter">
+<!-- 
+        cleanflag <div class="modal-footer edums-tamodal-tafooter">
 
           <div class="row">
             <div class="col-md-10"></div>
@@ -369,7 +393,7 @@
               href="#modal-container-2" data-toggle="modal">
               <i class="fa fa-caret-right"></i> Anmeldung</button>
             </div>
-          </div>
+          </div> -->
 
         </div>
      </div> <!-- end modal-content -->
