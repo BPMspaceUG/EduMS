@@ -2,7 +2,7 @@
 <div class="container-fluid " ng-controller="navCtrl">
 
 
-<div ng-repeat="event in xlist|limitTo:5">
+<div ng-repeat="event in extendedEventlist|limitTo:5">
   <div itemscope itemtype="http://schema.org/EducationEvent"> 
   <!-- meta muss wahrsch. in head -> head wird in index ausgeführt weil gesamt brand in div liegt -> keine xlist in index verfügbar: Entweder ohne meta itemprop an sidebar binden oder sidebar in requesthandler vorsortieren Außerdem ISO´s prüfen-->
    <meta itemprop="startDate" content="{{event.start_date}}"/>
@@ -32,8 +32,8 @@
        <a data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
          {{topic.topic_name_raw}}</a>
       </li>
-      <li class="pull-right edums-navbar-agbunddatenschutz">
-       <a data-toggle="tab" data-target="#panel-agbunddatenschutz" ng-click="sidebarselect = 'start'">
+      <li class="pull-right edums-navbar-agbimpressumdatenschutz">
+       <a data-toggle="tab" data-target="#panel-agbimpressumdatenschutz" ng-click="sidebarselect = 'start'">
         AGB & Datenschutz</a>
       </li>
       <li class="pull-right edums-navbar-locations">
@@ -96,9 +96,9 @@
         <mitsm></mitsm>       
       </div>
 
-      <div class="tab-pane edums-tabpanels-agbunddatenschutz" id="panel-agbunddatenschutz">
-       <div class="panel-group edums-agbunddatenschutz-group" id="panel-493447">
-        <div class="panel panel-default edums-agbunddatenschutz-panel">
+      <div class="tab-pane edums-tabpanels-agbimpressumdatenschutz" id="panel-agbimpressumdatenschutz">
+       <div class="panel-group edums-agbimpressumdatenschutz-group" id="panel-493447">
+        <div class="panel panel-default edums-agbimpressumdatenschutz-panel">
          <div class="panel-heading">
           <a class="panel-title collapsed" data-toggle="collapse"
            data-parent="#panel-497725" href="#panel-element-9675257"><span
@@ -115,7 +115,7 @@
          </div>
         </div>
 
-        <div class="panel panel-default edums-agbunddatenschutz-panel">
+        <div class="panel panel-default edums-agbimpressumdatenschutz-panel">
          <div class="panel-heading">
           <a class="panel-title collapsed" data-toggle="collapse"
            data-parent="#panel-493447" href="#panel-element-678923"><span
@@ -126,6 +126,23 @@
            <div class="container-fluid">
             <div class="row">
              <datenschutzerklaerung></datenschutzerklaerung>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div> 
+
+        <div class="panel panel-default edums-agbimpressumdatenschutz-panel">
+         <div class="panel-heading">
+          <a class="panel-title collapsed" data-toggle="collapse"
+           data-parent="#panel-493447" href="#panel-element-678929"><span
+           class="badge">2</span> Impressum</a>
+         </div>
+         <div id="panel-element-678929" class="panel-collapse collapse">
+          <div class="panel-body">
+           <div class="container-fluid">
+            <div class="row">
+             <impressum></impressum>
             </div>
            </div>
           </div>
@@ -238,12 +255,28 @@
               <tbody class="edums-tatable-body">
                 <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch" ng-if="event.exam != 0">
                   <td>
-                    <div ng-if="event.eventguaranteestatus == 1"><b>*</b></div>
-                    <div ng-if="event.eventguaranteestatus == 2"><b>TERMIN-<br>GARANTIE</b></div>
-                    <div ng-if="event.eventguaranteestatus == 3"><b>3 PLÄTZE<br>FREI</b></div>
-                    <div ng-if="event.eventguaranteestatus == 4"><b>1 PLATZ<br>FREI</b></div>
-                    <div ng-if="event.eventguaranteestatus == 5"><b>WARTELISTE</b></div>
-                  </td>
+                  <div class="row edums-event-garantie" ng-if="event.eventguaranteestatus == 2 || event.eventguaranteestatus == 4 || event.eventguaranteestatus == 3">
+                    <span class="label label-success">
+                      <strong>TERMIN-GARANTIE</strong>
+                    </span>
+                  </div>
+                  <div class="row edums-event-waitlist" ng-if="event.eventguaranteestatus == 3">
+                    <span class="label label-primary">
+                      <strong>3 PLÄTZE FREI</strong>
+                    </span>
+                  </div>
+                  <div class="row edums-event-onefree" ng-if="event.eventguaranteestatus == 4">
+                    <span class="label label-warning">
+                      <strong>1 PLATZ FREI</strong>
+                    </span>
+                  </div>
+                </div>
+                <div class="row edums-event-threefree" ng-if="event.eventguaranteestatus == 5">
+                  <span class="label label-danger">
+                    <strong>WARTELISTE</strong>
+                  </span>
+                </div>
+                </td>
                   <td>{{event.start_date | date:"dd.MM."}} - {{event.finish_date | date:"dd.MM.yy"}}</td>
                   <td>{{event.namefortable}}</td>
                   <td>{{event.internet_location_name}}</td>
@@ -268,7 +301,7 @@
             <form name="formReg" class="form-horizontal edums-tareserve" novalidate>
               <div class="form-group edums-tareserve-taformgroup">
                 <div class="row edums-taformgroup" >
-                  <h4>Ausgewählte Termine:</h4>
+
                   <div class="row edums-taformgroup-tapicklist" ng-repeat="picked in rinfo.courses track by $index">
                     <h4>{{picked.course_name}}</h4>
                     <div class="row edums-tapicklist-info">
@@ -280,13 +313,13 @@
                     <div class="row edums-tapicklist-exam">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.checked" ng-click="reservationlistupdate(picked)"></div>
                       <div class="col-md-2">Kurs</div>
-                      <div class="col-md-9">{{picked.price | number : 2}} €</div>
+                      <div class="col-md-9">{{picked.price | number : 2}} €  ({{picked.price*1.19 | number : 2}} €)</div>
                     </div>
 
                     <div class="row edums-tapicklist-course" ng-if="picked.exam" ng-click="reservationlistupdate(picked)">
                       <div class="col-md-1"><input type="checkbox" class="checkbox" ng-model="picked.exam.checked"></div>
                       <div class="col-md-2">Prüfung</div>
-                      <div class="col-md-9">{{picked.exam.coursePrice | number : 2}} €</div>
+                      <div class="col-md-9">{{picked.exam.coursePrice | number : 2}} €  ({{picked.exam.coursePrice*1.19 | number : 2}} €)</div>
                     </div>
 
 
@@ -351,8 +384,29 @@
                      </div>
                     </div>
                    </div>
+                   </div>
+                   </div>
+
+                  <div class="row">                    
+                  <div class="panel panel-default edums-taformgroup-impressum">
+                   <div class="panel-heading">
+                    <a class="panel-title collapsed" data-toggle="collapse"
+                     data-parent="#panel-493447" href="#panel-element-79"><span
+                     class="badge"><i class="fa fa-caret-down edums-taformgroup-icon"></i></span> Impressum</a>
+                   </div>
+                   <div id="panel-element-79" class="panel-collapse collapse">
+                    <div class="panel-body">
+                     <div class="container-fluid">
+                      <div class="row">
+                       <impressum></impressum>
+                      </div>
+                     </div>
+                    </div>
+                   </div>
+                   </div>
+                   </div>
                   
-                  </div>
+                  
                   <div class="row">
                    <p>Mit dem Absenden des Formulars akzeptieren Sie unsere AGB & Datenschutzerklärung.</p>
                   </div>
@@ -398,11 +452,11 @@
         </div>
      </div> <!-- end modal-content -->
    </div> <!-- end modal-dialog-->
- </div> <!-- modal fade -->
+
 
   <div class="modal fade edums-finishmodal" id="modal-container-2" role="dialog" >
-   <div class="modal-dialog">
-     <div class="modal-content ">
+   <div class="modal-dialog ">
+     <div class="modal-content edums-finishmodal-content">
 
        <button type="button" class="close edums-finishmodal-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
 
@@ -421,6 +475,9 @@
      </div> <!-- end modal-content -->
    </div> <!-- end modal-dialog-->
  </div> <!-- modal fade -->
+
+ </div> 
+
 
 
 
