@@ -391,16 +391,6 @@ catch (phpmailerAppException $e) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 if (count($results_messages) > 0) {
   echo "<h2>Run results</h2>\n";
   echo "<ul>\n";
