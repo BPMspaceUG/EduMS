@@ -262,14 +262,22 @@ body {
 .edums-finishmodal-btnclose{}
 .edums-finishmodal-btnreserve{} 
 .edums-finishmodal-content{
-    margin-top: 10px; 
+    top:10%;
+    left:33%;
+    width: 33%;
+    height: 66%;
 } 
 .edums-finishmodal-positivetext{
     font-size : 14px;
 } 
 .edums-finishmodal-negativetext{
     font-size : 14px;
-} 
+}
+.edums-agbimpressumdatenschutz-panel{}
+/*special classes*/
+.edums-warning{
+    color:#f6766d;
+}
 
 /**ID´s:
 ** Specific elements in repeating ng-repeat lists can be edited by ID.
