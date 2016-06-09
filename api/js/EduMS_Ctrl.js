@@ -39,6 +39,20 @@ $scope.sidebarselect = 'start'
   $scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionFooter+'</div>')
   $scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionSidebar+'</div>')
   $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandImage+'</div>')
+
+  if (response.brandinfo[0].imprint) {
+    $scope.brandinfo.imprint = $sce.trustAsHtml('<div>'+response.brandinfo[0].imprint+'</div>')
+  }else{$scope.brandinfo.imprint = false}
+
+  if (response.brandinfo[0].protection_of_data_privacy) {
+    $scope.brandinfo.protection_of_data_privacy = $sce.trustAsHtml('<div>'+response.brandinfo[0].protection_of_data_privacy+'</div>')
+  }else{ $scope.brandinfo.protection_of_data_privacy = false}
+
+  if (response.brandinfo[0].terms_and_conditions) {
+    $scope.brandinfo.terms_and_conditions = $sce.trustAsHtml('<div>'+response.brandinfo[0].terms_and_conditions+'</div>')
+  }else{$scope.brandinfo.terms_and_conditions = false}
+
+  console.log(typeof $scope.brandinfo.terms_and_conditions)
   $scope.rinfo={contactpersonemail : '', courses:[], brand:response.brandinfo[0].login}
 
   //topiclist RAW: 
@@ -197,14 +211,14 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           if (course.examRef) {
             course.exam = courses.find((c) =>{return c.course_id == course.examRef.test_id})
             if (course.exam) {
-              tmpevent = $scope.eventlist.find((e) =>{return course.exam.course_id == e.course_id})
+              tmpevent = $scope.eventlist.find((e) =>{return course.exam.course_id == e.course_id && e.start_date >= course.start_date})
               if (tmpevent) {
                 course.exam.event_id = tmpevent.event_id
               };
             };
 
             // course.exam.courseDescription = $sce.trustAsHtml('<div>'+course.exam.courseDescription+'</div>')            
-          }else{course.exam=0;log('course.examRef')}
+          }else{course.exam=0;}
           // if (course.examRef) {log('course['+course.course_id+'].exam:');log(course.examRef);log(course.exam);};
 
           course.events=getDateSortedEventsToCourse(course.course_id)
@@ -311,24 +325,7 @@ function setEventList(TundA) {
 
         };
       })
-    })
-    _.each(topic.eventList, function(event){
-      //createModallist -> 
-      if(event.test!=1){
-        // log('test!=1')
-        // log(event.course_id+' - '+event.test_id+' - '+event.test)
-        res.push(event) 
-
-        _.each(topic.eventList, function(eventRef){
-          if (event.test_id == eventRef.course_id) {
-
-            res.push(eventRef)
-          }
-        })
-      }else{
-        // log('\nevent is test:')
-        // log(event.course_id+' - '+event.test_id+' - '+event.test)
-      }
+      res.push(event) 
     })
   })
 return res;
@@ -367,7 +364,7 @@ $scope.extendedEventlist =  setEventList(TundA);
    eventZuCourse.forEach((e)=>{e.sysName = e.course_name.replace(/\W+/g,'')})
    $scope.topics[i].sideBarCourses = eventZuCourse;
   };
-  $scope.sideBarCoursesStart = $scope.eventlist.filter((x)=>{return x.exam != 0})
+  $scope.sideBarCoursesStart = $scope.eventlist.filter((x)=>{return x.test != 1})
   console.log('fertiges $scope.topics: ', $scope.topics); 
   }
 
@@ -392,7 +389,7 @@ $scope.sortReverse = false
 /*On click a ckeckbox from the TAModal:
 -> Handle 'Picked' list*/
 $scope.reservationlistupdate = function(c) { //c = course/event thats picked
-  var reslist = $scope.rinfo.courses, oneIsChecked = false
+  var reslist = $scope.rinfo.courses, oneIsChecked = false, sum = 0
   var isInList = reslist.find((p)=>{return c.event_id==p.event_id})
   if (c.checked || c.exam.checked) {oneIsChecked=true};
   if (oneIsChecked) {
@@ -405,6 +402,18 @@ $scope.reservationlistupdate = function(c) { //c = course/event thats picked
       if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
     };
   }
+  // reslist.forEach((c)=>{
+  //   if (c.price>0 && c.checked) {
+  //     sum = sum +c.price
+  //   };
+  //   if (c.exam) {
+  //     if (c.exam.coursePrice>0 && c.exam.checked) {
+  //       sum = sum +c.exam.coursePrice
+  //     };
+  //   };
+  // })
+  // $scope.rinfo.sumAll = sum * $scope.rinfo.mTeilnehmerZahl
+  log(reslist)
 }
 
 /*On click 'btnreserve' from a sidebar-element:
@@ -416,6 +425,12 @@ $scope.btnRegFkt = function(e) { //c = event
   e.btnRegister=!e.btnRegister
   log($scope.rinfo.courses)
 }
+
+/**/
+// $scope.modaldismiss = function() { //c = event
+//   $("#ta-modal").modal("hide")
+//   log( $("#ta-modal"))
+// }
 
 /*On click btn reservate from siderbar-element or Modal:
 -> create a final reservationobject from selections and send it to the api-server*/
@@ -430,7 +445,7 @@ $scope.reservate = function(e) {
     send.eventIds.push(c.exam.event_id)
   };
 } )
- console.log($scope.rinfo)
+ console.log('rinfo: ',$scope.rinfo)
  send.contactpersonemail = $scope.rinfo.contactpersonemail, send.brandid = $scope.brandinfo[0].brand_id, send.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl
  log('POST: '); log(send);
  $http({
@@ -453,7 +468,7 @@ $scope.reservate = function(e) {
           $scope.data = response || "Request failed";
           $scope.status = response.status;
       });
-  }
+}
 
 
 
