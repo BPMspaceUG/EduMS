@@ -63,3 +63,134 @@ ADD CONSTRAINT `brand_id_6`
   REFERENCES `brand` (`brand_id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+
+
+
+
+
+ALTER TABLE `brand` 
+CHANGE COLUMN `protection of data privacy` `protection_of_data_privacy` LONGTEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `terms and conditions` `terms_and_conditions` LONGTEXT NULL DEFAULT NULL ;
+
+CREATE OR REPLACE  VIEW `v_brand__notdepercated_loginnotempty_accesstokennotempty` AS
+SELECT 
+`brand`.`brand_id` AS `brand_id`,
+`brand`.`event_partner_id` AS `event_partner_id`,
+`brand`.`brand_name` AS `brand_name`,
+`brand`.`brandHeadline` AS `brandHeadline`,
+`brand`.`brandDescription` AS `brandDescription`,
+`brand`.`brandDescriptionFooter` AS `brandDescriptionFooter`,
+`brand`.`brandDescriptionSidebar` AS `brandDescriptionSidebar`,
+`brand`.`brandImage` AS `brandImage`,
+`brand`.`accesstoken` AS `accesstoken`,
+`brand`.`login` AS `login`,
+`brand`.`discount` AS `discount`,
+`brand`.`css-style` AS `css-style`,
+`brand`.`deprecated` AS `branddeprecated`,        
+`brand`.`imprint` AS `imprint`, 
+`brand`.`protection_of_data_privacy` AS `protection_of_data_privacy`, 
+`brand`.`terms_and_conditions` AS `terms_and_conditions`
+FROM
+`brand`
+WHERE
+((`brand`.`deprecated` <> '1')
+AND (`brand`.`login` <> '')
+AND (`brand`.`accesstoken` <> ''));
+
+
+CREATE OR REPLACE 
+VIEW `v_brand_notdeprecated_loginnotempty_accesstokennotempty` AS
+SELECT 
+`brand`.`brand_id` AS `brand_id`,
+`brand`.`event_partner_id` AS `event_partner_id`,
+`brand`.`brand_name` AS `brand_name`,
+`brand`.`brandHeadline` AS `brandHeadline`,
+`brand`.`brandDescription` AS `brandDescription`,
+`brand`.`brandDescriptionFooter` AS `brandDescriptionFooter`,
+`brand`.`brandDescriptionSidebar` AS `brandDescriptionSidebar`,
+`brand`.`brandImage` AS `brandImage`,
+`brand`.`accesstoken` AS `accesstoken`,
+`brand`.`login` AS `login`,
+`brand`.`discount` AS `discount`,
+`brand`.`css-style` AS `css-style`,
+`brand`.`deprecated` AS `branddeprecated`,
+`brand`.`deprecated` AS `imprint`,
+`brand`.`protection_of_data_privacy` AS `protection_of_data_privacy`,
+`brand`.`terms_and_conditions` AS `terms_and_conditions`
+FROM
+`brand`
+WHERE
+((`brand`.`deprecated` <> '1')
+AND (`brand`.`login` <> '')
+AND (`brand`.`accesstoken` <> ''));
+
+
+
+DROP VIEW `v_brand__notdepercated_loginnotempty_accesstokennotempty`;
+
+
+ALTER TABLE `brand` 
+ADD COLUMN `after_reservation_text_pre` LONGTEXT NULL AFTER `email`,
+ADD COLUMN `after_reservation_text_post` LONGTEXT NULL AFTER `after_reservation_text_pre`,
+ADD COLUMN `html_core` LONGTEXT NULL AFTER `after_reservation_text_post`,
+ADD COLUMN `mail_text_pre` LONGTEXT NULL AFTER `html_core`,
+ADD COLUMN `mail_text_post` LONGTEXT NULL AFTER `mail_text_pre`,
+ADD COLUMN `registration_acceptance_text` LONGTEXT NULL AFTER `mail_text_post`;
+
+
+CREATE OR REPLACE 
+VIEW `v_brand_notdeprecated_loginnotempty_accesstokennotempty` AS
+SELECT 
+`brand`.`brand_id` AS `brand_id`,
+`brand`.`event_partner_id` AS `event_partner_id`,
+`brand`.`brand_name` AS `brand_name`,
+`brand`.`brandHeadline` AS `brandHeadline`,
+`brand`.`brandDescription` AS `brandDescription`,
+`brand`.`brandDescriptionFooter` AS `brandDescriptionFooter`,
+`brand`.`brandDescriptionSidebar` AS `brandDescriptionSidebar`,
+`brand`.`brandImage` AS `brandImage`,
+`brand`.`accesstoken` AS `accesstoken`,
+`brand`.`login` AS `login`,
+`brand`.`discount` AS `discount`,
+`brand`.`css-style` AS `css-style`,
+`brand`.`deprecated` AS `branddeprecated`,
+`brand`.`imprint` AS `imprint`,
+`brand`.`protection_of_data_privacy` AS `protection_of_data_privacy`,
+`brand`.`terms_and_conditions` AS `terms_and_conditions`,
+
+`brand`.`after_reservation_text_pre` AS `after_reservation_text_pre`,
+`brand`.`after_reservation_text_post` AS `after_reservation_text_post`,
+`brand`.`html_core` AS `html_core`,
+`brand`.`mail_text_pre` AS `mail_text_pre`,
+`brand`.`mail_text_post` AS `mail_text_post`,
+`brand`.`registration_acceptance_text` AS `registration_acceptance_text`
+FROM
+`brand`
+WHERE
+((`brand`.`deprecated` <> '1')
+AND (`brand`.`login` <> '')
+AND (`brand`.`accesstoken` <> ''));
+
+CREATE OR REPLACE
+VIEW `v_brand_and_partner_reservationmail` AS
+SELECT 
+`a`.`brand_id` AS `brand_id`,
+`a`.`email` AS `brandmail`,
+`a`.`event_partner_id` AS `partner_id`,
+`a`.`brand_name` AS `brand_name`,
+`a`.`protection_of_data_privacy` AS `prot_data_priv`,
+`a`.`terms_and_conditions` AS `terms_and_cond`,
+`a`.`brandImage` AS `brandImage`,
+`a`.`imprint` AS `imprint`,
+`a`.`mail_text_pre` AS `mail_text_pre`,
+`a`.`mail_text_post` AS `mail_text_post`,
+`b`.`email` AS `partnermail`,
+`b`.`brand_name` AS `partnername`
+FROM
+(`brand` `a`
+JOIN `brand` `b`)
+WHERE
+((`a`.`event_partner_id` = `b`.`brand_id`)
+    AND (`a`.`deprecated` <> 1));
