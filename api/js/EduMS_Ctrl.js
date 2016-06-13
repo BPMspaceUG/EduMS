@@ -30,29 +30,19 @@ $scope.sidebarselect = 'start'
 
   orderbranddata = function(response) {
   console.log(response)
-  //brandinfo RAW:
+  //brandinfo RAW (veraltet 10/06):
   /*accesstoken: "5b35793a3",brandDescription: "<h2>description</p>",brandDescriptionFooter: "<h2>FOOTices proin.</p>",brandDescriptionSidebar: "<h2>SIDt felis</p>",
   brandHeadline: "Brand with ID 9",brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9",brand_id: "9",brand_name: "Eqpajbuu ID 9",
   branddeprecated: "0",css-style: "<style> body {background-color: ;}</style>",discount: "7.00",event_partner_id: "1",login: "EqpajbuuID9"*/
   $scope.brandinfo = response.brandinfo
-  $scope.brandinfo.brandDescription = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescription+'</div>')
-  $scope.brandinfo.brandDescriptionFooter = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionFooter+'</div>')
-  $scope.brandinfo.brandDescriptionSidebar = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandDescriptionSidebar+'</div>')
-  $scope.brandinfo.brandImage = $sce.trustAsHtml('<div>'+response.brandinfo[0].brandImage+'</div>')
 
-  if (response.brandinfo[0].imprint) {
-    $scope.brandinfo.imprint = $sce.trustAsHtml('<div>'+response.brandinfo[0].imprint+'</div>')
-  }else{$scope.brandinfo.imprint = false}
+  brandinfoprops =['brandDescription', 'brandDescriptionFooter', 'brandDescriptionSidebar', 'brandImage', 'imprint',
+   'protection_of_data_privacy', 'terms_and_conditions', 'mail_text_pre', 'mail_text_post', 
+   'after_reservation_text_pre', 'after_reservation_text_post', 'registration_acceptance_text']
+  brandinfoprops.forEach((property)=>{if (response.brandinfo[0][property]) {
+      $scope.brandinfo[property] = $sce.trustAsHtml('<div class="edums-'+property+'">'+response.brandinfo[0][property]+'</div>')
+    }else{$scope.brandinfo[property]=false}})
 
-  if (response.brandinfo[0].protection_of_data_privacy) {
-    $scope.brandinfo.protection_of_data_privacy = $sce.trustAsHtml('<div>'+response.brandinfo[0].protection_of_data_privacy+'</div>')
-  }else{ $scope.brandinfo.protection_of_data_privacy = false}
-
-  if (response.brandinfo[0].terms_and_conditions) {
-    $scope.brandinfo.terms_and_conditions = $sce.trustAsHtml('<div>'+response.brandinfo[0].terms_and_conditions+'</div>')
-  }else{$scope.brandinfo.terms_and_conditions = false}
-
-  console.log(typeof $scope.brandinfo.terms_and_conditions)
   $scope.rinfo={contactpersonemail : '', courses:[], brand:response.brandinfo[0].login}
 
   //topiclist RAW: 
@@ -234,7 +224,6 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           location: course.location_name,
           start: course.start_date,
           finish: course.finish_date,
-          //cleanflag trainer: 'Anonym',
           topic: i})
  
           // if (course.exam) { //wenn kein exam existiert ist es ein exam und hat in der liste nix zu suchen
@@ -313,6 +302,11 @@ function setEventList(TundA) {
           //clenflag event.test = tableEntry.test
           event.exam = tableEntry.exam
           event.test_id = tableEntry.test_id
+          
+          event.guaranteelabel = $scope.stateinfo.find(
+                                        (state)=>{
+                                          return state.ID ==event.eventguaranteestatus})
+                                        .eventguaranteestatus
           //trainerinfo nicht vorhanden
           // cleanflag event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
