@@ -62,7 +62,7 @@ class RequestHandler
   private function validateCredentials($userid,$token){
     global $db;
     $this->usercss = '<style> body {background-color: red;}</style>';
-    $sql = "SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
+    $sql = "SELECT * FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE accesstoken = '".$db->real_escape_string($token)."' AND login = '".$db->real_escape_string($userid)."'";
     $result = $db->query($sql);
     if($result->num_rows>0){
 
@@ -286,7 +286,7 @@ class RequestHandler
   // } 
 
   private function getbrandtopics($brandname){
-    $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand__notdepercated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
+    $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
     
     //Hole Brandinfo
     // file_put_contents('logs/getBrandLog.log', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
