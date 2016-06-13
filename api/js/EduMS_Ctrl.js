@@ -8,7 +8,7 @@ Deu/Ger: Der Controller navCtrl fordert über den $http-service JSON-Datensätze
 Er definiert alle Models und funktionen.
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
-*/
+*/ 
 
 
 //meta topic: https://github.com/angular/angular.js/wiki/Understanding-Dependency-Injection
