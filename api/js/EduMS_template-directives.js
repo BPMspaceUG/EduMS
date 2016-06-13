@@ -216,7 +216,9 @@ app.directive('coursePanelBody', function(){
     </div>
 
     <div role="tabpanel" class="tab-pane" id="termine{{panelcourse.sysName}}">
-      <div>
+    <right-bar-course-all ng-repeat="e in panelcourse.events"  class="edums-allevents-event"></right-bar-course-all>
+    
+      <!--div>
         <table class="table table-responsive table-hover table-striped edums-panelbody-eventtable">
           <thead>
               <th><h4>Status</h4></th>
@@ -255,7 +257,7 @@ app.directive('coursePanelBody', function(){
               </tr>
             </tbody>
       </table>
-     </div>
+     </div-->
     </div>
   </div>
 </div>
