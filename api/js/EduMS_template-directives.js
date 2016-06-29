@@ -15,12 +15,12 @@ template:
     <div class="list-group-item">
     
       <div class="row">
-        <div class="col-md-1">
+        <div class="col-xs-1">
           <div class="row"><br><br></div>
           <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" ></i> </div>
         </div>
           
-        <div class="col-md-7 edums-event-content">
+        <div class="col-xs-7 edums-event-content">
           <div class="row edums-event-date" >{{e.start_date | date:"dd/MM/yyyy"}}<br>{{e.internet_location_name}}</div>
           <div class="row edums-event-name" ><strong>{{e.course_name}}</strong></div>
           <div class="row"><button type="button" class="btn btn-block edums-event-btnreserve" ng-model="reservate" 
@@ -30,7 +30,7 @@ template:
         </div>
 
 
-        <div class="col-md-3">
+        <div class="col-xs-3">
           <!--div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">
               <strong>*</strong>
           </div -->
@@ -59,16 +59,16 @@ template:
       </div>
       
     <div class="row">
-      <div class="col-md-1" ></div>
+      <div class="col-xs-1" ></div>
       
-        <div class="col-md-10">
+        <div class="col-xs-10">
           <div class="row edums-event-btnregform">
             <div ng-show="e.btnRegister">
             <register-form class="edums-sideregform"></register-form>
             </div>
           </div>
         </div>
-        <div class="col-md-1" ></div>
+        <div class="col-xs-1" ></div>
     </div>
     </div>
   </div>
@@ -90,14 +90,14 @@ template:`
   <div class="form-group">
     <div class="row edums-sideregform-body">
 
-      <div class="col-md-1"> </div>
+      <div class="col-xs-1"> </div>
 
-      <div class="col-md-8" >
+      <div class="col-xs-8" >
 
       <div class="row">
-        <div class="col-md-7 edums-sideregform-partitionertext"> Teilnehmerzahl </div>
+        <div class="col-xs-7 edums-sideregform-partitionertext"> Teilnehmerzahl </div>
 
-        <div class="col-md-4 edums-sideregform-partitionernumber">
+        <div class="col-xs-4 edums-sideregform-partitionernumber">
           <input type="text" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="1" 
            ng-model="rinfo.mTeilnehmerZahl">
         </div>
@@ -307,17 +307,17 @@ template:
 
 <h3 ng-if="!(rinfo.contactpersonemail && rinfo.courses)">Fast geschafft... </h3>
 
-<div ng-if="!rinfo.contactpersonemail" class="col-md-12">
+<div ng-if="!rinfo.contactpersonemail" class="col-xs-12">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <h4>Bitte geben Sie eine <strong>E-Mail-Adresse</strong> an, sodass wir Sie erreichen können.</h4>
     </div>
   </div>
 </div>
 
-<div ng-if="!rinfo.courses" class="col-md-12">
+<div ng-if="!rinfo.courses" class="col-xs-12">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <h4>Bitte setzen Sie einen <strong>Haken</strong> rechts in der <strong>Auswahl</strong>, sodass wir wissen welche <strong>Kurse</strong> wir für sie Reservieren können.</h4>
     </div>
   </div>
@@ -325,47 +325,47 @@ template:
 
 <div class="row edums-finishmodal-content" ng-if="rinfo.contactpersonemail && rinfo.courses">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <h2>Ihre Reservierung wurde gesendet.</h2>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-11 col-md-offset-1">
+    <div class="col-xs-11 col-xs-offset-1">
       <p><strong>Vielen Dank </strong>für die Reservierung.</p>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-10 col-md-offset-2">
+    <div class="col-xs-10 col-xs-offset-2">
       <p>Teilnehmerzahl: {{rinfo.mTeilnehmerZahl}}</p>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-9 col-md-offset-3">
+    <div class="col-xs-9 col-xs-offset-3">
       <div ng-repeat="course in rinfo.courses track by $index">
         <p><strong>{{course.course_name}}</strong></p><br>
         <p>{{course.internet_location_name}}, {{course.start_date}} - {{course.finish_date}}</p><br>
         <div class="row" ng-if="course.checked">
-          <div class="col-md-4">Kurs:</div>
-          <div class="col-md-8">{{course.price * 1.19 | number : 2}} €</div>
+          <div class="col-xs-4">Kurs:</div>
+          <div class="col-xs-8">{{course.price * 1.19 | number : 2}} €</div>
         </div>
         <div class="row" ng-if="course.exam.checked">
-          <div class="col-md-4">Prüfung:</div>
-          <div class="col-md-8">{{course.exam.brutto | number : 2}} €</div>
+          <div class="col-xs-4">Prüfung:</div>
+          <div class="col-xs-8">{{course.exam.brutto | number : 2}} €</div>
         </div>
       </div>
     </div>
   </div>  
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <p>Sie bekommen in Kürze eine E-Mail von uns an {{rinfo.contactpersonemail}} gesendet.</p> 
       <p>Wir melden uns in Kürze mit weiteren Informationen zum Kurs und einer Platzbestätigung.</p><br><br>
       <p>Mit freundlichen Grüßen</p> 
