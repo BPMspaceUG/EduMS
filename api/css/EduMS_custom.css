@@ -1,84 +1,16 @@
 <style type="text/css">
-/*
-
-*/
-.modal {
-    position: fixed;
-    top: 3%;
-    right: auto;
-    bottom: 0;
-    left: 5%;
-    overflow: hidden;
-}
-
 
 .modal-dialog {
-    display: inline-block;
+/*    display: inline-block;
     position: fixed;
-    margin: 0;
+    margin: 0;*/
     width: 90%;
     height: 90%;
-    padding: 0;
+/*    padding: 0;*/
 }
 
-.modal-content {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: 0;
-    box-shadow: none;
-}
 
-.modal-header {
-    text-align: center;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 50px;
-    padding: 10px;
-    border: 0;
-}
 
-.modal-title {
-    font-size: 2em;
-    line-height: 30px;
-}
-
-.modal-body {
-    position: absolute;
-    top: 50px;
-    bottom: 1px;
-    overflow: auto;
-}
-
-.modal-footer {
-
-}
-
-table {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-body {
-    position: relative;
-}
-
-.event{
-    z-index: 2;
-    color: #000;
-    background-color: #FFF;
-    border-color: grey;
-}
-
-.container-fluid {
-    padding: 15px;
-    margin-right: auto;
-    margin-left: auto;
-}
 /*Classes
 ** .edums classes define a 
 >> Formatdescription: .=class-selector, edums-=namespace, 
@@ -97,7 +29,9 @@ body {
 .edums-navbar-sonstiges{}
 .edums-navbar-locations{}
 .edums-infocore{}
-.edums-infocore-tabpanels{}
+.edums-infocore-tabpanels{
+    min-width:300px;
+}
 .edums-tabpanels-tabcontent{}
 .edums-tabcontent-brandpanel{}
 .edums-tabcontent-topicpanel{}
@@ -121,8 +55,11 @@ body {
 .edums-tabpanels-sonstiges{}
 .edums-sonstiges-group{}
 .edums-sonstiges-panel{}
-.edums-infocore-sidebar{}
+.edums-infocore-sidebar{
+    min-width:300px;
+}
 .edums-infocore-btnta{
+     min-width:200px;
     margin-bottom: 15px; 
     width:100%;
     color: #428bca;
@@ -214,17 +151,29 @@ body {
 .edums-tamodal-tacontent{}
 .edums-tacontent-btnclose{}
 .edums-tacontent{}
-.edums-tacontent-headrow{}
+.edums-tacontent-headrow1{}
+.edums-tacontent-headrow2{}
 .edums-tacontent-tabody{}
 .edums-tabody{}
+.edums-tabody-left{
+    overflow-x: scroll;    
+}
 .edums-tabody-searchgroup{}
-.edums-searchgroup-inputfield{}
+.edums-searchgroup-inputfield{
+    min-width:310px;
+}
 .edums-tabody-tatable{
     width: 98%;
 }
-.edums-tatable-head{}
+.edums-tatable-head{
+
+    min-width:310px;
+}
 .edums-tatable-body{}
-.edums-tacontent-tareserve{}
+.edums-tacontent-tareserve{
+    min-width:310px;
+    overflow-x: scroll;    
+}
 .edums-tareserve{}
 .edums-tareserve-taformgroup{}
 .edums-taformgroup{
@@ -235,7 +184,9 @@ body {
 .edums-tapicklist-exam{}
 .edums-tapicklist-course{}
 .edums-taformgroup{}
-.edums-taformgroup-participants{}
+.edums-taformgroup-participants{
+    min-width:260px;
+}
 .edums-taformgroup-email{
     margin-top: 10px; 
 }
@@ -251,7 +202,7 @@ body {
 .edums-taformgroup-datenschutz{}
 .edums-tamodal-tafooter{}
 .edums-tafooter-btnclose{
-        margin-top: 3px;
+    margin-top: 3px;
     width: 100%;
 }
 .edums-tafooter-btnreservate{}
@@ -278,6 +229,10 @@ body {
 .edums-warning{
     color:#f6766d;
 }
+.edums-accordion-element{
+    overflow-x: scroll;
+    width: 100%;
+}
 
 /**ID´s:
 ** Specific elements in repeating ng-repeat lists can be edited by ID.
@@ -289,4 +244,10 @@ body {
 */
 #coursedescr43{}
 #topicdescr2{}
+
+@media only screen and (max-width: 400px) { 
+  #edums-tacontent-hr2 { 
+    display: none; 
+  } 
+}
 </style>
