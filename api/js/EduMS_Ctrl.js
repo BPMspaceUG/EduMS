@@ -39,7 +39,7 @@ $scope.sidebarselect = 'start'
   brandinfoprops =['brandDescription', 'brandDescriptionFooter', 'brandDescriptionSidebar', 'brandImage', 'imprint',
    'protection_of_data_privacy', 'terms_and_conditions', 'mail_text_pre', 'mail_text_post', 
    'after_reservation_text_pre', 'after_reservation_text_post', 'registration_acceptance_text']
-  brandinfoprops.forEach((property)=>{if (response.brandinfo[0][property]) {
+  _.each(brandinfoprops, function(property){if (response.brandinfo[0][property]) {
       $scope.brandinfo[property] = $sce.trustAsHtml('<div class="edums-'+property+'">'+response.brandinfo[0][property]+'</div>')
     }else{$scope.brandinfo[property]=false}})
 
@@ -195,13 +195,14 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.sysName = course.course_name.replace(/\W+/g,''); //PanelIds
 
           course.test_id= getTestID(course.course_id, courseToTest)
-
-          course.examRef = courseToTest.find((ref) =>{return ref.course_id == course.course_id})
+// var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
+// => 2
+          course.examRef = _.find(courseToTest,function(ref){return ref.course_id == course.course_id})//courseToTest.find(function(ref){return ref.course_id == course.course_id})
 
           if (course.examRef) {
-            course.exam = courses.find((c) =>{return c.course_id == course.examRef.test_id})
+            course.exam = _.find(courses,function(c){return c.course_id == course.examRef.test_id})//courses.find(function(c){return c.course_id == course.examRef.test_id})
             if (course.exam) {
-              tmpevent = $scope.eventlist.find((e) =>{return course.exam.course_id == e.course_id && e.start_date >= course.start_date})
+              tmpevent = _.find($scope.eventlist,function(e){return course.exam.course_id == e.course_id && e.start_date >= course.start_date})//$scope.eventlist.find(function(e){return course.exam.course_id == e.course_id && e.start_date >= course.start_date})
               if (tmpevent) {
                 course.exam.event_id = tmpevent.event_id
               };
@@ -303,10 +304,13 @@ function setEventList(TundA) {
           event.exam = tableEntry.exam
           event.test_id = tableEntry.test_id
           
-          event.guaranteelabel = $scope.stateinfo.find(
-                                        (state)=>{
-                                          return state.ID ==event.eventguaranteestatus})
-                                        .eventguaranteestatus
+          // cleanflag: ersetzt durch underscore wegen abwärtskompatibilität
+          // event.guaranteelabel = $scope.stateinfo.find(
+          //                               function(state){
+          //                                 return state.ID ==event.eventguaranteestatus})
+          //                               .eventguaranteestatus
+          event.guaranteelabel = _.find($scope.stateinfo,function(state){return state.ID ==event.eventguaranteestatus}).eventguaranteestatus
+
           //trainerinfo nicht vorhanden
           // cleanflag event.trainer = topic.responsibleTrainer_id
           //model for checkboxes
@@ -349,16 +353,16 @@ $scope.extendedEventlist =  setEventList(TundA);
    if (!$scope.topics[i].sideBarCourses){$scope.topics[i].sideBarCourses=[]}//lege sidebarArray für topic an
 
    //filter events to the topic
-   var courseZuTopic = $scope.topiccourseCourse.filter((x)=>{return t.topic_id == x.topic_id})
-   var eventZuCourse = $scope.eventlist.filter((x)=>{
+   var courseZuTopic = _.filter($scope.topiccourseCourse, function(x){return t.topic_id == x.topic_id})
+   var eventZuCourse = _.filter($scope.eventlist, function(x){
                       var isInList = false
-                      courseZuTopic.forEach(function(c){if(c.course_id == x.course_id && x.test != 1){
+                      _.each(courseZuTopic, function(c){if(c.course_id == x.course_id && x.test != 1){
                         isInList=true}})
                     return isInList})
-   eventZuCourse.forEach((e)=>{e.sysName = e.course_name.replace(/\W+/g,'')})
+   _.each(eventZuCourse, function(e){e.sysName = e.course_name.replace(/\W+/g,'')})
    $scope.topics[i].sideBarCourses = eventZuCourse;
   };
-  $scope.sideBarCoursesStart = $scope.eventlist.filter((x)=>{return x.test != 1})
+  $scope.sideBarCoursesStart = _.filter($scope.eventlist, function(x){return x.test != 1})
   console.log('fertiges $scope.topics: ', $scope.topics); 
   }
 
@@ -384,7 +388,8 @@ $scope.sortReverse = false
 -> Handle 'Picked' list*/
 $scope.reservationlistupdate = function(c) { //c = course/event thats picked
   var reslist = $scope.rinfo.courses, oneIsChecked = false, sum = 0
-  var isInList = reslist.find((p)=>{return c.event_id==p.event_id})
+  // var isInList = reslist.find(function(p){return c.event_id==p.event_id})
+  var isInList = _.find(reslist,function(p){return c.event_id==p.event_id})
   if (c.checked || c.exam.checked) {oneIsChecked=true};
   if (oneIsChecked) {
     if (!isInList) {
