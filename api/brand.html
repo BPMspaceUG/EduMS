@@ -136,7 +136,7 @@
          <div class="panel-heading">
           <a class="panel-title collapsed" data-toggle="collapse"
            data-parent="#panel-493447" href="#panel-element-678929"><span
-           class="badge">2</span> Impressum</a>
+           class="badge">3</span> Impressum</a>
          </div>
          <div id="panel-element-678929" class="panel-collapse collapse">
           <div class="panel-body">
@@ -236,16 +236,16 @@
 
 
           <div class="modal-header row">
-            <div class="col-xs-9 edums-tacontent-headrow1"><h2>1. Terminauswahl</h2></div>
-            <div class="col-xs-3 edums-tacontent-headrow2" id="edums-tacontent-hr2"><h2>2. Anmeldung</h2></div>
+            <div class="col-xs-12 col-sm-6 col-md-9 edums-tacontent-headrow1"><h2>1. Terminauswahl</h2></div>
+            <div class="col-xs-3 col-sm-6 col-md-3 edums-tacontent-headrow2" id="edums-tacontent-hr2"><h2>2. Anmeldung</h2></div>
           </div>
-         <div class="modal-body edums-tacontent col-xs-12">
+         <div class="modal-body edums-tacontent col-xs-12 col-sm-12 col-md-12">
            
 
           <div class="row edums-tacontent-tabody">
 
 
-           <div class="col-xs-9 edums-tabody-left">
+           <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8 edums-tabody-left">
 
 
             <div class="row edums-tabody-searchgroup">
@@ -260,7 +260,7 @@
               </div>
             </div>
 
-            <table class="table table-responsive table-hover table-striped edums-tabody-tatable">
+            <table class="table table-bordered table-hover table-striped edums-tabody-tatable">
               <thead class="edums-tatable-head">
                 <th><h4>Status</h4></th>
                 <th><a href="#" ng-click="sortType = 'start_date'; sortReverse = !sortReverse"><h4>Termin</h4>
@@ -289,25 +289,25 @@
                 <tr ng-repeat="event in extendedEventlist | orderBy:sortType:sortReverse | filter:tablesearch" ng-if="event.exam != 0">
                   <td>
                     <div class="row edums-event-garantie" ng-if="event.eventguaranteestatus == 2 || event.eventguaranteestatus == 4 || event.eventguaranteestatus == 3">
-                      <span class="label label-success">
+                      <span class="label label-success edums-guaranteelabel">
                         <strong>{{stateinfo[3].eventguaranteestatus}}</strong>
                       </span>
                     </div>
                     
                     <div class="row edums-event-waitlist" ng-if="event.eventguaranteestatus == 3">
-                      <span class="label label-primary">
+                      <span class="label label-primary edums-guaranteelabel">
                         <strong>{{event.guaranteelabel}}</strong>
                       </span>
                     </div>
 
                     <div class="row edums-event-onefree" ng-if="event.eventguaranteestatus == 4">
-                      <span class="label label-warning">
+                      <span class="label label-warning edums-guaranteelabel">
                         <strong>{{event.guaranteelabel}}</strong>
                       </span>
                     </div>                  
 
                     <div class="row edums-event-threefree" ng-if="event.eventguaranteestatus == 5">
-                      <span class="label label-danger">
+                      <span class="label label-danger edums-guaranteelabel">
                         <strong>{{event.guaranteelabel}}</strong>
                       </span>
                     </div>
@@ -327,7 +327,7 @@
 
 
           
-           <div class="col-xs-3 edums-tacontent-tareserve">
+           <div class="col-xs-3 col-sm-6 col-md-3 edums-tacontent-tareserve">
               <h3>Ausgewählte Termine</h3>
               <form name="formReg" class="form-horizontal edums-tareserve" novalidate>
                 <div class="form-group edums-tareserve-taformgroup">
@@ -359,9 +359,9 @@
                  </div>
                   <div class="row edums-taformgroup">
 
-                    <div class="col-xs-1"> </div>
+                    <div class="col-xs-0 col-sm-1 col-md-1"> </div>
 
-                    <div class="col-xs-8" >
+                    <div class="col-xs-12 col-sm-11 col-md-11" >
 
                     <div class="row  edums-taformgroup-participants">
                       <div class="col-xs-6"><h4>Teilnehmerzahl</h4></div>
