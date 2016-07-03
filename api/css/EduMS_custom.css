@@ -148,7 +148,9 @@
 .edums-topicevents-event{}
 .edums-footer{}
 .edums-tamodal{}
-.edums-tamodal-tacontent{}
+.edums-tamodal-tacontent{
+    overflow-x: scroll;    
+}
 .edums-tacontent-btnclose{}
 .edums-tacontent{}
 .edums-tacontent-headrow1{}
@@ -185,7 +187,7 @@
 .edums-tapicklist-course{}
 .edums-taformgroup{}
 .edums-taformgroup-participants{
-    min-width:260px;
+    /*min-width:260px;*/
 }
 .edums-taformgroup-email{
     margin-top: 10px; 
@@ -203,7 +205,7 @@
 .edums-tamodal-tafooter{}
 .edums-tafooter-btnclose{
     margin-top: 3px;
-    width: 100%;
+    width: 90%;
 }
 .edums-tafooter-btnreservate{}
 .edums-finishmodal{}
@@ -232,6 +234,9 @@
 .edums-accordion-element{
     overflow-x: scroll;
     width: 100%;
+}
+.edums-guaranteelabel{
+    width: 90%;
 }
 
 /**ID´s:
