@@ -364,12 +364,38 @@ $scope.extendedEventlist =  setEventList(TundA);
   };
   $scope.sideBarCoursesStart = _.filter($scope.eventlist, function(x){return x.test != 1})
   console.log('fertiges $scope.topics: ', $scope.topics); 
+
+        /*//On topic-tab or course-accordion click -> change URL-field: window.history.replaceState('Object', 'Title', '/another-new-url');
+        $scope.panelList = {}
+        // log('asdf')
+
+          // console.log('fertiges $scope.topics: ', $scope.topics); 
+        $scope.topics.forEach(
+          function(topic){
+            $scope.panelList[topic.topic_name] = { name : topic.topic_name, visible:false }
+          }
+        )
+        $scope.openPanel = function(element) {  
+          var panelElement = $scope.topics.find(function(entry){return element==entry.name} )
+          _.each($scope.panelList, function(panel){ panel.visible = false })
+          panelElement.visible = true
+          log(panelElement)
+        }
+        $scope.modifyURL = function(element) {
+          var element = element||''
+            window.history.replaceState('Object', 'Title', '/'+element);
+          if (element) {
+          };
+        }
+        */
   }
 
 //If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
 $scope.tablesearchchange = function(name){
   $scope.tablesearch = name
   $scope.sidebarselect = name
+  // name= name.replace(/\s+/g,'')
+  // openPanel(name)
 }
 
 
@@ -425,6 +451,8 @@ $scope.btnRegFkt = function(e) { //c = event
   log($scope.rinfo.courses)
 }
 
+
+
 /**/
 // $scope.modaldismiss = function() { //c = event
 //   $("#ta-modal").modal("hide")
@@ -440,8 +468,9 @@ $scope.reservate = function(e) {
  var send = {eventIds:[]} 
  _.each($scope.rinfo.courses, function(c){
   send.eventIds.push(c.event_id)
+
   if (c.exam.checked) {
-    send.eventIds.push(c.exam.event_id)
+    send.eventIds.push(c.exam.events[0].event_id)
   };
 } )
  console.log('rinfo: ',$scope.rinfo)
