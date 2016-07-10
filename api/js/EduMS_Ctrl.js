@@ -123,6 +123,11 @@ $scope.sidebarselect = 'start'
 
 //stateinfo RAW:
 //states of a event - Object[0] {ID:"2", eventguaranteestatus:"guaranteed"}
+  response.stateinfo.guaranteed = response.stateinfo.find(function(state){
+    if (state.eventguaranteestatus.match(/g|G\w+nt/)) {
+      return true
+    };
+  })
   $scope.stateinfo = response.stateinfo
 
 
@@ -464,6 +469,9 @@ $scope.btnRegFkt = function(e) { //c = event
 $scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush; rinfo: ')
+ console.log('!(rinfo.contactpersonemail && rinfo.courses): '+!($scope.rinfo.contactpersonemail && $scope.rinfo.courses))
+ console.log('rinfo.contactpersonemail: '+$scope.rinfo.contactpersonemail)
+ console.log('rinfo.courses: '+$scope.rinfo.courses)
  $scope.rinfo.eventIds=[]
  var send = {eventIds:[]} 
  _.each($scope.rinfo.courses, function(c){
