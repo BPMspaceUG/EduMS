@@ -41,8 +41,16 @@
 .edums-panelcontainer-accordion{}
 .edums-accordion{}
 .edums-accordion-heading{}
-.edums-accordion-collapse{}
-.edums-collapse-panelbody{}
+.edums-accordion-collapse{
+    overflow-x: scroll;    
+}
+.edums-collapse-panelbody{
+    min-width: 320px;
+    overflow-x: scroll;    
+}
+.edums-collapse-navtabs{
+    overflow-x: scroll;    
+}
 .edums-panelbody-pricetable{
     width: 80%;
 }
@@ -58,6 +66,18 @@
 .edums-infocore-sidebar{
     min-width:300px;
 }
+.edums-ta-btnagbmodal, .edums-ta-btndatenschutzmodal{
+    margin-bottom: 5px; 
+    margin-top: 5px; 
+    color: #428bca;
+    background-color: transparent;
+    border-color: currentcolor;
+    border-width:2px;
+    transition: all .5s;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #428bca;
+}
 .edums-infocore-btnta{
      min-width:200px;
     margin-bottom: 15px; 
@@ -69,7 +89,7 @@
     transition: all .5s;
     border-width: 2px;
     border-radius: 10px;
-    border-color: #428bca;      }
+    border-color: #428bca;      
 }
 
 .edums-infocore-btnta:hover {
@@ -105,35 +125,43 @@
 }
 
 .edums-event-garantie{
-     margin: 10px 0px -10px 5px;
+     margin: 10px 0px 0px 5px;
 }
 .edums-event-waitlist{
-     margin: 10px 0px -10px 5px;
+     margin: 10px 0px -3px 5px;
 }
 .edums-event-none{
-    margin: 10px 0px -10px 5px;
+    margin: 10px 0px -3px 5px;
 }
 .edums-event-onefree{
-    margin: 10px 0px -10px 5px;
+    margin: 10px 0px -3px 5px;
 
 }
 .edums-event-threefree{
-    margin: 10px 0px -10px 5px;
+    margin: 10px 0px -3px 5px;
      
 }
 .edums-event-btnregform{
     width: 100%;
 }
-.edums-sideregform{}
+.edums-sideregform{
+    margin-left: 0px;
+    padding-left:1px;
+}
 .edums-sideregform-body{
     margin-top: 10px; 
 }
 .edums-sideregform-partitionertext{
     text-align:left;
+    min-width: 100px;
 }
 .edums-sideregform-partitionernumber{
     align:right;
+    min-width: 50px;
+    margin-right: 0px;
+    padding-right:1px;
 }
+.edums-sideregform-partitionernumberarrows{}
 .edums-sideregform-email{
     margin-top: 10px; 
 }
@@ -147,7 +175,13 @@
 .edums-sidebarpanels-topicevents{}
 .edums-topicevents-event{}
 .edums-footer{}
+
+
+
 .edums-tamodal{}
+.edums-tamodal-partitioneramount{
+    min-width: 40px
+}
 .edums-tamodal-tacontent{
     overflow-x: scroll;    
 }
@@ -166,12 +200,18 @@
 }
 .edums-tabody-tatable{
     width: 98%;
+    overflow-y: scroll;
 }
 .edums-tatable-head{
-
+    overflow-y: scroll;
     min-width:310px;
 }
-.edums-tatable-body{}
+.edums-tatable-coursename{
+    min-width: 170px;
+}
+.edums-tatable-body{
+    overflow-y: scroll;
+}
 .edums-tacontent-tareserve{
     min-width:310px;
     overflow-x: scroll;    
@@ -194,6 +234,7 @@
 }
 .edums-taformgroup-btnreserve{
     margin-top: 6px;
+    width: 90%;
 }
 .edums-taformgroup-icon{
     color:#fff;
@@ -207,18 +248,27 @@
     margin-top: 3px;
     width: 90%;
 }
-.edums-tafooter-btnreservate{}
-.edums-finishmodal{}
-.edums-finishmodal-btnclose{}
+.edums-tafooter-btnreservate{
+    width: 90%;
+}
+
+
+
+
+.edums-finishmodal{
+    top:10%;
+    width: 100%;
+    min-height:200px;
+    height: 66%;
+}
+.edums-finishmodal-btnclose{
+    right: 0px;
+}
 .edums-finishmodal-body{}
 .edums-finishmodal-footer{}
-.edums-finishmodal-btnclose{}
 .edums-finishmodal-btnreserve{} 
 .edums-finishmodal-content{
-    top:10%;
-    left:33%;
-    width: 33%;
-    height: 66%;
+    overflow-y: scroll;
 } 
 .edums-finishmodal-positivetext{
     font-size : 14px;
@@ -226,6 +276,47 @@
 .edums-finishmodal-negativetext{
     font-size : 14px;
 }
+
+
+
+
+.edums-agbmodal{}
+.edums-agbmodal-content{
+    top:5%;
+    left:10%;
+    width: 80%;
+    min-height:200px;
+    height: 90%;
+    overflow-y: scroll;
+}
+.edums-agbmodal-btnclose{
+    right: 0px;
+    margin-top: 3px;
+}
+.edums-agbmodal-footer{}
+
+
+
+
+.edums-datenschutzmodal{}
+.edums-datenschutzmodal-content{
+    top:5%;
+    left:10%;
+    width: 80%;
+    min-height:200px;
+    height: 90%;
+    overflow-y: scroll;
+}
+.edums-datenschutzmodal-btnclose{
+    right: 0px;
+    margin-top: 3px;
+}
+.edums-datenschutzmodal-footer{}
+
+
+
+
+
 .edums-agbimpressumdatenschutz-panel{}
 /*special classes*/
 .edums-warning{
