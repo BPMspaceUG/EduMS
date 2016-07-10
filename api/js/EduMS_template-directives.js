@@ -10,71 +10,70 @@
 //Sidebarelement
 app.directive('rightBarCourseAll', function() {
  return{
-template:'<div class="list-group " >    <div class="list-group-item">          <div class="row">        <div class="col-xs-1">          <div class="row"><br><br></div>          <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" ></i> </div>        </div>                  <div class="col-xs-7 edums-event-content">          <div class="row edums-event-date" >{{e.start_date | date:"dd/MM/yyyy"}}<br>{{e.internet_location_name}}</div>          <div class="row edums-event-name" ><strong>{{e.course_name}}</strong></div>          <div class="row"><button type="button" class="btn btn-block edums-event-btnreserve" ng-model="reservate"             ng-hide="e.btnRegister" ng-click= "btnRegFkt(e)">            <i class="fa fa-caret-right" aria-hidden="true"></i> Anmelden!          </button></div>        </div>        <div class="col-xs-3">          <!--div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">              <strong>*</strong>          </div -->          <div class="row edums-event-garantie" ng-if="e.eventguaranteestatus == 2 || e.eventguaranteestatus == 4 || e.eventguaranteestatus == 3">            <span class="label label-success edums-guaranteelabel">              <strong>TERMIN-GARANTIE</strong>            </span>          </div>          <div class="row edums-event-waitlist" ng-if="e.eventguaranteestatus == 3">            <span class="label edums-guaranteelabel label-primary">              <strong>3 PLÄTZE FREI</strong>            </span>          </div>          <div class="row edums-event-onefree" ng-if="e.eventguaranteestatus == 4">            <span class="label edums-guaranteelabel label-warning">              <strong>1 PLATZ FREI</strong>            </span>          </div>        </div>        <div class="row edums-event-threefree" ng-if="e.eventguaranteestatus == 5">          <span class="label edums-guaranteelabel label-danger">            <strong>WARTELISTE</strong>          </span>        </div>            </div>          <div class="row">      <div class="col-xs-1" ></div>              <div class="col-xs-10">          <div class="row edums-event-btnregform">            <div ng-show="e.btnRegister">            <register-form class="edums-sideregform"></register-form>            </div>          </div>        </div>        <div class="col-xs-1" ></div>    </div>    </div>  </div> </div> </div>'
-/*<div class="list-group " >
-    <div class="list-group-item">
-    
-      <div class="row">
-        <div class="col-xs-1">
-          <div class="row"><br><br></div>
-          <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" ></i> </div>
-        </div>
-          
-        <div class="col-xs-7 edums-event-content">
-          <div class="row edums-event-date" >{{e.start_date | date:"dd/MM/yyyy"}}<br>{{e.internet_location_name}}</div>
-          <div class="row edums-event-name" ><strong>{{e.course_name}}</strong></div>
-          <div class="row"><button type="button" class="btn btn-block edums-event-btnreserve" ng-model="reservate" 
-            ng-hide="e.btnRegister" ng-click= "btnRegFkt(e)">
-            <i class="fa fa-caret-right" aria-hidden="true"></i> Anmelden!
-          </button></div>
-        </div>
-
-
-        <div class="col-xs-3">
-          <!--div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">
-              <strong>*</strong>
-          </div -->
-          <div class="row edums-event-garantie" ng-if="e.eventguaranteestatus == 2 || e.eventguaranteestatus == 4 || e.eventguaranteestatus == 3">
-            <span class="label edums-guaranteelabel label-success">
-              <strong>TERMIN-GARANTIE</strong>
-            </span>
-          </div>
-          <div class="row edums-event-waitlist" ng-if="e.eventguaranteestatus == 3">
-            <span class="label edums-guaranteelabel label-primary">
-              <strong>3 PLÄTZE FREI</strong>
-            </span>
-          </div>
-          <div class="row edums-event-onefree" ng-if="e.eventguaranteestatus == 4">
-            <span class="label edums-guaranteelabel label-warning">
-              <strong>1 PLATZ FREI</strong>
-            </span>
-          </div>
-        </div>
-        <div class="row edums-event-threefree" ng-if="e.eventguaranteestatus == 5">
-          <span class="label edums-guaranteelabel label-danger">
-            <strong>WARTELISTE</strong>
-          </span>
-        </div>
-      
-      </div>
-      
-    <div class="row">
-      <div class="col-xs-1" ></div>
-      
-        <div class="col-xs-10">
-          <div class="row edums-event-btnregform">
-            <div ng-show="e.btnRegister">
-            <register-form class="edums-sideregform"></register-form>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-1" ></div>
-    </div>
-    </div>
-  </div>
-
- </div>
- </div>*/
+template:'<div class="list-group " >\
+    <div class="list-group-item">\
+    \
+      <div class="row">\
+        <div class="col-xs-12 hidden-xs col-sm-1 col-md-1">\
+          <div class="row"><br><br></div>\
+          <div class="row"> <i class="fa fa-caret-right fa-2x" aria-hidden="true" ></i> </div>\
+        </div>\
+          \
+        <div class="col-xs-12 col-sm-12 col-md-7 edums-event-content">\
+          <div class="row edums-event-date" >{{e.start_date | date:"dd/MM/yyyy"}}<br>{{e.internet_location_name}}</div>\
+          <div class="row edums-event-name" ><strong>{{e.course_name}}</strong></div>\
+          <div class="row"><button type="button" class="btn btn-block edums-event-btnreserve" ng-model="reservate" \
+            ng-hide="e.btnRegister" ng-click= "btnRegFkt(e)">\
+            <i class="fa fa-caret-right" aria-hidden="true"></i> Anmelden!\
+          </button></div>\
+        </div>\
+\
+\
+        <div class="col-xs-12 col-sm-12 col-md-4">\
+          <!--div class="row edums-event-none" ng-if="e.eventguaranteestatus == 1">\
+              <strong>*</strong>\
+          </div -->\
+          <div class="row edums-event-garantie" ng-if="e.eventguaranteestatus == 2 || e.eventguaranteestatus == 4 || e.eventguaranteestatus == 3">\
+            <span class="label edums-guaranteelabel label-success">\
+              <strong>{{stateinfo.guaranteed.eventguaranteestatus}}</strong>\
+            </span>\
+          </div>\
+          <div class="row edums-event-waitlist" ng-if="e.eventguaranteestatus == 3">\
+            <span class="label edums-guaranteelabel label-primary">\
+              <strong>{{e.guaranteelabel}}</strong>\
+            </span>\
+          </div>\
+          <div class="row edums-event-onefree" ng-if="e.eventguaranteestatus == 4">\
+            <span class="label edums-guaranteelabel label-warning">\
+              <strong>{{e.guaranteelabel}}</strong>\
+            </span>\
+          </div>\
+        </div>\
+        <div class="row edums-event-threefree" ng-if="e.eventguaranteestatus == 5">\
+          <span class="label edums-guaranteelabel label-danger">\
+            <strong>{{e.guaranteelabel}}</strong>\
+          </span>\
+        </div>\
+      \
+      </div>\
+      \
+    <div class="row">\
+      <div class="col-xs-12 hidden-xs col-sm-1 col-md-1" ></div>\
+      \
+        <div class="col-xs-12 col-sm-11 col-md-11">\
+          <div class="row edums-event-btnregform">\
+            <div ng-show="e.btnRegister">\
+            <register-form class="edums-sideregform"></register-form>\
+            </div>\
+          </div>\
+        </div>\
+        <div class="col-xs-12 hidden-xs col-sm-1 col-md-1" ></div>\
+    </div>\
+    </div>\
+  </div>\
+\
+ </div>\
+ </div>'
 
 }
 });
@@ -89,20 +88,22 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
   <div class="form-group">\
     <div class="row edums-sideregform-body">\
 \
-      <div class="col-xs-1"> </div>\
+      <div class="col-xs-12 hidden-xs col-sm-12 hidden-sm col-md-1"> </div>\
 \
-      <div class="col-xs-8" >\
+      <div class="col-xs-12 col-sm-12 col-md-11" >\
 \
       <div class="row">\
-        <div class="col-xs-7 edums-sideregform-partitionertext"> Teilnehmerzahl </div>\
+        <div class="col-xs-12 col-sm-6 col-md-6 edums-sideregform-partitionertext"> Teilnehmerzahl </div>\
 \
-        <div class="col-xs-4 edums-sideregform-partitionernumber">\
+        <div class="col-xs-9 col-sm-4 col-md-4 edums-sideregform-partitionernumber">\
           <input type="text" class="form-control" id="inputAnzahlId{{e.sysName}}" placeholder="1" min="1" \
            ng-model="rinfo.mTeilnehmerZahl">\
         </div>\
               \
+        <div class="col-xs-2 col-sm-1 col-md-1 edums-sideregform-partitionernumberarrows pull-left">\
          <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>\
          <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>\
+        </div>\
 \
       </div>\
       <div class="row" class="input-group" class="form-input">\
@@ -141,7 +142,7 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
 app.directive('coursePanelBody', function(){
  return{
   template: '\
-  <div>\
+  <div class="edums-collapse-navtabs">\
   <!-- Nav tabs -->\
   <ul class="nav nav-tabs" role="tablist">\
     <li role="presentation" class="active">\
@@ -299,29 +300,29 @@ template:'\
 app.directive('afterReserve', function() {
 return{
 template:
-'\
-<div>\
+
+'<div>\
 \
 \
-<h3 ng-if="!(rinfo.contactpersonemail && rinfo.courses)">Fast geschafft... </h3>\
+<h3 ng-if="rinfo.contactpersonemail && rinfo.courses">Fast geschafft... </h3>\
 \
-<div ng-if="!rinfo.contactpersonemail" class="col-xs-12">\
+<div ng-if="rinfo.contactpersonemail" class="">\
   <div class="row">\
-    <div class="col-xs-12">\
+    <div class="">\
       <h4>Bitte geben Sie eine <strong>E-Mail-Adresse</strong> an, sodass wir Sie erreichen können.</h4>\
     </div>\
   </div>\
 </div>\
 \
-<div ng-if="!rinfo.courses" class="col-xs-12">\
+<div ng-if="rinfo.courses" class="">\
   <div class="row">\
-    <div class="col-xs-12">\
+    <div class="">\
       <h4>Bitte setzen Sie einen <strong>Haken</strong> rechts in der <strong>Auswahl</strong>, sodass wir wissen welche <strong>Kurse</strong> wir für sie Reservieren können.</h4>\
     </div>\
   </div>\
 </div>\
 \
-<div class="row edums-finishmodal-content" ng-if="rinfo.contactpersonemail && rinfo.courses">\
+<div class="row edums-finishmodal-content" ng-if="!(rinfo.contactpersonemail && rinfo.courses)">\
   <div class="row">\
     <div class="col-xs-12">\
     </div>\
@@ -375,9 +376,9 @@ template:
 \
 \
 \
-</div>\
-\
-'
+</div>'
+
+
 }
 });
 
