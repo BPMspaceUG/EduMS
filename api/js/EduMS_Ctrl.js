@@ -123,7 +123,7 @@ $scope.sidebarselect = 'start'
 
 //stateinfo RAW:
 //states of a event - Object[0] {ID:"2", eventguaranteestatus:"guaranteed"}
-  response.stateinfo.guaranteed = response.stateinfo.find(function(state){
+  response.stateinfo.guaranteed = _.find(response.stateinfo, function(state){
     if (state.eventguaranteestatus.match(/g|G\w+nt/)) {
       return true
     };
