@@ -397,6 +397,7 @@ $scope.extendedEventlist =  setEventList(TundA);
 
 //If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
 $scope.tablesearchchange = function(name){
+
   $scope.tablesearch = name
   $scope.sidebarselect = name
   // name= name.replace(/\s+/g,'')
@@ -469,9 +470,6 @@ $scope.btnRegFkt = function(e) { //c = event
 $scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
  console.log('reservepush; rinfo: ')
- console.log('!(rinfo.contactpersonemail && rinfo.courses): '+!($scope.rinfo.contactpersonemail && $scope.rinfo.courses))
- console.log('rinfo.contactpersonemail: '+$scope.rinfo.contactpersonemail)
- console.log('rinfo.courses: '+$scope.rinfo.courses)
  $scope.rinfo.eventIds=[]
  var send = {eventIds:[]} 
  _.each($scope.rinfo.courses, function(c){

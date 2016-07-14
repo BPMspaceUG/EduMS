@@ -159,19 +159,15 @@ class RequestHandler
         break;
       case 'getFutureCourses': return $this->getFutureCourses();
         break;
-      case 'getNextFiveEvents': return $this->getNextFiveEvents();
-        break;
       
-
       //returns: brandinfo topiclist topiccourselist courselist eventlist 
       case 'getBrandInfo': return $this->getbrandtopics($bname);
         break;
 
       case "reserve":
-        //$dbRulesToBrand = getReservationInfo($bname);
-
-        require_once 'reservemail.php';
-      //   file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+        // require_once 'reservemail.php'; // Send Mail via PHP-Mailer
+        require_once 'reservavtionMail.php'; //newer Version for Linux - PHP - sendmail 
+        // file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
         return; //$return;
       break;
     
@@ -183,32 +179,12 @@ class RequestHandler
     }
   }
 
- public function reservationprocess(){  
-    
-    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
-  } 
+  // public function reservationprocess(){     
+  //  return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
+  // } 
 
 
   /*Definition of special handling functions.*/
-  //cleanflag
-
-
-  /*Choose by URL($handle) what data the monitor have to responde*/
-  // private function handleMonitor($handle=array('a' => 'default' )){
-  //   //wie viele Parameter wurden übergeben? sizeof=count
-  //   $out = array();
-  //   if(sizeof($handle)==0){ //api/usr/token/monitor---
-  //     $out['monitor'] = $this->getAll(); //Monitor everything
-  //     return $out;
-  //   }
-  //   /*If receaved a specific Monitor, responde data for every specification*/
-  //   else{ 
-  //     for ($i=0; $i < sizeof($handle); $i++) { 
-  //       $out[$handle[i]] = $this->handle($handle); //response[handle-1,(..),handle-n]=Data        
-  //     }
-  //     return $out;
-  //   }
-  // }
 
   //vTopicNotdepercated vTopiccourseNotdepercatedlevelnotzero vEventcourselocationFuturepublicnotdepercatednotstornonotnew
   /*Definition of all getters for the database*/
@@ -224,9 +200,7 @@ class RequestHandler
     return $return;
   }
 
-  private function gettestarray(){  
-    return  array('a' => 7, 'b' => array('bg' => '1', 'cb' => 'cc'));
-  } 
+
   private function getFutureCourses(){  
     return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
   }  
@@ -234,11 +208,7 @@ class RequestHandler
   //topic_course_id  topic_id  topicName  course_id  course_name level  rank 
     return $this->getResultArray("SELECT * FROM `v_topiccourse_notdepercatedlevelnotzero` ");
   }
-  private function getNextFiveEvents(){
-  //event_id  start_date finish_date start_time finish_time course_id  course_name test  coursedeprecated  courseMaxParticipants  
-  //location_id location_name  internet_location_name location_description  locationMaxParticipants event_status_id eventguaranteestatus  eventinhouse
-    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 5");
-  }  
+  
   private function vEventcourselocationFuturepublicnotdepercatednotstornonotnew(){
     //event_id start_date finish_date start_time finish_time course_id  course_name test  coursedeprecated  courseMaxParticipants  location_id location_name  internet_location_name 
     //location_description  locationMaxParticipants event_status_id eventguaranteestatus  eventinhouse
