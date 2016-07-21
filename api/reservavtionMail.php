@@ -43,14 +43,19 @@ if (isset($_POST['eventIds'])) {
 
 $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".$_POST['brandid']);
 
-$confirmationBody ='';
+$confirmationBody ='<html><head><title></title></head><body>';
 
-  $confirmationBody .= '<div style="color:red;">confirmationBody<br>Sie haben für '.$mTeilnehmerZahl.
-  ' Personen bei '.$brandMailInfo[0]['brand_name'].' folgende Kurse reserviert:<br></div>';
-  $brandBody = '<div style="color:green;">brandBody<br>'.$contactpersonemail.' hat ';
-  $brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$contactpersonemail.' hat '.
-    'bei '.$brandMailInfo[0]['brand_name'];
+  $confirmationBody .= print_r($brandMailInfo[0][mail_text_pre],true)
+  .'<br><div>Teilnehmerzahl: '.$mTeilnehmerZahl.
+  ' Personen.';
 
+  //clenaflag
+  // .$brandMailInfo[0]['brand_name'].' folgende Kurse reserviert:<br></div>';
+  // $brandBody = '<div style="color:green;">brandBody<br>'.$contactpersonemail.' hat ';
+  // $brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$contactpersonemail.' hat '.
+  //   'bei '.$brandMailInfo[0]['brand_name'];
+
+		// error_log("\nmailtexte: ".,true), 0);
   $price=0;
 
   foreach($eventList as $e) {
@@ -59,10 +64,10 @@ $confirmationBody ='';
    $price += intval($e['coursePrice']);
 
    $confirmationBody .= 
-   '<br>Kurs: '.$e['course_name'].', von '. $e['start_date'].' bis '.$e['finish_date'].', '.
+   '<br><h4>Kurs: </h4>'.$e['course_name'].', von '. $e['start_date'].' bis '.$e['finish_date'].', '.
    $e['start_time'].' - '.$e['finish_time'].'Uhr. <br>'.
-   '<h3>Standort:</h3>'.'Der Kurs findet '.$e['internet_location_name'].' statt. <br>'.
-   $e['location_description'];
+   '<h4>Standort:</h4>'.'Der Kurs findet '.$e['internet_location_name'].' statt. <br>';
+   // $e['location_description'];
 
    $brandBody .= $e['course_name'].' am '. $e['start_date'].'  & ';
 
@@ -71,44 +76,47 @@ $confirmationBody ='';
 
   $price=$price*intval($mTeilnehmerZahl);
 
-   $confirmationBody .='<h3>Preis:</h3>'.'Netto: '.$price.' | incl. Mwst.: '.
-   $price*1.19.' <br>'.$e['event_status_id'].',  '.$e['eventguaranteestatus'].',  '.$e['eventinhouse'];
+  $confirmationBody .='<h4>Preis:</h4>'.'Netto: '.$price.' | incl. Mwst.: '.
+  $price*1.19;
 
-   $brandBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
-    $price*1.19.') reserviert.</div>';
+  // ' <br>'.$e['event_status_id'].',  '.$e['eventguaranteestatus'].',  '.$e['eventinhouse'];
 
-   $brandPartnerBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
-    $price*1.19 .') reserviert.</div>';
+  // $brandBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
+  // $price*1.19.') reserviert.</div>';
+
+  // $brandPartnerBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
+  // $price*1.19 .') reserviert.</div>';
     
 
 
 
-  $body=$confirmationBody.
-  ' ~~~~~~~ '.print_r($eventList,true).
-  ' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. ';
+  $body=$confirmationBody;
+  // ' ~~~~~~~ '.print_r($eventList,true);
+  // ' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. ';
 
 //cleanflag test php mail-function: mail(to, subject, message, headers, parameters) //headers und parameters sind optional
-	//Info setzen
-	$to = $contactpersonemail.', '.$partnermail.', '.$brandMail;
-	
-	// $subject = "Betreff";
-	//Reservierungsanfrage brand, course
-	
-	$message = $body;
+  //Info setzen
+  $to = $contactpersonemail.', '.$partnermail.', '.$brandMail;
+  
+  // $subject = "Betreff";
+  //Reservierungsanfrage brand, course
+  
+  $message = $body.'<br>'.print_r($brandMailInfo[0][mail_text_post],true).'  '.
+  print_r($brandMailInfo[0][brandImage],true).'</body></html>';
 
-	$header = "From:".$brandMail." \r\n";
+  // für HTML-E-Mails muss der 'Content-type'-Header gesetzt werden
+  $header  = 'MIME-Version: 1.0' . "\r\n";
+  $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
-	$result = mail($to, $subject, $message, $header); //Abschlussprüfung
-	if($result = true)
-	{
-		error_log("To: ".$to.", wurde versand. ", 0);
-				
+  $header .= "From:".$brandMail." \r\n";
+
+  $result = mail($to, $subject, $message, $header); //Abschlussprüfung
+  if($result = true)
+  {
+    error_log("To: ".$to.", wurde versand. ", 0);
 		// error_log("\n\l\rSubject: ".$subject, 0);
-		
 		// error_log("\n\l\rMessage: ".$message, 0);
-		
 		// error_log("\n\l\rHeader: ".$header, 0);
-
 	}
 	else
 	{
