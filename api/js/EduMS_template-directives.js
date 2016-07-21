@@ -121,7 +121,7 @@ template:'<form name="formReg" class="form-horizontal" novalidate>\
       </div>\
       <div class="row">\
         <div>\
-          <button type="button" class="btn btn-block edums-sideregform-btnreserve" ng-model="reservate" href="#modal-container-2"\
+          <button type="button" class="btn btn-block edums-sideregform-btnreserve" ng-model="reservate" href="#modal-container-5"\
            ng-click="reservate(e)" data-toggle="modal">\
             <i class="fa fa-caret-right" aria-hidden="true" ></i> One-Click Anmeldung\
           </button>\
@@ -270,8 +270,8 @@ app.directive('coursePanelBody', function(){
 app.directive('agb', function() {
 return{
 template:'\
-<div ng-if="!brandinfo.terms_and_conditions" class="edums-warning">Warnung: Keine AGB verfügbar.</div>\
-<div ng-bind-html="brandinfo.terms_and_conditions"></div>\
+<div ng-if="!terms_and_conditions" class="edums-warning">Warnung: Keine AGB verfügbar.</div>\
+<div ng-bind-html="terms_and_conditions"></div>\
 '
 }
 });
@@ -279,18 +279,15 @@ template:'\
 //Long text
 app.directive('datenschutzerklaerung', function() {
 return{
-template:'\
-<div ng-if="!brandinfo.protection_of_data_privacy" class="edums-warning">Warnung: Keine Datenschutzerklärung verfügbar.</div>\
-<div ng-bind-html="brandinfo.protection_of_data_privacy"></div>\
-'}
+template:'<div ng-if="!protection_of_data_privacy" class="edums-warning">Warnung: Keine Datenschutzerklärung verfügbar.</div><div ng-bind-html="protection_of_data_privacy">a</div>'}
 });
 
 //Long text
 app.directive('impressum', function() {
 return{
 template:'\
-<div ng-if="!brandinfo.imprint" class="edums-warning">Warnung: Kein Impressum verfügbar.</div>\
-<div ng-bind-html="brandinfo.imprint"></div>\
+<div ng-if="!imprint" class="edums-warning">Warnung: Kein Impressum verfügbar.</div>\
+<div ng-bind-html="imprint"></div>\
 '}
 });
 
@@ -300,13 +297,13 @@ template:'\
 app.directive('afterReserve', function() {
 return{
 template:
-
-'<div>\
+'\
+<div>\
 \
 \
-<h3 ng-if="rinfo.contactpersonemail && rinfo.courses">Fast geschafft... </h3>\
+<h3 ng-if="!send.contactpersonemail && !send.courses">Fast geschafft... </h3>\
 \
-<div ng-if="rinfo.contactpersonemail" class="">\
+<div ng-if="!send.contactpersonemail" class="">\
   <div class="row">\
     <div class="">\
       <h4>Bitte geben Sie eine <strong>E-Mail-Adresse</strong> an, sodass wir Sie erreichen können.</h4>\
@@ -314,7 +311,7 @@ template:
   </div>\
 </div>\
 \
-<div ng-if="rinfo.courses" class="">\
+<div ng-if="!(send.eventIds.length > 0)" class="">\
   <div class="row">\
     <div class="">\
       <h4>Bitte setzen Sie einen <strong>Haken</strong> rechts in der <strong>Auswahl</strong>, sodass wir wissen welche <strong>Kurse</strong> wir für sie Reservieren können.</h4>\
@@ -322,7 +319,7 @@ template:
   </div>\
 </div>\
 \
-<div class="row edums-finishmodal-content" ng-if="!(rinfo.contactpersonemail && rinfo.courses)">\
+<div class="row edums-finishmodal-content" ng-if="rinfo.finish">\
   <div class="row">\
     <div class="col-xs-12">\
     </div>\
@@ -335,40 +332,42 @@ template:
   </div>\
 \
   <div class="row">\
-    <div class="col-xs-11 col-xs-offset-1">\
-      <p><strong>Vielen Dank </strong>für die Reservierung.</p>\
+    <div class="col-xs-11 col-sm-11 col-md-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1">\
+    <div ng-bind-html="after_reservation_text_pre"></div>\
+      <p ng-if="!after_reservation_text_pre"><strong>Vielen Dank </strong>für die Reservierung.</p>\
     </div>\
   </div>\
 \
   <div class="row">\
-    <div class="col-xs-10 col-xs-offset-2">\
-      <p>Teilnehmerzahl: {{rinfo.mTeilnehmerZahl}}</p>\
+    <div class="col-xs-11 col-sm-11 col-md-11 col-xs-offset-1 col-sm-offset-1 col-md-offset-1">\
+      <p>Teilnehmerzahl: {{send.mTeilnehmerZahl}}</p>\
     </div>\
   </div>\
 \
   <div class="row">\
-    <div class="col-xs-9 col-xs-offset-3">\
+    <div class="col-xs-12 col-sm-12 col-md-9 col-md-offset-3">\
       <div ng-repeat="course in rinfo.courses track by $index">\
         <p><strong>{{course.course_name}}</strong></p><br>\
         <p>{{course.internet_location_name}}, {{course.start_date}} - {{course.finish_date}}</p><br>\
         <div class="row" ng-if="course.checked">\
-          <div class="col-xs-4">Kurs:</div>\
-          <div class="col-xs-8">{{course.price * 1.19 | number : 2}} €</div>\
+          <div class="col-xs-12 col-sm-12 col-md-4">Kurs:</div>\
+          <div class="col-xs-12 col-sm-12 col-md-8">{{course.price * 1.19 | number : 2}} €</div>\
         </div>\
         <div class="row" ng-if="course.exam.checked">\
-          <div class="col-xs-4">Prüfung:</div>\
-          <div class="col-xs-8">{{course.exam.brutto | number : 2}} €</div>\
+          <div class="col-xs-12 col-sm-12 col-md-4">Prüfung:</div>\
+          <div class="col-xs-12 col-sm-12 col-md-8">{{course.exam.brutto | number : 2}} €</div>\
         </div>\
       </div>\
     </div>\
   </div>  \
 \
-  <div class="row">\
-    <div class="col-xs-12">\
-      <p>Sie bekommen in Kürze eine E-Mail von uns an {{rinfo.contactpersonemail}} gesendet.</p> \
+  <div class="row" ng-if="send.finish">\
+    <div ng-bind-html="after_reservation_text_post"></div>\
+    <div class="col-xs-12" ng-if="!after_reservation_text_post">\
+      <p>Sie bekommen in Kürze eine E-Mail von uns an {{send.contactpersonemail}} gesendet.</p> \
       <p>Wir melden uns in Kürze mit weiteren Informationen zum Kurs und einer Platzbestätigung.</p><br><br>\
       <p>Mit freundlichen Grüßen</p> \
-      <p>Das TEAM von {{rinfo.brand}}</p> \
+      <p>Das TEAM von {{send.brand}}</p> \
     </div>\
   </div>\
 </div>\
