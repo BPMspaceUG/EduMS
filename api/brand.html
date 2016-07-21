@@ -66,7 +66,7 @@
    
      <div class="tab-content edums-tabpanels-tabcontent">
       <div class="tab-pane active edums-tabcontent-brandpanel" id="panel-brand">
-        <div ng-bind-html="brandinfo.brandDescription"></div>
+        <div ng-bind-html="brandDescription"></div>
 
       </div>
 
@@ -209,11 +209,37 @@
 
      </div>
     </div>
+
+    <!-- Level 0 finishmodal -->
+    <div class="modal fade edums-finishmodal" id="modal-container-5" role="dialog" >
+     <div class="modal-dialog ">
+       <div class="modal-content edums-finishmodal-content">
+
+          <div class="modal-header row">
+            <button type="button" class="close edums-finishmodal-btnclose" ng-click="dismissInnerModalD()" aria-hidden="true">X </button>
+          </div>
+
+         <div> <!-- afterbutton -->
+           <div class="modal-body" >
+             <after-reserve class="edums-finishmodal-body"></after-reserve>    
+           </div><!-- end registerform -->
+         </div> <!-- end afterbutton -->
+
+
+          <div class="modal-footer edums-finishmodal-footer">
+          <button type="button" 
+          class="btn btn-danger edums-finishmodal-btnclose" 
+          ng-click="dismissInnerModalD()">schließen</button>
+          </div>
+       </div> <!-- end modal-content -->
+     </div> <!-- end modal-dialog-->
+   </div> <!-- modal fade -->
+
 </div>
 
 <div class="col-xs-12 edums-footer" id="container-footer">
   <h4>{{brandinfo.brand_name}}</h4>
-  <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
+  <h5 ng-bind-html="brandDescriptionFooter"></h5>
 </div>
 
 </div>
@@ -376,10 +402,8 @@
                         <div class="col-xs-2">Prüfung</div>
                         <div class="col-xs-9">{{picked.exam.coursePrice | number : 2}} €  ({{picked.exam.coursePrice*1.19 | number : 2}} €)</div>
                       </div>
-
-
-
                     </div>
+
                  </div>
                   <div class="row edums-taformgroup">
 
@@ -387,36 +411,29 @@
 
                     <div class="col-xs-12 col-sm-11 col-md-11" >
 
-                    <div class="row  edums-taformgroup-participants">
-                      <div class="col-xs-6"><h4>Teilnehmerzahl</h4></div>
-                      <div class="col-xs-4" >
-                        <input type="text" class="form-control edums-tamodal-partitioneramount" id="inputAnzahlIdModal" placeholder="1" 
-                         ng-model="rinfo.mTeilnehmerZahl">
-                      </div>
-                                             
+                      <div class="row  edums-taformgroup-participants">
+                        <div class="col-xs-6"><h4>Teilnehmerzahl</h4></div>
+                        <div class="col-xs-4" >
+                          <input type="text" class="form-control edums-tamodal-partitioneramount" id="inputAnzahlIdModal" placeholder="1" 
+                           ng-model="rinfo.mTeilnehmerZahl">
+                        </div>
+                                               
                        <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>
                        <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>
-                      
-                    </div>
-                    <div class="row" class="input-group form-input">
-                      <div>
-                        <input type="email" class="form-control edums-taformgroup-email" id="inputEmailIdModal" 
-                         placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
+                        
+                      </div>
+                      <div class="row" class="input-group form-input">
+                        <div>
+                          <input type="email" class="form-control edums-taformgroup-email" id="inputEmailIdModal" 
+                           placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
+                        </div>
                       </div>
                     </div>
-
-
-
-                     </div>
-                    </div>
-
-
-
-
+                  </div>
 
                     
-                    <div class="row" ng-if="brandinfo.registration_acceptance_text">
-                      <div ng-bind-html="brandinfo.registration_acceptance_text"></div>
+                    <div class="row" ng-if="registration_acceptance_text">
+                      <div ng-bind-html="registration_acceptance_text"></div>
                     </div>
                     <div class="row">
                       <div class="col-xs-12 col-sm-5 col-md-5">
@@ -430,26 +447,102 @@
                          </button>
                        </div>
                     </div>
-                    <div class="row" ng-if="!brandinfo.registration_acceptance_text">
+                    <!-- nested modal -->
+                    <div class="modal fade edums-agbmodal" id="modal-container-3" role="dialog" >
+                     <div class="modal-dialog ">
+                       <div class="modal-content edums-agbmodal-content">
+
+                          <div class="modal-header row">
+                            <button type="button" class="close edums-agbmodal-btnclose" ng-click="dismissInnerModalA()" aria-hidden="true">X </button>
+                          </div>
+
+                         <div> <!-- afterbutton -->
+                           <div class="modal-body" >
+                               <agb></agb>
+                               <impressum></impressum>   
+                           </div><!-- end registerform -->
+                         </div> <!-- end afterbutton -->
+
+
+                          <div class="modal-footer edums-agbmodal-footer">
+                          <button type="button" 
+                          class="btn btn-danger  edums-finishmodal-btnclose" 
+                          ng-click="dismissInnerModalA()" >schließen</button>
+                          </div>
+                       </div> <!-- end modal-content -->
+                     </div> <!-- end modal-dialog-->
+                    </div> <!-- modal fade -->
+
+                    <!-- nested modal -->
+                    <div class="modal fade edums-datenschutzmodal" id="modal-container-4" role="dialog" >
+                     <div class="modal-dialog ">
+                       <div class="modal-content edums-datenschutzmodal-content">
+
+                          <div class="modal-header row">
+                         <button type="button" class="close edums-datenschutzmodal-btnclose" ng-click="dismissInnerModalB()" aria-hidden="true">X </button>
+                          </div>
+
+                         <div> <!-- afterbutton -->
+                           <div class="modal-body" >  
+                                <datenschutzerklaerung></datenschutzerklaerung>
+                               <impressum></impressum> 
+                           </div><!-- end registerform -->
+                         </div> <!-- end afterbutton -->
+
+
+                          <div class="modal-footer edums-datenschutzmodal-footer">
+                          <button type="button" 
+                          class="btn btn-danger  edums-finishmodal-btnclose" 
+                          ng-click="dismissInnerModalB()">schließen</button>
+                          </div>
+                       </div> <!-- end modal-content -->
+                     </div> <!-- end modal-dialog-->
+                   </div> <!-- modal fade -->
+
+                    <div class="row" ng-if="!registration_acceptance_text">
                      <p>Mit dem Absenden des Formulars akzeptieren Sie unsere AGB & Datenschutzerklärung.</p>
                     </div>
-                    <div class="row">
-                      <div>
-                        <button type="button" class="btn btn-block edums-taformgroup-btnreserve" ng-model="reservate"  href="#modal-container-2" ng-click="reservate()" data-toggle="modal">
-                          <i class="fa fa-caret-right edums-taformgroup-icon" aria-hidden="true"></i> Anmeldung
-                        </button>
 
-                      </div>
+                    <div class="row">
+                      <button type="button" class="btn btn-block edums-taformgroup-btnreserve" ng-model="reservate"  href="#modal-container-2" ng-click="reservate()" data-toggle="modal">
+                        <i class="fa fa-caret-right edums-taformgroup-icon" aria-hidden="true"></i> Anmeldung
+                      </button>
+
+                      <!-- Level 1 finishmodal, nested -->
+                      <div class="modal fade edums-finishmodal" id="modal-container-2" role="dialog" >
+                       <div class="modal-dialog ">
+                         <div class="modal-content edums-finishmodal-content">
+
+                            <div class="modal-header row">
+                              <button type="button" class="close edums-finishmodal-btnclose" ng-click="dismissInnerModalC()" aria-hidden="true">X </button>
+                            </div>
+
+                           <div> <!-- afterbutton -->
+                             <div class="modal-body" >
+                               <after-reserve class="edums-finishmodal-body"></after-reserve>    
+                             </div><!-- end registerform -->
+                           </div> <!-- end afterbutton -->
+
+
+                            <div class="modal-footer edums-finishmodal-footer">
+                            <button type="button" 
+                            class="btn btn-danger edums-finishmodal-btnclose" 
+                            ng-click="dismissInnerModalC()">schließen</button>
+                            </div>
+                         </div> <!-- end modal-content -->
+                       </div> <!-- end modal-dialog-->
+                     </div> <!-- modal fade --> 
                     </div>
+                  </div>
                     <div class="row">
                       <button type="button" class="btn btn-danger edums-tafooter-btnclose" data-dismiss="modal">schließen
                       </button>
                     </div>
-                    </div>
-                </div>
+            </div>
+            </div>
 
-                </div>
-                </form>
+            </div>
+            </form>
 
            </div>
 
@@ -484,86 +577,3 @@
 
 
 
-
-
-  <div class="modal fade edums-finishmodal" id="modal-container-2" role="dialog" >
-   <div class="modal-dialog ">
-     <div class="modal-content edums-finishmodal-content">
-
-        <div class="modal-header row">
-          <button type="button" class="close edums-finishmodal-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
-        </div>
-
-       <div> <!-- afterbutton -->
-         <div class="modal-body" >
-           <after-reserve class="edums-finishmodal-body"></after-reserve>    
-         </div><!-- end registerform -->
-       </div> <!-- end afterbutton -->
-
-
-        <div class="modal-footer edums-finishmodal-footer">
-        <button type="button" 
-        class="btn btn-danger edums-finishmodal-btnclose" 
-        data-dismiss="modal">schließen</button>
-        </div>
-     </div> <!-- end modal-content -->
-   </div> <!-- end modal-dialog-->
- </div> <!-- modal fade -->
-
-
-  <div class="modal fade edums-agbmodal" id="modal-container-3" role="dialog" >
-   <div class="modal-dialog ">
-     <div class="modal-content edums-agbmodal-content">
-
-        <div class="modal-header row">
-          <button type="button" class="close edums-agbmodal-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
-        </div>
-
-       <div> <!-- afterbutton -->
-         <div class="modal-body" >
-             <agb></agb>
-             <impressum></impressum>   
-         </div><!-- end registerform -->
-       </div> <!-- end afterbutton -->
-
-
-        <div class="modal-footer edums-agbmodal-footer">
-        <button type="button" 
-        class="btn btn-danger  edums-finishmodal-btnclose" 
-        data-dismiss="modal">schließen</button>
-        </div>
-     </div> <!-- end modal-content -->
-   </div> <!-- end modal-dialog-->
- </div> <!-- modal fade -->
-
-
-  <div class="modal fade edums-datenschutzmodal" id="modal-container-4" role="dialog" >
-   <div class="modal-dialog ">
-     <div class="modal-content edums-datenschutzmodal-content">
-
-        <div class="modal-header row">
-       <button type="button" class="close edums-datenschutzmodal-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
-        </div>
-
-       <div> <!-- afterbutton -->
-         <div class="modal-body" >  
-              <datenschutzerklaerung></datenschutzerklaerung>
-             <impressum></impressum> 
-         </div><!-- end registerform -->
-       </div> <!-- end afterbutton -->
-
-
-        <div class="modal-footer edums-datenschutzmodal-footer">
-        <button type="button" 
-        class="btn btn-danger  edums-finishmodal-btnclose" 
-        data-dismiss="modal">schließen</button>
-        </div>
-     </div> <!-- end modal-content -->
-   </div> <!-- end modal-dialog-->
- </div> <!-- modal fade -->
-
-
-
-
-
-</div> 
