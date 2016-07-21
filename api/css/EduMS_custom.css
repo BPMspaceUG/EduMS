@@ -251,14 +251,10 @@
 .edums-tafooter-btnreservate{
     width: 90%;
 }
-
-
-
-
 .edums-finishmodal{
     top:10%;
     width: 100%;
-    min-height:200px;
+    min-height:550px;
     height: 66%;
 }
 .edums-finishmodal-btnclose{
