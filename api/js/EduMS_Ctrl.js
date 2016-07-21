@@ -29,21 +29,35 @@ $scope.sidebarselect = 'start'
 
 
   orderbranddata = function(response) {
-  console.log(response)
+  // console.log(response)
   //brandinfo RAW (veraltet 10/06):
   /*accesstoken: "5b35793a3",brandDescription: "<h2>description</p>",brandDescriptionFooter: "<h2>FOOTices proin.</p>",brandDescriptionSidebar: "<h2>SIDt felis</p>",
   brandHeadline: "Brand with ID 9",brandImage: "<img class="" src="http://dummyimage.com/200x200/91B561/3D7B6B.jpg&text=Eqpajbuu ID 9",brand_id: "9",brand_name: "Eqpajbuu ID 9",
   branddeprecated: "0",css-style: "<style> body {background-color: ;}</style>",discount: "7.00",event_partner_id: "1",login: "EqpajbuuID9"*/
   $scope.brandinfo = response.brandinfo
+  log('\n $scope: response.brandinfo:')
+  log($scope.brandinfo[0].protection_of_data_privacy)
 
   brandinfoprops =['brandDescription', 'brandDescriptionFooter', 'brandDescriptionSidebar', 'brandImage', 'imprint',
    'protection_of_data_privacy', 'terms_and_conditions', 'mail_text_pre', 'mail_text_post', 
    'after_reservation_text_pre', 'after_reservation_text_post', 'registration_acceptance_text']
-  _.each(brandinfoprops, function(property){if (response.brandinfo[0][property]) {
-      $scope.brandinfo[property] = $sce.trustAsHtml('<div class="edums-'+property+'">'+response.brandinfo[0][property]+'</div>')
-    }else{$scope.brandinfo[property]=false}})
+  _.each(brandinfoprops, function(property){
+    if ($scope.brandinfo[0][property]) {
 
-  $scope.rinfo={contactpersonemail : '', courses:[], brand:response.brandinfo[0].login}
+      // log('\n'+property)
+      // log($scope.brandinfo[0][property])
+
+      $scope[property] = $sce.trustAsHtml('<div class="edums-'+property+'">'+$scope.brandinfo[0][property+'']+'</div>')
+      // log($scope[property])
+    }else{$scope.brandinfo[property]=false}
+  })
+  // log(brandinfo.protection_of_data_privacy)
+  // log($scope.brandinfo.protection_of_data_privacy)
+  //   // $scope.brandinfo.protection_of_data_privacy = $sce.trustAsHtml('<div>'+$scope.brandinfo[0].protection_of_data_privacy+'</div>')
+  // log('$scope.brandinfo.protection_of_data_privacy:')
+  // log($scope.brandinfo.protection_of_data_privacy)
+
+  $scope.rinfo={contactpersonemail : '', courses:[], brand:response.brandinfo[0].login, mTeilnehmerZahl:1}
 
   //topiclist RAW: 
   /*$$hashKey: "object:953", deprecated: "0", topicDescriptionFooter: "<h2>FOOTER Topic ligula. At.</p>", responsibleTrainer_id: "14", topicDescription: "<h2>Topic with ID 1</h2>", 
@@ -433,18 +447,8 @@ $scope.reservationlistupdate = function(c) { //c = course/event thats picked
       if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
     };
   }
-  // reslist.forEach((c)=>{
-  //   if (c.price>0 && c.checked) {
-  //     sum = sum +c.price
-  //   };
-  //   if (c.exam) {
-  //     if (c.exam.coursePrice>0 && c.exam.checked) {
-  //       sum = sum +c.exam.coursePrice
-  //     };
-  //   };
-  // })
-  // $scope.rinfo.sumAll = sum * $scope.rinfo.mTeilnehmerZahl
-  log(reslist)
+  // log('reslist: ')
+  // log(reslist)
 }
 
 /*On click 'btnreserve' from a sidebar-element:
@@ -454,57 +458,79 @@ $scope.btnRegFkt = function(e) { //c = event
   if (e.exam != 0) {e.exam.checked=true};
   $scope.rinfo.courses.push(e)
   e.btnRegister=!e.btnRegister
-  log($scope.rinfo.courses)
+  // log('btnRegFkt -> $scope.rinfo.courses push:')
+  // log($scope.rinfo.courses)
 }
 
 
 
-/**/
-// $scope.modaldismiss = function() { //c = event
-//   $("#ta-modal").modal("hide")
-//   log( $("#ta-modal"))
-// }
+
 
 /*On click btn reservate from siderbar-element or Modal:
 -> create a final reservationobject from selections and send it to the api-server*/
+
 $scope.reservate = function(e) {
  // $scope.rinfo.reserveparticipants = $scope.reserveparticipants
- console.log('reservepush; rinfo: ')
- $scope.rinfo.eventIds=[]
- var send = {eventIds:[]} 
- _.each($scope.rinfo.courses, function(c){
-  send.eventIds.push(c.event_id)
+ // console.log('reservepush: ')
 
-  if (c.exam.checked) {
-    send.eventIds.push(c.exam.events[0].event_id)
-  };
-} )
+ $scope.rinfo.eventIds=[]
+ $scope.send = {eventIds:[]} 
+
+ _.each($scope.rinfo.courses, function(c){
+    $scope.send.eventIds.push(c.event_id)
+
+    if (c.exam.checked) {
+      $scope.send.eventIds.push(c.exam.events[0].event_id)
+    };
+  })
+
  console.log('rinfo: ',$scope.rinfo)
- send.contactpersonemail = $scope.rinfo.contactpersonemail, send.brandid = $scope.brandinfo[0].brand_id, send.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl
- log('POST: '); log(send);
- $http({
-      method: 'POST',
-      //http://dev.bpmspace.org:4040/~cedric/EduMS/api/index.php/EqpajbuuID9/5b35716ce1ff524b662dfbb160e293a3/reserve
-      url: apisvr+'/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}, //json
-      transformRequest: function(obj) {
-          var str = [];
-          for(var p in obj)
-          str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
-          return str.join("&");
-      },
-      data:  send
-  }).then(function(response) {
-         
-          // console.log(reservefinal='http://dev.bpmspace.org:4040/~cedric/EduMS/api/reservemail.php')
-          // console.log(reservefinal='reserveinfo send to:[POST]/EduMS/api/index.php/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve')
-        }, function(response) {
-          $scope.data = response || "Request failed";
-          $scope.status = response.status;
+ $scope.send.contactpersonemail = $scope.rinfo.contactpersonemail, $scope.send.brandid = $scope.brandinfo[0].brand_id, $scope.send.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl
+ 
+
+ log('POST: '); 
+ log($scope.send);
+ /*send send-data to api-svr*/
+ $scope.rinfo.finish = false;
+ if ($scope.send.eventIds.length > 0 && $scope.send.contactpersonemail.match(/@/)) {
+   $http({
+        method: 'POST',
+        url: apisvr+'/'+$scope.brandinfo[0].login+'/'+$scope.brandinfo[0].accesstoken+'/reserve',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}, //json
+        transformRequest: function(obj) {
+            var str = [];
+            for(var p in obj)
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
+            return str.join("&");
+        },
+        data:  $scope.send
+    })
+   .then(function(response) {
+      //expect origin error, ignore.
+      $scope.rinfo.finish = true;
+      }, function(response) {
+
+        //expect origin error, ignore.
+        $scope.rinfo.finish = true;
+        log('$scope.rinfo.finish = '+$scope.rinfo.finish);
+
+        $scope.data = response || "Request failed";
+        $scope.status = response.status;
       });
+ };
 }
 
 
+
+
+
+
+//Bootstrap by default dont support nested modals. This jQuery-functions get called on click various 'btnclose'
+//->http://getbootstrap.com/javascript/#modals
+$scope.dismissInnerModalA = function(){ $("#modal-container-3").modal("hide") }
+$scope.dismissInnerModalB = function(){ $("#modal-container-4").modal("hide") }
+$scope.dismissInnerModalC = function(){ $("#modal-container-2").modal("hide") }
+$scope.dismissInnerModalD = function(){ $("#modal-container-5").modal("hide") }
 
 orderbranddata(response);
 }]);
