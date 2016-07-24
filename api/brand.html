@@ -17,7 +17,7 @@
 
 
 <div class="row edums-content" >
-   <!---- menu -->
+   <!-- menu -->
    <div class="row edums-menu" >
    <div class="col-xs-12 edums-menu-container" >
     <div class="tabbable" >
@@ -70,7 +70,7 @@
 
       </div>
 
-      <div ng-repeat="topicpanel in topics" class="tab-pane edums-tabcontent-topicpanel" id="panel-{{topicpanel.topic_name}}" ng-class="panelList[topicpanel.topic_name].visible">
+      <div ng-repeat="topicpanel in topics" class="tab-pane edums-tabcontent-topicpanel" id="panel-{{topicpanel.topic_name}}" ng-class="{{getClass(topicpanel.topic_name)}}">
        <div class="col-xs-12">
        <h2>{{topicpanel.topicHeadline}}</h2>
        <div ng-bind-html="topicpanel.topicDescription" class="edums-tabcontent-topicdescription" id="topicdescr{{topicpanel.topic_id}}"></div>
@@ -525,19 +525,22 @@
 
 
                             <div class="modal-footer edums-finishmodal-footer">
-                            <button type="button" 
+                            <button type="button" ng-if="!(rinfo.finish)"
                             class="btn btn-danger edums-finishmodal-btnclose" 
                             ng-click="dismissInnerModalC()">schließen</button>
+                            <button type="button" ng-if="rinfo.finish"
+                            class="btn btn-danger edums-finishmodal-btnclose" 
+                            ng-click="dismissInnerModalE()">schließen</button>
                             </div>
                          </div> <!-- end modal-content -->
                        </div> <!-- end modal-dialog-->
                      </div> <!-- modal fade --> 
                     </div>
-                  </div>
                     <div class="row">
                       <button type="button" class="btn btn-danger edums-tafooter-btnclose" data-dismiss="modal">schließen
                       </button>
                     </div>
+                  </div>
             </div>
             </div>
 
