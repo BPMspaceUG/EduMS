@@ -300,9 +300,6 @@ template:
 '\
 <div>\
 \
-\
-<h3 ng-if="!send.contactpersonemail && !send.courses">Fast geschafft... </h3>\
-\
 <div ng-if="!send.contactpersonemail" class="">\
   <div class="row">\
     <div class="">\
@@ -361,8 +358,8 @@ template:
     </div>\
   </div>  \
 \
-  <div class="row" ng-if="send.finish">\
     <div ng-bind-html="after_reservation_text_post"></div>\
+  <div class="row" ng-if="send.finish">\
     <div class="col-xs-12" ng-if="!after_reservation_text_post">\
       <p>Sie bekommen in Kürze eine E-Mail von uns an {{send.contactpersonemail}} gesendet.</p> \
       <p>Wir melden uns in Kürze mit weiteren Informationen zum Kurs und einer Platzbestätigung.</p><br><br>\

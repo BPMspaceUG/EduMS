@@ -531,7 +531,23 @@ $scope.dismissInnerModalA = function(){ $("#modal-container-3").modal("hide") }
 $scope.dismissInnerModalB = function(){ $("#modal-container-4").modal("hide") }
 $scope.dismissInnerModalC = function(){ $("#modal-container-2").modal("hide") }
 $scope.dismissInnerModalD = function(){ $("#modal-container-5").modal("hide") }
+$scope.dismissInnerModalE = function(){ 
+  $("#modal-container-1").modal("hide") 
+  $("#modal-container-2").modal("hide") 
+  $("#modal-container-3").modal("hide") 
+  $("#modal-container-4").modal("hide") 
+  $("#modal-container-5").modal("hide") 
+}
 
+
+
+$scope.getClass = function(topicName){ 
+ if (topicName == '') {
+  return 'active' 
+ }else{
+  return ''
+ }
+}
 orderbranddata(response);
 }]);
 
