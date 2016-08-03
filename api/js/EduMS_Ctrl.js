@@ -477,7 +477,10 @@ $scope.reservate = function(e) {
  $scope.send = {eventIds:[]} 
 
  _.each($scope.rinfo.courses, function(c){
-    $scope.send.eventIds.push(c.event_id)
+
+    if (c.checked) {
+      $scope.send.eventIds.push(c.event_id)
+    };
 
     if (c.exam.checked) {
       $scope.send.eventIds.push(c.exam.events[0].event_id)
@@ -538,6 +541,45 @@ $scope.dismissInnerModalE = function(){
   $("#modal-container-4").modal("hide") 
   $("#modal-container-5").modal("hide") 
 }
+
+/*
+
+$scope.dismissInnerModalA = function(){
+
+ $("#modal-container-3").modal("hide") 
+  $('.modal-backdrop').remove();
+  $('body').removeClass('modal-open');
+}
+$scope.dismissInnerModalB = function(){
+
+ $("#modal-container-4").modal("hide") 
+  $('.modal-backdrop').remove();
+  $('body').removeClass('modal-open');
+}
+$scope.dismissInnerModalC = function(){
+
+ $("#modal-container-2").modal("hide") 
+  $('.modal-backdrop').remove();
+  $('body').removeClass('modal-open');
+}
+$scope.dismissInnerModalD = function(){
+
+ $("#modal-container-5").modal("hide") 
+  $('.modal-backdrop').remove();
+  $('body').removeClass('modal-open');
+}
+$scope.dismissInnerModalE = function(){ 
+  $("#modal-container-1").modal("hide") 
+  $("#modal-container-2").modal("hide") 
+  $("#modal-container-3").modal("hide") 
+  $("#modal-container-4").modal("hide") 
+  $("#modal-container-5").modal("hide") 
+  $('body').removeClass('modal-open');
+  $('.modal-backdrop').remove();
+}
+
+
+*/
 
 
 
