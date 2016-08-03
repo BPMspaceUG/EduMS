@@ -243,11 +243,11 @@
     margin-bottom: 5px; 
 }
 .edums-taformgroup-registrationAcceptanceText{
-    margin-left: 10px;
+    margin-left: 15px;
 }
 .edums-taformgroup-btnreserve{
     margin-top: 6px;
-    width: 90%;
+    width: 85%;
 }
 .edums-taformgroup-icon{
     color:#fff;
@@ -259,7 +259,10 @@
 .edums-tamodal-tafooter{}
 .edums-tafooter-btnclose{
     margin-top: 3px;
-    width: 90%;
+    width: 85%;
+}
+.edums-tafooter-btnclose-btn{
+    width: 100%;
 }
 .edums-tafooter-btnreservate{
     width: 90%;
