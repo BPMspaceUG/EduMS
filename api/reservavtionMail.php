@@ -43,7 +43,7 @@ if (isset($_POST['eventIds'])) {
 
 $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` WHERE brand_id =".$_POST['brandid']);
 
-$confirmationBody ='<html><head><title></title></head><body>';
+$confirmationBody ='<html><head><title></title><meta http-equiv=Content-Type content=text/html; charset=UTF-8></head><body>';
 
   $confirmationBody .= print_r($brandMailInfo[0][mail_text_pre],true)
   .'<br><div>Teilnehmerzahl: '.$mTeilnehmerZahl.
@@ -101,8 +101,7 @@ $confirmationBody ='<html><head><title></title></head><body>';
   // $subject = "Betreff";
   //Reservierungsanfrage brand, course
   
-  $message = $body.'<br>'.print_r($brandMailInfo[0][mail_text_post],true).'  '.
-  print_r($brandMailInfo[0][brandImage],true).'</body></html>';
+  $message = $body.'<br>'.print_r($brandMailInfo[0][mail_text_post],true).'</body></html>';
 
   // für HTML-E-Mails muss der 'Content-type'-Header gesetzt werden
   $header  = 'MIME-Version: 1.0' . "\r\n";
