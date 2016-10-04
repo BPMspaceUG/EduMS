@@ -130,19 +130,24 @@
 }
 
 .edums-event-garantie{
+    float:left;
      margin: 5px 0px 5px 5px;
 }
 .edums-event-waitlist{
+    float:left;
      margin: 5px 0px  5px 5px;
 }
 .edums-event-none{
+    float:left;
     margin: 5px 0px  5px 5px;
 }
 .edums-event-onefree{
+    float:left;
     margin: 5px 0px  5px 5px;
 
 }
 .edums-event-threefree{
+    float:left;
     margin: 5px 0px  5px 5px;
      
 }
