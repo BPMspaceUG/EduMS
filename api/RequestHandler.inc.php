@@ -1,18 +1,20 @@
 <?php
-class RequestHandler 
-{
   /*
   Overview - Übersicht
   Eng: For every in the index.php receaved request a requesthandler is called. 
-    After validating the user/token, the in the url requested view, controllers and data will collected
-    to send it to the browser.
+    After validating the user/token, branspecific informatons get fetched from the database. This data,
+    scripts and css will finally be send back.
+    For Resevationsrequests the eventinformations will be loaded an finally the mail-send script will 
+    execute.
 
   Deu/Ger: Die index.php leitet alle Anfragen in diesen Requesthandler.
-    Nach einer User/Token-Prüfung werden die in der url geforderten Views, Crontroller und Daten bereitgestellt
-    um sie an den Browser zu senden. 
+    Nach einer User/Token-Prüfung werden die Brandspezifischen Informationen geladen und zusammen 
+    mit scripten und css zurrückgesand. 
+    Für Reservierungsanfragen werden Eventinformationen aus der Datenbank abgefragt und abschließend
+    das Mailversand-script aufgerufen.
   */
-
-
+class RequestHandler 
+{
   private $userid = -1;  private $token = -1;  private $validLogin = false;  private $db; 
   /** Handles SQL-querys and returns the resultdata.
   * @debugmode on: show the the query
@@ -126,12 +128,17 @@ class RequestHandler
         'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); </script>".file_get_contents('js/EduMS_Ctrl.js'),
         'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
         'directive'=>file_get_contents('js/EduMS_template-directives.js'),
-        'ct'=> file_get_contents('brand.html'));
+        'htmlCore'=> $this->getResultArray("SELECT `html_core` FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$bname."'")
+        );
+        if (file_exists('brand.html')) {
+          $return['ct']= file_get_contents('brand.html');
+        }
+
         return $return;
         break;
       
       //returns: brandinfo topiclist topiccourselist courselist eventlist 
-      case 'getBrandInfo': return $this->getbrandtopics($bname);
+      case 'getBrandInfo': return $this->getbrandtopics($bname, $section, $handle);
         break;
 
         case "reserve":
@@ -161,11 +168,18 @@ class RequestHandler
     return $return;
   }
 
-
-  private function getbrandtopics($brandname){
-    $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
+  /*
+  Get all topics, their courses and events for a specific brand.
+    Act by follow the chain to fetch the data from the database:
+      1. brandinformation, 2. topics to the brand, 
+      3. Only valid topics, 3.2 check for requested topic
+      4. valid courses to selected topics, 5. events to courses, 
+      6. events for tests, 7. informationcodes to states
+  */
+  private function getbrandtopics($brandname, $section, $handle){
     
-    //Hole Brandinfo
+    //1. brandinformation
+    $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
     // file_put_contents('logs/getBrandLog.log', date("d.m.Y - H:i:s",time())."\nBrandID: ".$return['brandinfo'][0]['brand_id']."\nBrand Name: ".$brandname."\n-----------\n", FILE_APPEND | LOCK_EX);
     
     if ($return['brandinfo'][0]['branddeprecated']!=0) {//In case SQL fails exit
@@ -173,10 +187,12 @@ class RequestHandler
     }
     $brandId = $return['brandinfo'][0]['brand_id'];
 
-    //Hole Topics zu Brand
+    //2. topics to the brand
     $topicsInBrand = $this->getResultArray("SELECT `topic_id` FROM `v_brandtopic` WHERE brand_id = '".$brandId."'");
 
+
     $queryTopics='';
+    //3. Only valid topics
     $rootquery = 'SELECT * FROM `v_topic_notdepercated` WHERE';
       foreach ($topicsInBrand as $val) {
         $queryTopics .= ' or topic_id = '.implode($val);
@@ -184,8 +200,21 @@ class RequestHandler
     $queryTopics = substr($queryTopics,3,strlen($queryTopics));    
     $return['topiclist'] = $this->getResultArray($rootquery.$queryTopics);
 
-    //Hole Course zu den Topics
+    //3.2 check if there is a requested topic and its existence in the topiclist of the brand
+    if (isset($_GET['topic'])) {
+      $decoded = urldecode($_GET['topic']);
+      if ( array_search($decoded, array_column($return['topiclist'], 'topicName')) >=0 ) {
+        $return['preselectedTopic'] = $decoded;
+      }else{
+        $return['preselectedTopic'] = 'none';
+      }
+    }else{
+      $return['preselectedTopic'] = 'none';
+      //$return['preselectedTopic'] = $section;
+    }
+
     $queryCourses='';
+    //4. valid courses to selected topics
     $rootquery = 'SELECT * FROM `v_topiccourse_notdepercatedlevelnotzero` WHERE';
       foreach ($topicsInBrand as $val) {
         $queryCourses .= ' or topic_id = '.implode($val);
@@ -201,33 +230,23 @@ class RequestHandler
     $queryCourses = substr($queryCourses,3,strlen($queryCourses));
     $return['courselist'] = $this->getResultArray($rootquery.$queryCourses);
 
-    //Hole Events zu Courses
+    //5. events to courses
     $return['eventlist'] = $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` WHERE ".$queryCourses);
+    //6. events for tests
     $return['coursetotestlist'] = $this->getResultArray("SELECT * FROM `v_testcourse`");
+    //7. informationcodes to states
     $return['stateinfo'] = $this->getResultArray("SELECT * FROM `v_statuseventguarantee`");
     
     return $return;
   }
 
-
+  /* Get eventinformation for requestet events (reservation) */
   private function vEventcourselocationReservationmail($eventlist){
-     //event_id, start_date, finish_date, start_time, finish_time, event_status_id, eventguaranteestatus, eventinhouse, coursePrice, course_id, course_name, courseMaxParticipants, 
-     //location_name, internet_location_name, location_description, locationMxParticipants, 
-    // $eventlist = json_decode($eventlist);
     $rootquery = 'SELECT * FROM `v_eventcourselocation_reservationmail` WHERE ';    
     $queryEvents='event_id = ';
     if (count($eventlist)>0) {
       $queryEvents .= implode(' or event_id = ', $eventlist );
     }
-     // error_log($eventlist);
-     // error_log($rootquery.$queryEvents);
-    // for ($i=0; $i < count($eventlist); $i++) {     
-    //   // if ($eventlist[$i]!=null) {
-    //           $queryEvents .= ' or event_id = '.$eventlist[$i];
-    //         // }      
-    // }
-    // $queryEvents = substr($queryEvents,3,strlen($queryEvents));
-  //bsp SELECT * FROM `v_eventcourselocation_reservationmail` WHERE  event_id = "4260" or event_id = "4261" or event_id = "3851"
     return $this->getResultArray($rootquery.$queryEvents);
   }
 

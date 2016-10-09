@@ -330,10 +330,12 @@ console.log('fertiges $scope.topics: ', $scope.topics);
 
 /*
 If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
+and the Browser-URL-field get updated with ?topic= name of the Navbarelement
 */
 $scope.tablesearchchange = function(name){
   $scope.tablesearch = name
   $scope.sidebarselect = name
+  window.history.replaceState('','','index.php?topic='+name)
   // name= name.replace(/\s+/g,'')
   // openPanel(name)
 }
@@ -457,6 +459,12 @@ $scope.getClass = function(topicName){
  }
 }
 orderbranddata(response);
+
+/*After a complete loading, select the in the URL preselectet topic */
+$( document ).ready(function() {
+    var selector = 'nav-'+response.preselectedTopic.replace(/\s+/g,'')
+    $( '#'+selector ).click()
+  });
 }]);
 
 function log(a){console.log(a)}

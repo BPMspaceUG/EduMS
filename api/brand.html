@@ -1,3 +1,4 @@
+<!-- Timespamp 7.10.2016 -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
 <div class="container-fluid">
 
@@ -29,7 +30,7 @@
        </a>
       </li>
       <li class="edums-navbar-topictab" ng-repeat="topic in topics">
-       <a data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
+       <a id="nav-{{topic.topic_name}}" data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
          {{topic.topic_name_raw}}</a>
       </li>
 
