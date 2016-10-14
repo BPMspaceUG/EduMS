@@ -202,8 +202,8 @@ class RequestHandler
 
     //3.2 check if there is a requested topic and its existence in the topiclist of the brand
     if (isset($_GET['topic'])) {
-      $decoded = urldecode($_GET['topic']);
-      if ( array_search($decoded, array_column($return['topiclist'], 'topicName')) >=0 ) {
+      $decoded = $_GET['topic'];
+      if ( array_search($decoded, array_column($return['topiclist'], 'topicName')) >= 0) {
         $return['preselectedTopic'] = $decoded;
       }else{
         $return['preselectedTopic'] = 'none';
@@ -212,6 +212,7 @@ class RequestHandler
       $return['preselectedTopic'] = 'none';
       //$return['preselectedTopic'] = $section;
     }
+    $return['url_GET']=$_GET;
 
     $queryCourses='';
     //4. valid courses to selected topics
@@ -232,6 +233,29 @@ class RequestHandler
 
     //5. events to courses
     $return['eventlist'] = $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` WHERE ".$queryCourses);
+    
+    //5.2 set 'meta' to Schema.org/EducationEvent structure tags (startDate, endDate, location, name)
+    //returnes true if event is in the future
+    function validEvent($event)
+    {
+      $startDate = $event['start_date'];
+      return time() < strtotime($startDate);
+    }
+    $metaEventlist = array_filter($return['eventlist'], "validEvent");
+    $return['meta']='  <div itemscope itemtype="http://schema.org/EducationEvent"> ';//debug-print keys of the array: implode(array_keys($metaEventlist[3]),'~');
+    $metaFillCounter = 0;
+    for ($i=0; $i < sizeof($metaEventlist); $i++) { 
+      if (isset($metaEventlist[$i]) && $metaFillCounter < 5) {
+         $return['meta'] .= '<meta itemprop="startDate" content="'.$metaEventlist[$i]['start_date'].'"/>';
+         $return['meta'] .= '<meta itemprop="endDate" content="'.$metaEventlist[$i]['finish_date'].'"/>';
+         $return['meta'] .= '<meta itemprop="location" content="'.$metaEventlist[$i]['internet_location_name'].' '.$metaEventlist[$i]['eventguaranteestatus'].'"/>';
+         $return['meta'] .= '<meta itemprop="name" content="'.$metaEventlist[$i]['course_name'].'"/>';
+        //debug-print time calculation: $return['meta'].= time().' '.strtotime($metaEventlist[$i]['start_date']).' '.$metaEventlist[$i]['start_date'].' - ';
+        $metaFillCounter +=1;
+       } 
+    }
+    $return['meta'].='</div>';
+
     //6. events for tests
     $return['coursetotestlist'] = $this->getResultArray("SELECT * FROM `v_testcourse`");
     //7. informationcodes to states
