@@ -9,6 +9,8 @@ Definition, sorting and combining of all receaved content-data to integrate in A
 funcitons overview: 
   orderbranddata  - sorting of receaved Infos for brand and $sce validating
   getTestID - find test/exam-ID to a course-ID
+  eventonly - define pageconstellation for events
+  descriptiononly - define pageconstellation for descriptions
   getDateSortedEventsToCourse - find events to courses for sidebar
   defineCourseList -  preparte courselist
   setCourseList -   sort courselist
@@ -28,6 +30,8 @@ Definition, Sortierung und Verflechtung aller empfangener Content-Daten zur Eing
 
 Funktionenübersicht: 
   orderbranddata  -  Sortieren der emfapngenen Infos zu Brand und $sce validierung
+  eventonly - definiere den Seitenaufbau für Events
+  descriptiononly - definiere den Seitenaufbau für Beschreibungen (descriptions)
   getTestID -   TestID zu einer KursID finden
   getDateSortedEventsToCourse -   Events zu Kursen für Sidebar finden
   defineCourseList -  Kursliste vorbereiten
@@ -59,6 +63,8 @@ app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $s
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $scope.Math = window.Math, reservefinal=false
 $scope.sidebarselect = 'start'
+$scope.show = {ct:false, eventOnly:false}
+
 
   /*
   Pass every submitted HTML section through $sce.trustAsHtml. 
@@ -108,6 +114,124 @@ $scope.sidebarselect = 'start'
     $scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.eventlist[i].location_description+'</div>')
    }
   $scope.eventlist = $scope.eventlist.sort(function(x,y){return new Date(x.start_date) - new Date(y.start_date)})
+
+
+  /*
+  If the initial url gets the parameter "eventonly=true":
+  - create a list
+  - show it and hide the rest
+
+  Additional prameter dependencies cases:
+  1. topic (optional course)
+  2. location (optional topic OR-AND course)
+  3. course but no topic
+  4. just eventonly
+  */
+  var errHead = 'ERROR: requested ', errTail = ' not found or is not associeted with your organisation.'
+  eventonly = function(){
+    var get = response.url_GET, course = get.course || false, location = get.location || false,
+     topic = get.topic || false
+    // Initial check if event only mode is selected
+    if (get.eventonly == 'true') {
+      log('eventonly:')
+      $scope.show.ct = false, $scope.show.eventOnly = true 
+      $scope.soloevent = {list:[], count: get.count || 5}
+
+      //case 1: only topic and optional course
+      if (topic && !location) {
+        var matchTopic = _.filter($scope.topics, function(T){ return T.topic_name_raw == topic})
+        if (matchTopic[0]) {
+          $scope.soloevent.list = matchTopic[0].eventList
+
+          if (course) {
+            $scope.soloevent.list = _.filter($scope.soloevent.list, function(E){return E.course_name == course})
+          };
+        }else{            
+            $scope.soloevent.error = errHead+'topic("'+topic+'")'+errTail 
+        }
+      }
+
+      //case 2: location and optional topic and course
+      else if(location){
+        $scope.soloevent.list = _.filter($scope.eventlist, function(E){
+          var res = E.internet_location_name == location
+          if (topic && res) {res = E.topic_name_raw == topic};
+          if (course && res) {res = E.course_name == course};
+          return res
+        })
+        if ($scope.soloevent.list.length < 1) {
+            $scope.soloevent.error = errHead+'location("'+location+'") topic("'+topic+'") course("'+course+'")'+errTail 
+        };
+      }
+
+      //case 3: course but no topic
+      else if(course && !topic){
+        $scope.soloevent.list = _.filter($scope.eventlist, function(E){
+          var res = (E.course_name == course)
+          return res
+        })
+        if ($scope.soloevent.list.length < 1) {
+            $scope.soloevent.error = errHead+'location("'+location+'") topic("'+topic+'") course("'+course+'")'+errTail 
+        };
+      }
+
+      //case 4: just eventonly
+      else{
+        $scope.soloevent.list = $scope.eventlist
+      };
+    }    
+  }
+  /*
+  If the initial url gets the parameter "descriptiononly=true":
+  - extract and show description(s)
+  - hide the rest
+
+  Additional prameter dependencies cases:
+  brand, topic, course, location
+  */
+  descriptiononly = function(){
+    var get = response.url_GET, brand=get.brand, course = get.course || false, location = get.location || false,
+     topic = get.topic || false, res = {}
+     if (get.descriptiononly) {
+        $scope.show.ct = false, $scope.show.descriptionOnly = true
+
+        if (brand) {
+          res.brandDescription = $scope.brandinfo[0].brandDescription };
+        
+        if (topic) {
+          res.topic = _.filter(response.topiclist, function(T){ return T.topic_name_raw == topic})
+          if (res.topic[0]) {
+            res.topic = res.topic[0].topicDescription
+          }else{            
+            res.topic = errHead+'topic('+topic+')'+errTail 
+          }
+        };
+
+        if (course) {
+          res.course = _.filter(response.courselist, function(C){ return C.course_name == course}) 
+          if (res.course[0]) {
+            res.course = res.course[0].courseDescription 
+          } else{            
+            res.course = errHead+'course('+course+')'+errTail 
+          }
+        };
+
+        if (location) {
+          res.location = _.filter($scope.eventlist, function(E){ return E.internet_location_name == location})
+          if (res.location[0]) {
+            res.location = res.location[0].location_description 
+          }else{            
+            res.location = errHead+'location('+location+')'+errTail 
+          }
+        };
+
+        if (!brand && !topic && !course && !location) {
+          res.brandDescription = $scope.brandinfo[0].brandDescription
+        };
+     };
+     $scope.solodescription = res
+  }
+
 
   response.stateinfo.guaranteed = _.find(response.stateinfo, function(state){
     if (state.eventguaranteestatus.match(/g|G\w+nt/)) {
@@ -326,6 +450,8 @@ console.log('fertiges $scope.topics: ', $scope.topics);
         };
       }
       */
+  eventonly()
+  descriptiononly()
 }
 
 /*
@@ -335,7 +461,10 @@ and the Browser-URL-field get updated with ?topic= name of the Navbarelement
 $scope.tablesearchchange = function(name){
   $scope.tablesearch = name
   $scope.sidebarselect = name
-  window.history.replaceState('','','index.php?topic='+name)
+  //only update the state if topics are selectable
+  if (!$scope.show.ct == false) {
+    window.history.replaceState('','','index.php?topic='+name)
+  };
   // name= name.replace(/\s+/g,'')
   // openPanel(name)
 }
@@ -459,6 +588,7 @@ $scope.getClass = function(topicName){
  }
 }
 orderbranddata(response);
+if (!($scope.show.eventOnly || $scope.show.descriptionOnly)) {$scope.show.ct = true};
 
 /*After a complete loading, select the in the URL preselectet topic */
 $( document ).ready(function() {
