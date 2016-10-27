@@ -1,65 +1,37 @@
-<!-- Timespamp 7.10.2016 -->
+<!-- Timestpamp 25.10.2016 -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
 <div class="container-fluid">
 
-
-<div ng-repeat="event in extendedEventlist|limitTo:5">
-  <div itemscope itemtype="http://schema.org/EducationEvent"> 
-  <!-- meta muss wahrsch. in head -> head wird in index ausgeführt weil gesamt brand in div liegt -> keine xlist in index verfügbar: Entweder ohne meta itemprop an sidebar binden oder sidebar in requesthandler vorsortieren Außerdem ISO´s prüfen-->
-   <meta itemprop="startDate" content="{{event.start_date}}"/>
-   <meta itemprop="endDate" content="{{event.finish_date}}"/>
-   <meta itemprop="location" content="{{event.location}} ({{event.eventgarantiestatus}})"/>
-   <meta itemprop="name" content="{{event.name}}"/>
-   <!-- URL notwendig? (hoher Aufwand)-->
-   <!-- <meta itemprop="url" content="https://www.mitsm.de/kursname" />
-   <a href="https://www.mitsm.de/kursname" target="_self"></a> -->
-  </div> 
-</div>
-
-
-<div class="row edums-content" >
+<div class="row edums-content ng-cloak" ng-show="show.ct" >
    <!-- menu -->
    <div class="row edums-menu" >
-   <div class="col-xs-12 edums-menu-container" >
-    <div class="tabbable" >
-     <ul class="nav nav-tabs edums-navbar">
+     <div class="col-xs-12 edums-menu-container" >
+      <div class="tabbable" >
+       <ul class="nav nav-tabs edums-navbar">
 
-      <li class="active edums-navbar-brandtab">
-       <a data-target="#panel-brand" ng-click="sidebarselect = 'start'; tablesearch =''" data-toggle="tab">
-        <i class="fa fa-university"></i>
-       </a>
-      </li>
-      <li class="edums-navbar-topictab" ng-repeat="topic in topics">
-       <a id="nav-{{topic.topic_name}}" data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
-         {{topic.topic_name_raw}}</a>
-      </li>
+        <li class="active edums-navbar-brandtab">
+         <a data-target="#panel-brand" ng-click="sidebarselect = 'start'; tablesearch =''" data-toggle="tab">
+          <i class="fa fa-university"></i>
+         </a>
+        </li>
+        <li class="edums-navbar-topictab" ng-repeat="topic in topics">
+         <a id="nav-{{topic.topic_name}}" data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
+           {{topic.topic_name_raw}}</a>
+        </li>
 
-
-
-<!--
-       <li class="edums-navbar-topictab">
-
-        <input type="text" ng-model="openpanel"
-               placeholder="Type: bold strike red" aria-label="Type: bold strike red">
-        <hr>
-
-       <a data-target="#panel-standort" ng-click="modifyURL(topic.topic_name)" data-toggle="tab">{{openpanel}}</a>
-      </li> 
--->
-
-
-
-      <li class="pull-right edums-navbar-agbimpressumdatenschutz">
-       <a data-toggle="tab" data-target="#panel-agbimpressumdatenschutz" ng-click="sidebarselect = 'start'">
-        AGB & Datenschutz</a>
-      </li>
-      <li class="pull-right edums-navbar-locations">
-       <a data-toggle="tab" data-target="#panel-standort" ng-click="sidebarselect = 'start'">
-        <i class="fa fa-location-arrow"></i> Standorte</a>
-      </li>
-     </ul>
-  <p></p>
-  </div></div></div>
+        <li class="pull-right edums-navbar-agbimpressumdatenschutz">
+         <a data-toggle="tab" data-target="#panel-agbimpressumdatenschutz" ng-click="sidebarselect = 'start'">
+          AGB & Datenschutz</a>
+        </li>
+        <li class="pull-right edums-navbar-locations">
+         <a data-toggle="tab" data-target="#panel-standort" ng-click="sidebarselect = 'start'">
+          <i class="fa fa-location-arrow"></i> Standorte</a>
+        </li>
+       </ul>
+       <p></p>
+      </div>
+    </div>
+  </div>
   
   <!----content & sidebar-->
   <div class="row edums-infocore" >
@@ -250,6 +222,20 @@
 
 
 
+
+
+<div class="edums-eventOnly ng-cloak" ng-show="show.eventOnly">
+  <right-bar-course-all ng-repeat="e in soloevent.list | limitTo:soloevent.count"  class="edums-allevents-event"></right-bar-course-all>
+  <div class="edums-eventOnly" ng-show="soloevent.error">{{soloevent.error}}</div>
+</div>
+
+
+<div class="edums-descriptionOnly ng-cloak" ng-show="show.descriptionOnly">
+  <div class="edums-descriptionOnly-brandDescription" ng-bind-html="solodescription.brandDescription"></div>
+  <div class="edums-descriptionOnly-topic" ng-bind-html="solodescription.topic"></div>
+  <div class="edums-descriptionOnly-course" ng-bind-html="solodescription.course"></div>
+  <div class="edums-descriptionOnly-location" ng-bind-html="solodescription.location"></div>
+</div>
 
 
 
