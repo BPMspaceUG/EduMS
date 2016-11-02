@@ -23,7 +23,7 @@
 .edums-content{}
 .edums-menu{}
 .edums-menu-container{}
-.edums-navbar{}
+.edums-navbar{cursor:pointer}
 .edums-navbar-brandtab{}
 .edums-navbar-topictab{}
 .edums-navbar-sonstiges{}
