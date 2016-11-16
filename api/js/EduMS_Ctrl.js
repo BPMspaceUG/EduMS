@@ -477,10 +477,15 @@ $scope.tablesearchchange = function(name){
   $scope.sidebarselect = name
   //only update the state if topics are selectable
   if (!$scope.show.ct == false) {
-    window.history.replaceState('','',window.location.pathname+'?topic='+name)
+    window.history.replaceState('','',window.location.pathname+'?topic='+name.replace(/\W/g,''))
   };
   // name= name.replace(/\s+/g,'')
   // openPanel(name)
+}
+$scope.brandtabChange = function(){
+  window.history.replaceState('','',window.location.pathname)
+  sidebarselect = 'start'
+  tablesearch =''
 }
 
 /*
