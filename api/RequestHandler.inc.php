@@ -125,7 +125,7 @@ class RequestHandler
       case 'brand': 
         $return = array(
         'script'=>file_get_contents('js/Underscore v1.8.3.js').file_get_contents('js/jQuery 2.2.1.js').file_get_contents('js/AngularJS v1.4.9.js').file_get_contents('js/Bootstrap v3.3.6.js'),
-        'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); </script>".file_get_contents('js/EduMS_Ctrl.js'),
+        'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize', 'ngLocale']); </script>".file_get_contents('js/EduMS_Ctrl.js'),
         'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
         'directive'=>file_get_contents('js/EduMS_template-directives.js'),
         'htmlCore'=> $this->getResultArray("SELECT `html_core` FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$bname."'")
@@ -236,10 +236,11 @@ class RequestHandler
     
     //5.2 set 'meta' to Schema.org/EducationEvent structure tags (startDate, endDate, location, name)
     //returnes true if event is in the future
+    // $morgen = mktime(0, 0, 0, date("m")  , date("d")+1, date("Y"));
     function validEvent($event)
     {
       $startDate = $event['start_date'];
-      return time() < strtotime($startDate);
+      return mktime(0, 0, 0, date("m"), date("d")+1, date("Y")) < strtotime($startDate); //tommorrow < event start date
     }
     $metaEventlist = array_filter($return['eventlist'], "validEvent");
     $return['meta']='  <div itemscope itemtype="http://schema.org/EducationEvent"> ';//debug-print keys of the array: implode(array_keys($metaEventlist[3]),'~');
