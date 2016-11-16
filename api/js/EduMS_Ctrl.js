@@ -59,12 +59,14 @@ app.run(function ($rootScope) {
 Controllers define and handle an Angular area
 Ein controller wird für einen bestimmten Sinnabschnitt innerhalb von Angular definiert
 */
-app.controller('navCtrl', ['$scope','$http', '$sce', function ($scope, $http, $sce) {
+app.controller('navCtrl', ['$scope','$http', '$sce'/*, '$locale'*/, function ($scope, $http, $sce/*,$locale*/) {
  //https://docs.angularjs.org/api/ngSanitize/service/$sanitize
 $scope.Math = window.Math, reservefinal=false
 $scope.sidebarselect = 'start'
 $scope.show = {ct:false, eventOnly:false}
-
+// $scope.localeId = $locale.id
+$scope.now = new Date()
+$scope.tomorrow = new Date(''+$scope.now.getFullYear(), ''+$scope.now.getMonth(), ''+($scope.now.getDate()+1))
 
   /*
   Pass every submitted HTML section through $sce.trustAsHtml. 
@@ -109,8 +111,10 @@ $scope.show = {ct:false, eventOnly:false}
 
   $scope.courseToTest = response.coursetotestlist;
 
-  $scope.eventlist = response.eventlist
-  for (var i = 0; i < response.eventlist.length; i++) {
+  $scope.eventlist = _.filter( response.eventlist, function (event){
+    return new Date(event.start_date) > $scope.tomorrow
+  })
+  for (var i = 0; i < $scope.eventlist.length; i++) {
     $scope.eventlist[i].location_description = $sce.trustAsHtml('<div>'+response.eventlist[i].location_description+'</div>')
    }
   $scope.eventlist = $scope.eventlist.sort(function(x,y){return new Date(x.start_date) - new Date(y.start_date)})
@@ -139,12 +143,16 @@ $scope.show = {ct:false, eventOnly:false}
 
       //case 1: only topic and optional course
       if (topic && !location) {
-        var matchTopic = _.filter($scope.topics, function(T){ return T.topic_name_raw == topic})
-        if (matchTopic[0]) {
-          $scope.soloevent.list = matchTopic[0].eventList
+        var matchTopic = _.find($scope.topics, function(T){
+          return T.topic_name_raw.replace(/\W/g,'').toUpperCase() == topic.replace(/\W/g,'').toUpperCase()
+        })
+        if (matchTopic) {
+          $scope.soloevent.list = matchTopic.sideBarCourses//.filter(date > now()+1)
 
           if (course) {
-            $scope.soloevent.list = _.filter($scope.soloevent.list, function(E){return E.course_name == course})
+            $scope.soloevent.list = _.filter($scope.soloevent.list, function(E){ 
+              return E.course_name.replace(/\W/g,'').toUpperCase() == course.replace(/\W/g,'').toUpperCase() 
+            })
           };
         }else{            
             $scope.soloevent.error = errHead+'topic("'+topic+'")'+errTail 
@@ -153,10 +161,10 @@ $scope.show = {ct:false, eventOnly:false}
 
       //case 2: location and optional topic and course
       else if(location){
-        $scope.soloevent.list = _.filter($scope.eventlist, function(E){
-          var res = E.internet_location_name == location
-          if (topic && res) {res = E.topic_name_raw == topic};
-          if (course && res) {res = E.course_name == course};
+        $scope.soloevent.list = _.filter($scope.sideBarCoursesStart, function(E){
+          var res = E.internet_location_name.replace(/\W/g,'').toUpperCase() == location.replace(/\W/g,'').toUpperCase()
+          if (topic && res) {res = E.topic_name_raw.replace(/\W/g,'').toUpperCase() == topic.replace(/\W/g,'').toUpperCase()};
+          if (course && res) {res = E.course_name.replace(/\W/g,'').toUpperCase() == course.replace(/\W/g,'').toUpperCase()};
           return res
         })
         if ($scope.soloevent.list.length < 1) {
@@ -166,8 +174,8 @@ $scope.show = {ct:false, eventOnly:false}
 
       //case 3: course but no topic
       else if(course && !topic){
-        $scope.soloevent.list = _.filter($scope.eventlist, function(E){
-          var res = (E.course_name == course)
+        $scope.soloevent.list = _.filter($scope.sideBarCoursesStart, function(E){
+          var res = (E.course_name.replace(/\W/g,'').toUpperCase() == course.replace(/\W/g,'').toUpperCase())
           return res
         })
         if ($scope.soloevent.list.length < 1) {
@@ -177,7 +185,7 @@ $scope.show = {ct:false, eventOnly:false}
 
       //case 4: just eventonly
       else{
-        $scope.soloevent.list = $scope.eventlist
+        $scope.soloevent.list = $scope.sideBarCoursesStart
       };
     }    
   }
@@ -199,7 +207,9 @@ $scope.show = {ct:false, eventOnly:false}
           res.brandDescription = $scope.brandinfo[0].brandDescription };
         
         if (topic) {
-          res.topic = _.filter(response.topiclist, function(T){ return T.topic_name_raw == topic})
+          res.topic = _.filter(response.topiclist, function(T){ 
+            return T.topic_name_raw.replace(/\W/g,'').toUpperCase() == topic.replace(/\W/g,'').toUpperCase()
+          })
           if (res.topic[0]) {
             res.topic = res.topic[0].topicDescription
           }else{            
@@ -208,7 +218,9 @@ $scope.show = {ct:false, eventOnly:false}
         };
 
         if (course) {
-          res.course = _.filter(response.courselist, function(C){ return C.course_name == course}) 
+          res.course = _.filter(response.courselist, function(C){ 
+            return C.course_name.replace(/\W/g,'').toUpperCase() == course.replace(/\W/g,'').toUpperCase()
+          }) 
           if (res.course[0]) {
             res.course = res.course[0].courseDescription 
           } else{            
@@ -217,7 +229,9 @@ $scope.show = {ct:false, eventOnly:false}
         };
 
         if (location) {
-          res.location = _.filter($scope.eventlist, function(E){ return E.internet_location_name == location})
+          res.location = _.filter($scope.eventlist, function(E){ 
+            return E.internet_location_name.replace(/\W/g,'').toUpperCase() == location.replace(/\W/g,'').toUpperCase()
+          })
           if (res.location[0]) {
             res.location = res.location[0].location_description 
           }else{            
@@ -290,7 +304,7 @@ var defineCourseList = function(topic, topiccourseCourse, courses, courseToTest)
           course.level = mntopiccourse.level //Anzeigereihenfolge in Panel
           course.rank = mntopiccourse.rank
           course.brutto = course.coursePrice*1.19
-          course.sysName = course.course_name.replace(/\W+/g,''); //PanelIds
+          course.sysName = course.course_name.replace(/\W/g,'').toUpperCase(); //PanelIds
 
           course.test_id= getTestID(course.course_id, courseToTest)
 
@@ -421,7 +435,7 @@ for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
                     _.each(courseZuTopic, function(c){if(c.course_id == x.course_id && x.test != 1){
                       isInList=true}})
                   return isInList})
- _.each(eventZuCourse, function(e){e.sysName = e.course_name.replace(/\W+/g,'')})
+ _.each(eventZuCourse, function(e){e.sysName = e.course_name.replace(/\W/g,'').toUpperCase()})
  $scope.topics[i].sideBarCourses = eventZuCourse;
 };
 $scope.sideBarCoursesStart = _.filter($scope.eventlist, function(x){return x.test != 1})
@@ -463,7 +477,7 @@ $scope.tablesearchchange = function(name){
   $scope.sidebarselect = name
   //only update the state if topics are selectable
   if (!$scope.show.ct == false) {
-    window.history.replaceState('','','index.php?topic='+name)
+    window.history.replaceState('','',window.location.pathname+'?topic='+name)
   };
   // name= name.replace(/\s+/g,'')
   // openPanel(name)
