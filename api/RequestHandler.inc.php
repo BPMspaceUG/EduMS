@@ -1,8 +1,4 @@
 <?php
-// require_once 'PHPMailer/PHPMailerAutoload.php';
-
-// $mail = new PHPMailer(true);
-// class phpmailerAppException extends phpmailerException {}
 class RequestHandler 
 {
   /*
@@ -16,13 +12,11 @@ class RequestHandler
     um sie an den Browser zu senden. 
   */
 
-  
-  // require 'reservemail.php';
 
   private $userid = -1;  private $token = -1;  private $validLogin = false;  private $db; 
-  /** Handles SQL-querys and returnes the resultdata.
-  * - On debug -> show the the query
-  * - On fail -> log infodata */
+  /** Handles SQL-querys and returns the resultdata.
+  * @debugmode on: show the the query
+  * @fail: log infodata */
   private function getResultArray($query){
     global $db; 
     if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
@@ -57,8 +51,7 @@ class RequestHandler
 
   /** Validates the receaved login-credentials of an User
   * - expect userId and token in tbl brand-> return true/false 
-  * - on fail-> add info to a Logfile */
-    
+  * @fail: add info to a Logfile */    
   private function validateCredentials($userid,$token){
     global $db;
     $this->usercss = '<style> body {background-color: red;}</style>';
@@ -86,8 +79,7 @@ class RequestHandler
        //   mkdir ('logs', 0744);
        // }
       file_put_contents ('metaLog.log', 'Created logs directory on '.date("d.m.Y - H:i:s",time()).'. ', FILE_APPEND | LOCK_EX);
-      
-      // var_dump($this->usercss);
+
     }
     else{
       file_put_contents('logs/failLogInLog.log', date("d.m.Y - H:i:s",time())."\nUserId: ".$userid."\nToken: ".$token."\n-----------\n", FILE_APPEND | LOCK_EX);
@@ -96,7 +88,7 @@ class RequestHandler
     }
   }
 
-  /*removes the first element from an array - return array Result*/
+  /*removes the first element from an array - return result-array*/
   private function rmFirstParam($handle){
     unset($handle[0]);
     $result = array();
@@ -107,7 +99,7 @@ class RequestHandler
   }
 
   /* Handles the receaved route-request.
-  * - On Login-fail exit the handle and responde fail
+  * @Login-fail: exit the handle and responde fail
   * - Case and route the $route to its specific functions
   * - return array|bool|mixed|mysqli_result */
   public function handle($route){
@@ -134,47 +126,20 @@ class RequestHandler
         'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); </script>".file_get_contents('js/EduMS_Ctrl.js'),
         'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
         'directive'=>file_get_contents('js/EduMS_template-directives.js'),
-        'ct'=>file_get_contents('brand.html'));        
+        'ct'=> file_get_contents('brand.html'));
         return $return;
-        break;
-
-      case 'reserveform': 
-      // $handle[0];
-        $return = array(
-        'script'=>file_get_contents('js/Underscore v1.8.3.js').file_get_contents('js/jQuery 2.2.1.js').file_get_contents('js/AngularJS v1.4.9.js').file_get_contents('js/Bootstrap v3.3.6.js'),
-        'controller'=>"<script type=\"text/javascript\">var app = angular.module('application', ['ngSanitize']); </script>".file_get_contents('js/Form_Ctrl.js'),
-        'css'=>file_get_contents('css/3.3.6 bootstrap.min.css').file_get_contents('css/EduMS_custom.css').$this->usercss,
-        'directive'=>file_get_contents('js/EduMS_reserveForm_template_directives.js'),
-        'ct'=>file_get_contents('reserveform.html'));        
-        return $return;
-        break;
-
-      //database getters
-      case 'getTopics': $response = array('topiclist' => $this->vTopicNotdepercated(), 'topiccourseCourselist' => $this->vTopiccourseNotdepercatedlevelnotzero(), 'eventcourselocationFuture' => $this->vEventcourselocationFuturepublicnotdepercatednotstornonotnew());
-        return $response;
-        break;
-      case 'getCourses': return $this->getCourseList();
-        break;
-      case 'getAllLocations': return $this->getAllLocationsList();
-        break;
-      case 'getFutureCourses': return $this->getFutureCourses();
-        break;
-      case 'getNextFiveEvents': return $this->getNextFiveEvents();
         break;
       
-
       //returns: brandinfo topiclist topiccourselist courselist eventlist 
       case 'getBrandInfo': return $this->getbrandtopics($bname);
         break;
 
-      case "reserve":
-        //$dbRulesToBrand = getReservationInfo($bname);
-
-        require_once 'reservemail.php';
-      //   file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+        case "reserve":
+        require_once 'reservavtionMail.php'; //newer Version for Linux - PHP - sendmail 
+        // file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
         return; //$return;
       break;
-    
+
       default: echo "Defaultrequest from: Requesthandler -> handle -> defaultRequest.";
         echo "There is no section '".$section."' avaliable";
         file_put_contents('logs/failsectionLog.log', date("d.m.Y - H:i:s",time())."\nsectionrequest: ".$section."\n-----------\n", FILE_APPEND | LOCK_EX);
@@ -183,36 +148,8 @@ class RequestHandler
     }
   }
 
- public function reservationprocess(){  
-    
-    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
-  } 
-
-
-  /*Definition of special handling functions.*/
-  //cleanflag
-
-
-  /*Choose by URL($handle) what data the monitor have to responde*/
-  // private function handleMonitor($handle=array('a' => 'default' )){
-  //   //wie viele Parameter wurden übergeben? sizeof=count
-  //   $out = array();
-  //   if(sizeof($handle)==0){ //api/usr/token/monitor---
-  //     $out['monitor'] = $this->getAll(); //Monitor everything
-  //     return $out;
-  //   }
-  //   /*If receaved a specific Monitor, responde data for every specification*/
-  //   else{ 
-  //     for ($i=0; $i < sizeof($handle); $i++) { 
-  //       $out[$handle[i]] = $this->handle($handle); //response[handle-1,(..),handle-n]=Data        
-  //     }
-  //     return $out;
-  //   }
-  // }
-
-  //vTopicNotdepercated vTopiccourseNotdepercatedlevelnotzero vEventcourselocationFuturepublicnotdepercatednotstornonotnew
-  /*Definition of all getters for the database*/
-  //topic_id deprecated topicName  topicHeadline  topicDescription  topicDescriptionSidebar topicImage footer responsibleTrainer_id
+  /*Get topicinformation to an ID
+    @fail: log fail*/
   private function vTopicNotdepercated($id=-1){
     $return['topiclist'] = $this->getResultArray("SELECT * FROM `v_topic_notdepercated`");
     for ($i=0; $i < count($return['topiclist']) ; $i++) { 
@@ -224,66 +161,6 @@ class RequestHandler
     return $return;
   }
 
-  private function gettestarray(){  
-    return  array('a' => 7, 'b' => array('bg' => '1', 'cb' => 'cc'));
-  } 
-  private function getFutureCourses(){  
-    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 50");
-  }  
-  private function vTopiccourseNotdepercatedlevelnotzero(){ 
-  //topic_course_id  topic_id  topicName  course_id  course_name level  rank 
-    return $this->getResultArray("SELECT * FROM `v_topiccourse_notdepercatedlevelnotzero` ");
-  }
-  private function getNextFiveEvents(){
-  //event_id  start_date finish_date start_time finish_time course_id  course_name test  coursedeprecated  courseMaxParticipants  
-  //location_id location_name  internet_location_name location_description  locationMaxParticipants event_status_id eventguaranteestatus  eventinhouse
-    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` limit 5");
-  }  
-  private function vEventcourselocationFuturepublicnotdepercatednotstornonotnew(){
-    //event_id start_date finish_date start_time finish_time course_id  course_name test  coursedeprecated  courseMaxParticipants  location_id location_name  internet_location_name 
-    //location_description  locationMaxParticipants event_status_id eventguaranteestatus  eventinhouse
-    return $this->getResultArray("SELECT * FROM `v_eventcourselocation_futurepublicnotdepercatednotstornonotnew` ");
-  }
-
-
-
-  private function vEventcourselocationReservationmail($eventlist){
-
-     //event_id, start_date, finish_date, start_time, finish_time, event_status_id, eventguaranteestatus, eventinhouse, coursePrice, course_id, course_name, courseMaxParticipants, 
-     //location_name, internet_location_name, location_description, locationMxParticipants, 
-    // $eventlist = json_decode($eventlist);
-    $rootquery = 'SELECT * FROM `v_eventcourselocation_reservationmail` WHERE ';    
-    $queryEvents='event_id = ';
-    if (count($eventlist)>0) {
-      $queryEvents .= implode(' or event_id = ', $eventlist );
-    }
-     // error_log($eventlist);
-     // error_log($rootquery.$queryEvents);
-    // for ($i=0; $i < count($eventlist); $i++) {     
-    //   // if ($eventlist[$i]!=null) {
-    //           $queryEvents .= ' or event_id = '.$eventlist[$i];
-    //         // }      
-    // }
-    // $queryEvents = substr($queryEvents,3,strlen($queryEvents));
-  //bsp SELECT * FROM `v_eventcourselocation_reservationmail` WHERE  event_id = "4260" or event_id = "4261" or event_id = "3851"
-    return $this->getResultArray($rootquery.$queryEvents);
-  }
-
-
-
-  /*The courselist contains all not deprecated couses */
-  private function getCourseList(){   
-    $query = "SELECT * FROM `v_course_notdepercated`";
-    //course_id course_name number_of_days internet_course_article_id min_participants  courseHeadline courseDescription  courseDescriptionMail  coursePrice courseDescriptionCertificate
-    $return['courselist'] = $this->getResultArray($query);
-    return $return;
-  }
-  
-  /*The reservationinfo contains all associated email-adresses as well as other brand specific info*/
-  // private function getReservationInfo($bname){  
-  //brand_id, brandmail, partner_id, brand_name, prot_data_priv, terms_and_cond, brandImage, imprint, partnermail, partnername
-  //   return $this->getResultArray("SELECT * FROM `v_brand_and_partner_reservationmail` where login = ".$bname);
-  // } 
 
   private function getbrandtopics($brandname){
     $return['brandinfo'] = $this->getResultArray("SELECT * FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$brandname."'");
@@ -294,7 +171,7 @@ class RequestHandler
     if ($return['brandinfo'][0]['branddeprecated']!=0) {//In case SQL fails exit
       return $return['brandinfo'][0]['brandDescription'] = '- Forbidden - Please contact Admin';
     }
-    $brandId = $return['brandinfo'][0]['brand_id'];//$return['brandInfo']['brand_id'];
+    $brandId = $return['brandinfo'][0]['brand_id'];
 
     //Hole Topics zu Brand
     $topicsInBrand = $this->getResultArray("SELECT `topic_id` FROM `v_brandtopic` WHERE brand_id = '".$brandId."'");
@@ -330,6 +207,28 @@ class RequestHandler
     $return['stateinfo'] = $this->getResultArray("SELECT * FROM `v_statuseventguarantee`");
     
     return $return;
+  }
+
+
+  private function vEventcourselocationReservationmail($eventlist){
+     //event_id, start_date, finish_date, start_time, finish_time, event_status_id, eventguaranteestatus, eventinhouse, coursePrice, course_id, course_name, courseMaxParticipants, 
+     //location_name, internet_location_name, location_description, locationMxParticipants, 
+    // $eventlist = json_decode($eventlist);
+    $rootquery = 'SELECT * FROM `v_eventcourselocation_reservationmail` WHERE ';    
+    $queryEvents='event_id = ';
+    if (count($eventlist)>0) {
+      $queryEvents .= implode(' or event_id = ', $eventlist );
+    }
+     // error_log($eventlist);
+     // error_log($rootquery.$queryEvents);
+    // for ($i=0; $i < count($eventlist); $i++) {     
+    //   // if ($eventlist[$i]!=null) {
+    //           $queryEvents .= ' or event_id = '.$eventlist[$i];
+    //         // }      
+    // }
+    // $queryEvents = substr($queryEvents,3,strlen($queryEvents));
+  //bsp SELECT * FROM `v_eventcourselocation_reservationmail` WHERE  event_id = "4260" or event_id = "4261" or event_id = "3851"
+    return $this->getResultArray($rootquery.$queryEvents);
   }
 
 }

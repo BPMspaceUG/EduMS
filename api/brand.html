@@ -17,14 +17,14 @@
 
 
 <div class="row edums-content" >
-   <!---- menu -->
+   <!-- menu -->
    <div class="row edums-menu" >
    <div class="col-xs-12 edums-menu-container" >
     <div class="tabbable" >
      <ul class="nav nav-tabs edums-navbar">
 
       <li class="active edums-navbar-brandtab">
-       <a data-target="#panel-brand" ng-click="sidebarselect = 'start'" data-toggle="tab">
+       <a data-target="#panel-brand" ng-click="sidebarselect = 'start'; tablesearch =''" data-toggle="tab">
         <i class="fa fa-university"></i>
        </a>
       </li>
@@ -32,6 +32,22 @@
        <a data-target="#panel-{{topic.topic_name}}" ng-click="tablesearchchange(topic.topic_name_raw)" data-toggle="tab">
          {{topic.topic_name_raw}}</a>
       </li>
+
+
+
+<!--
+       <li class="edums-navbar-topictab">
+
+        <input type="text" ng-model="openpanel"
+               placeholder="Type: bold strike red" aria-label="Type: bold strike red">
+        <hr>
+
+       <a data-target="#panel-standort" ng-click="modifyURL(topic.topic_name)" data-toggle="tab">{{openpanel}}</a>
+      </li> 
+-->
+
+
+
       <li class="pull-right edums-navbar-agbimpressumdatenschutz">
        <a data-toggle="tab" data-target="#panel-agbimpressumdatenschutz" ng-click="sidebarselect = 'start'">
         AGB & Datenschutz</a>
@@ -46,15 +62,15 @@
   
   <!----content & sidebar-->
   <div class="row edums-infocore" >
-    <div class="col-xs-8 edums-infocore-tabpanels">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-8 edums-infocore-tabpanels">
    
      <div class="tab-content edums-tabpanels-tabcontent">
       <div class="tab-pane active edums-tabcontent-brandpanel" id="panel-brand">
-        <div ng-bind-html="brandinfo.brandDescription"></div>
+        <div ng-bind-html="brandDescription"></div>
 
       </div>
 
-      <div ng-repeat="topicpanel in topics" class="tab-pane edums-tabcontent-topicpanel" id="panel-{{topicpanel.topic_name}}">
+      <div ng-repeat="topicpanel in topics" class="tab-pane edums-tabcontent-topicpanel" id="panel-{{topicpanel.topic_name}}" ng-class="{{getClass(topicpanel.topic_name)}}">
        <div class="col-xs-12">
        <h2>{{topicpanel.topicHeadline}}</h2>
        <div ng-bind-html="topicpanel.topicDescription" class="edums-tabcontent-topicdescription" id="topicdescr{{topicpanel.topic_id}}"></div>
@@ -92,9 +108,17 @@
       </div>
       
 
-      <div class="tab-pane edums-tabpanels-location" id="panel-standort">
+
+
+
+
+      <div class="tab-pane edums-tabpanels-location"  ng-class="openpanel" id="panel-standort">
         <mitsm></mitsm>       
       </div>
+
+
+
+
 
       <div class="tab-pane edums-tabpanels-agbimpressumdatenschutz" id="panel-agbimpressumdatenschutz">
        <div class="panel-group edums-agbimpressumdatenschutz-group" id="panel-493447">
@@ -160,7 +184,7 @@
 
 
 
-   <div class="col-xs-4 text-center edums-infocore-sidebar" id="sidebar"> 
+   <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4 text-center edums-infocore-sidebar" id="sidebar"> 
 
 
      <button type="button" id="modal-1" href="#modal-container-1" role="button" class="btn btn-primary edums-infocore-btnta" data-toggle="modal">
@@ -185,11 +209,37 @@
 
      </div>
     </div>
+
+    <!-- Level 0 finishmodal -->
+    <div class="modal fade edums-finishmodal" id="modal-container-5" role="dialog" >
+     <div class="modal-dialog ">
+       <div class="modal-content edums-finishmodal-content">
+
+          <div class="modal-header row">
+            <button type="button" class="close edums-finishmodal-btnclose" ng-click="dismissInnerModalD()" aria-hidden="true">X </button>
+          </div>
+
+         <div> <!-- afterbutton -->
+           <div class="modal-body" >
+             <after-reserve class="edums-finishmodal-body"></after-reserve>    
+           </div><!-- end registerform -->
+         </div> <!-- end afterbutton -->
+
+
+          <div class="modal-footer edums-finishmodal-footer">
+          <button type="button" 
+          class="btn btn-danger edums-finishmodal-btnclose" 
+          ng-click="dismissInnerModalD()">schließen</button>
+          </div>
+       </div> <!-- end modal-content -->
+     </div> <!-- end modal-dialog-->
+   </div> <!-- modal fade -->
+
 </div>
 
 <div class="col-xs-12 edums-footer" id="container-footer">
   <h4>{{brandinfo.brand_name}}</h4>
-  <h5 ng-bind-html="brandinfo.brandDescriptionFooter"></h5>
+  <h5 ng-bind-html="brandDescriptionFooter"></h5>
 </div>
 
 </div>
@@ -249,8 +299,7 @@
 
 
             <div class="row edums-tabody-searchgroup">
-              <div class="col-xs-8" id="spacersearchbar"></div>
-              <div class="col-xs-4 edums-searchgroup">
+              <div class="col-sm-4 col-sm-offset-8 col-md-4 col-md-offset-8 edums-searchgroup">
                <form>
                  <div class="input-group">
                    <div class="input-group-addon"><i class="fa fa-search "></i></div>
@@ -267,7 +316,7 @@
                  <span ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
-                <th><a href="#" ng-click="sortType = 'namefortable'; sortReverse = !sortReverse"><h4>Schulung</h4>
+                <th class="edums-tatable-coursename"><a href="#" ng-click="sortType = 'namefortable'; sortReverse = !sortReverse"><h4>Schulung</h4>
                  <span ng-show="sortType == 'namefortable' && !sortReverse" class="fa fa-caret-down"></span>
                  <span ng-show="sortType == 'namefortable' && sortReverse" class="fa fa-caret-up"></span>
                 </a></th>                
@@ -290,7 +339,7 @@
                   <td>
                     <div class="row edums-event-garantie" ng-if="event.eventguaranteestatus == 2 || event.eventguaranteestatus == 4 || event.eventguaranteestatus == 3">
                       <span class="label label-success edums-guaranteelabel">
-                        <strong>{{stateinfo[3].eventguaranteestatus}}</strong>
+                        <strong>{{stateinfo.guaranteed.eventguaranteestatus}}</strong>
                       </span>
                     </div>
                     
@@ -313,7 +362,7 @@
                     </div>
                   </td>
                   <td>{{event.start_date | date:"dd.MM."}} - {{event.finish_date | date:"dd.MM.yy"}}</td>
-                  <td>{{event.namefortable}}</td>
+                  <td class="edums-tatable-coursename">{{event.namefortable}}</td>
                   <td>{{event.internet_location_name}}</td>
                   <td>{{event.price | number : 2}} €</td>               
                   <td>{{event.price*1.19 | number : 2}} €</td>               
@@ -352,106 +401,149 @@
                         <div class="col-xs-2">Prüfung</div>
                         <div class="col-xs-9">{{picked.exam.coursePrice | number : 2}} €  ({{picked.exam.coursePrice*1.19 | number : 2}} €)</div>
                       </div>
-
-
-
                     </div>
+
                  </div>
                   <div class="row edums-taformgroup">
 
-                    <div class="col-xs-0 col-sm-1 col-md-1"> </div>
 
                     <div class="col-xs-12 col-sm-11 col-md-11" >
 
-                    <div class="row  edums-taformgroup-participants">
-                      <div class="col-xs-6"><h4>Teilnehmerzahl</h4></div>
-                      <div class="col-xs-4" >
-                        <input type="text" class="form-control" id="inputAnzahlIdModal" placeholder="1" 
-                         ng-model="rinfo.mTeilnehmerZahl">
-                      </div>
-                                             
+                      <div class="row  edums-taformgroup-participants">
+                        <div class="col-xs-6"><h4>Teilnehmerzahl</h4></div>
+                        <div class="col-xs-4" >
+                          <input type="text" class="form-control edums-tamodal-partitioneramount" id="inputAnzahlIdModal" placeholder="1" 
+                           ng-model="rinfo.mTeilnehmerZahl">
+                        </div>
+                                               
                        <i class="fa fa-caret-up" ng-mousedown="rinfo.mTeilnehmerZahl = rinfo.mTeilnehmerZahl +1" ></i><br>
                        <i class="fa fa-caret-down" ng-mousedown="teilnehmerZahlcountDown()" ></i>
-                      
-                    </div>
-                    <div class="row" class="input-group form-input">
-                      <div>
-                        <input type="email" class="form-control edums-taformgroup-email" id="inputEmailIdModal" 
-                         placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
+                        
                       </div>
-                    </div>
-
-                    <div class="row ">
-                     <div class="panel-group" id="accordion">
-
-                      <div class="panel panel-default edums-taformgroup-agb">
-                       <div class="panel-heading">
-                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#accordion" href="#panel-ta-agb"><span
-                         class="badge"> <i class="fa fa-caret-down edums-taformgroup-icon"></i></span> SchulungsAGB</a>
-                       </div>
-                       <div id="panel-ta-agb" class="panel-collapse collapse">
-                        <div class="panel-body edums-accordion-element">
-                         <!-- <div class="container-fluid"> -->
-                          <div class="row">
-                          <h3>agb</h3>
-                           <agb></agb>
-                           <impressum></impressum>
-                          </div>
-                         <!-- </div> -->
+                      <div class="row" class="input-group form-input">
+                        <div>
+                          <input type="email" class="form-control edums-taformgroup-email" id="inputEmailIdModal" 
+                           placeholder="Kontakt E-Mail" ng-model="rinfo.contactpersonemail">
                         </div>
-                       </div>
                       </div>
-
-
-                     <div class="panel panel-default edums-taformgroup-datenschutz">
-                      <div class="panel-heading">
-                       <a class="panel-title collapsed" data-toggle="collapse"
-                       data-parent="#accordion" href="#panel-ta-datenschutz"><span
-                       class="badge"><i class="fa fa-caret-down edums-taformgroup-icon"></i></span> Datenschutzerklärung</a>
-                      </div>
-                      <div id="panel-ta-datenschutz" class="panel-collapse collapse">
-                       <div class="panel-body container edums-accordion-element">
-
-                          <h3>Datenschutzerklärung</h3>
-                         <datenschutzerklaerung></datenschutzerklaerung>
-                         <impressum></impressum>
-
-                       </div>
-                      </div>
-                     </div>
-
-
-                     </div>
                     </div>
-
-
-
-
+                  </div>
 
                     
-                    <div class="row" ng-if="brandinfo.registration_acceptance_text">
-                      <div ng-bind-html="brandinfo.registration_acceptance_text"></div>
+                    <div class="row edums-taformgroup-registrationAcceptanceText" ng-if="registration_acceptance_text">
+                      <div ng-bind-html="registration_acceptance_text"></div>
                     </div>
-                    <div class="row" ng-if="!brandinfo.registration_acceptance_text">
+                    <div class="row">
+                      <div class="col-xs-12 col-sm-5 col-md-5">
+                         <button type="button" id="modal-3" href="#modal-container-3" role="button" class="btn btn-primary edums-ta-btnagbmodal" data-toggle="modal">
+                           SchulungsAGB
+                         </button>
+                       </div>
+                      <div class=" col-xs-12 col-sm-7 col-md-7">
+                         <button type="button" id="modal-3" href="#modal-container-4" role="button" class="btn btn-primary edums-ta-btndatenschutzmodal" data-toggle="modal">
+                           Datenschutzerklärung
+                         </button>
+                       </div>
+                    </div>
+                    <!-- nested modal -->
+                    <div class="modal fade edums-agbmodal" id="modal-container-3" role="dialog" >
+                     <div class="modal-dialog ">
+                       <div class="modal-content edums-agbmodal-content">
+
+                          <div class="modal-header row">
+                            <button type="button" class="close edums-agbmodal-btnclose" ng-click="dismissInnerModalA()" aria-hidden="true">X </button>
+                          </div>
+
+                         <div> <!-- afterbutton -->
+                           <div class="modal-body" >
+                               <agb></agb>
+                               <impressum></impressum>   
+                           </div><!-- end registerform -->
+                         </div> <!-- end afterbutton -->
+
+
+                          <div class="modal-footer edums-agbmodal-footer">
+                          <button type="button" 
+                          class="btn btn-danger  edums-finishmodal-btnclose" 
+                          ng-click="dismissInnerModalA()" >schließen</button>
+                          </div>
+                       </div> <!-- end modal-content -->
+                     </div> <!-- end modal-dialog-->
+                    </div> <!-- modal fade -->
+
+                    <!-- nested modal -->
+                    <div class="modal fade edums-datenschutzmodal" id="modal-container-4" role="dialog" >
+                     <div class="modal-dialog ">
+                       <div class="modal-content edums-datenschutzmodal-content">
+
+                          <div class="modal-header row">
+                         <button type="button" class="close edums-datenschutzmodal-btnclose" ng-click="dismissInnerModalB()" aria-hidden="true">X </button>
+                          </div>
+
+                         <div> <!-- afterbutton -->
+                           <div class="modal-body" >  
+                                <datenschutzerklaerung></datenschutzerklaerung>
+                               <impressum></impressum> 
+                           </div><!-- end registerform -->
+                         </div> <!-- end afterbutton -->
+
+
+                          <div class="modal-footer edums-datenschutzmodal-footer">
+                          <button type="button" 
+                          class="btn btn-danger  edums-finishmodal-btnclose" 
+                          ng-click="dismissInnerModalB()">schließen</button>
+                          </div>
+                       </div> <!-- end modal-content -->
+                     </div> <!-- end modal-dialog-->
+                   </div> <!-- modal fade -->
+
+                    <div class="row" ng-if="!registration_acceptance_text">
                      <p>Mit dem Absenden des Formulars akzeptieren Sie unsere AGB & Datenschutzerklärung.</p>
                     </div>
-                    <div class="row">
-                      <div>
-                        <button type="button" class="btn btn-block edums-taformgroup-btnreserve" ng-model="reservate"  href="#modal-container-2" ng-click="reservate()" data-toggle="modal">
-                          <i class="fa fa-caret-right edums-taformgroup-icon" aria-hidden="true"></i> Anmeldung
-                        </button>
 
-                      </div>
+                    <div class="row edums-taformgroup-btnreserve">
+                      <button type="button" class="btn btn-block " ng-model="reservate"  href="#modal-container-2" ng-click="reservate()" data-toggle="modal">
+                        <i class="fa fa-caret-right edums-taformgroup-icon" aria-hidden="true"></i> Anmeldung
+                      </button>
+
+                      <!-- Level 1 finishmodal, nested -->
+                      <div class="modal fade edums-finishmodal" id="modal-container-2" role="dialog" >
+                       <div class="modal-dialog ">
+                         <div class="modal-content edums-finishmodal-content">
+
+                            <div class="modal-header row">
+                              <button type="button" class="close edums-finishmodal-btnclose" ng-click="dismissInnerModalC()" aria-hidden="true">X </button>
+                            </div>
+
+                           <div> <!-- afterbutton -->
+                             <div class="modal-body" >
+                               <after-reserve class="edums-finishmodal-body"></after-reserve>    
+                             </div><!-- end registerform -->
+                           </div> <!-- end afterbutton -->
+
+
+                            <div class="modal-footer edums-finishmodal-footer">
+                            <button type="button" ng-if="!(rinfo.finish)"
+                            class="btn btn-danger edums-finishmodal-btnclose" 
+                            ng-click="dismissInnerModalC()">schließen</button>
+                            <button type="button" ng-if="rinfo.finish"
+                            class="btn btn-danger edums-finishmodal-btnclose" 
+                            ng-click="dismissInnerModalE()">schließen</button>
+                            </div>
+                         </div> <!-- end modal-content -->
+                       </div> <!-- end modal-dialog-->
+                     </div> <!-- modal fade --> 
                     </div>
-                    <div class="row">
-                      <button type="button" class="btn btn-danger edums-tafooter-btnclose" data-dismiss="modal">schließen
+                    <div class="row edums-tafooter-btnclose">
+                      <button type="button" class="btn btn-danger edums-tafooter-btnclose-btn" data-dismiss="modal">schließen
                       </button>
                     </div>
-                    </div>
-                </div>
+                  </div>
+            </div>
+            </div>
 
-                </div>
-                </form>
+            </div>
+            </form>
 
            </div>
 
@@ -483,34 +575,6 @@
 
 
 
-
-
-
-
-
-  <div class="modal fade edums-finishmodal" id="modal-container-2" role="dialog" >
-   <div class="modal-dialog ">
-     <div class="modal-content edums-finishmodal-content">
-
-       <button type="button" class="close edums-finishmodal-btnclose" data-dismiss="modal" aria-hidden="true">X </button>
-
-       <div> <!-- afterbutton -->
-         <div class="modal-body" >
-           <after-reserve class="edums-finishmodal-body"></after-reserve>    
-         </div><!-- end registerform -->
-       </div> <!-- end afterbutton -->
-
-
-        <div class="modal-footer edums-finishmodal-footer">
-        <button type="button" 
-        class="btn btn-danger edums-finishmodal-btnclose" 
-        data-dismiss="modal">schließen</button>
-        </div>
-     </div> <!-- end modal-content -->
-   </div> <!-- end modal-dialog-->
- </div> <!-- modal fade -->
-
- </div> 
 
 
 
