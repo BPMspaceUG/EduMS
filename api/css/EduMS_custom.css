@@ -370,6 +370,14 @@
 @media only screen and (max-width: 400px) { 
   #edums-tacontent-hr2 { 
     display: none; 
+  }
+  .edums-check-right { 
+    display: none; 
+  } 
+}
+@media only screen and (min-width: 400px) { 
+  .edums-check-left { 
+    display: none; 
   } 
 }
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {

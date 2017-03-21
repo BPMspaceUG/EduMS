@@ -45,17 +45,17 @@ $brandMailInfo = $this -> getResultArray("SELECT * FROM `v_brand_and_partner_res
 
 $confirmationBody ='<html><head><title></title><meta http-equiv=Content-Type content=text/html; charset=UTF-8></head><body>';
 
-  $confirmationBody .= print_r($brandMailInfo[0][mail_text_pre],true)
+  $confirmationBody .= print_r($brandMailInfo[0]['mail_text_pre'],true)
   .'<br><div>Teilnehmerzahl: '.$mTeilnehmerZahl.
   ' Personen.';
 
   //clenaflag
   // .$brandMailInfo[0]['brand_name'].' folgende Kurse reserviert:<br></div>';
-  // $brandBody = '<div style="color:green;">brandBody<br>'.$contactpersonemail.' hat ';
-  // $brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$contactpersonemail.' hat '.
+  $brandBody = '<div style="color:green;">brandBody<br>'.$contactpersonemail.' hat ';
+  $brandPartnerBody = '<div style="color:blue;">brandPartnerBody<br>'.$contactpersonemail.' hat '.
   //   'bei '.$brandMailInfo[0]['brand_name'];
 
-		// error_log("\nmailtexte: ".,true), 0);
+    // error_log("\nmailtexte: ".,true), 0);
   $price=0;
 
   foreach($eventList as $e) {
@@ -87,25 +87,45 @@ $confirmationBody ='<html><head><title></title><meta http-equiv=Content-Type con
   // $brandPartnerBody .= 'für '.$_POST['mTeilnehmerZahl'].'Personen ('.'Netto: '.$price.' | incl. Mwst.: '.
   // $price*1.19 .') reserviert.</div>';
     
-
+  $formBody = '<form action="http://x.y/z.php" method="post" target="_blank"><label>Teilnehmerangaben:<br />';
+  // for ($i=0; $i < $mTeilnehmerZahl; $i++) { 
+  //    $formBody .= 'Vorname:<input type="text" name="Vorname"> Nachname:<input type="text" name="Nachname"> E-Mail:<input type="email" name="email"><br />'
+  // }
+  $formBody .= '<input type="submit" value="" />&nbsp;</form>';
 
 
   $body=$confirmationBody;
   // ' ~~~~~~~ '.print_r($eventList,true);
   // ' ~~~~~~~ '.print_r($brandMailInfo[0],true).'. ';
 
-//cleanflag test php mail-function: mail(to, subject, message, headers, parameters) //headers und parameters sind optional
   //Info setzen
   $to = $contactpersonemail.', '.$partnermail.', '.$brandMail;
   
-  // $subject = "Betreff";
-  //Reservierungsanfrage brand, course
+  // define terms and imprint handle non-existing 
+  // $terms = '';
+  // if (isset($brandMailInfo[0]['terms_and_cond']) && $brandMailInfo['oneclick'] == true)  {
+  //    $terms = json_decode($brandMailInfo['terms_and_cond'], true);  
+  // }
+  // $imprint = '';
+  // if (isset($brandMailInfo[0]['imprint']) && $brandMailInfo['oneclick'] == true)  {
+  //    $imprint = json_decode($brandMailInfo['imprint'], true);  
+  // }
   
-  $message = $body.'<br>'.print_r($brandMailInfo[0][mail_text_post],true).'</body></html>';
+  $message = $body.'<br>'.print_r($brandMailInfo[0]['mail_text_post'],true);
+    //attatch terms and conditions and imprint on bottom mail
+  if ($_POST['oneclick']=='true') {
+    $message .=" \r\n".'<br>'
+    .print_r($brandMailInfo[0]['imprint'],true)
+    ." \r\n"
+    .print_r($brandMailInfo[0]['terms_and_cond'],true)
+    ." \r\n".'<br>';
+  }
+
+    $message.='</body></html>';
 
   // für HTML-E-Mails muss der 'Content-type'-Header gesetzt werden
   $header  = 'MIME-Version: 1.0' . "\r\n";
-  $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+  $header .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 
   $header .= "From:".$brandMail." \r\n";
 
@@ -113,14 +133,13 @@ $confirmationBody ='<html><head><title></title><meta http-equiv=Content-Type con
   if($result = true)
   {
     error_log("To: ".$to.", wurde versand. ", 0);
-		// error_log("\n\l\rSubject: ".$subject, 0);
-		// error_log("\n\l\rMessage: ".$message, 0);
-		// error_log("\n\l\rHeader: ".$header, 0);
-	}
-	else
-	{
-		error_log("Mail an ".$to." wurde nicht gesendet.", 0);
-	}
+    // error_log("\n\l\rSubject: ".$subject, 0);
+    // error_log("\n\l\rMessage: ".$message, 0);
+    // error_log("\n\l\rHeader: ".$header, 0);
+  }
+  else
+  {
+    error_log("Mail an ".$to." wurde NICHT gesendet.", 0);
+  }
 
 ?>
-

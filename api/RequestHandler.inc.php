@@ -21,11 +21,11 @@ class RequestHandler
   * @fail: log infodata */
   private function getResultArray($query){
     global $db; 
-    if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
-      echo "<pre><hr>Query:<br>";
-      var_dump($query);
-      echo "</pre>";
-    }
+    // if(isset($_REQUEST['debug']) && $_REQUEST['debug']){
+    //   echo "<pre><hr>Query:<br>";
+    //   var_dump($query);
+    //   echo "</pre>";
+    // }
     $results_array = array();
     $result = $db->query($query);
     while ($row = $result->fetch_assoc()) {
@@ -37,7 +37,7 @@ class RequestHandler
         "\nQuery: ".
         $query.
         "\nResult: ".
-        print_r($results_array).
+        // print_r($results_array).
         "\n-----------\n", 
         FILE_APPEND | LOCK_EX);
     }
@@ -130,9 +130,11 @@ class RequestHandler
         'directive'=>file_get_contents('js/EduMS_template-directives.js'),
         'htmlCore'=> $this->getResultArray("SELECT `html_core` FROM `v_brand_notdeprecated_loginnotempty_accesstokennotempty` WHERE login = '".$bname."'")
         );
-        if (file_exists('brand.html')) {
+        if (file_exists('brand.html') && count($return['htmlCore'])<10 ) {
           $return['ct']= file_get_contents('brand.html');
         }
+        // var_dump($return['ct']);
+        // var_dump($return['htmlCore']);
 
         return $return;
         break;
@@ -141,9 +143,17 @@ class RequestHandler
       case 'getBrandInfo': return $this->getbrandtopics($bname, $section, $handle);
         break;
 
-        case "reserve":
+
+      case "reserve":
         require_once 'reservavtionMail.php'; //newer Version for Linux - PHP - sendmail 
         // file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+      
+      case 'reserveInfo': return 'reserveInfo';
+        break;
+
+      case 'salesRepresentive': return 'salesRepresentive';
+        break;
+      
         return; //$return;
       break;
 

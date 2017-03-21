@@ -142,7 +142,7 @@ template:
       <div class="row">\
         <div>\
           <button type="button" class="btn btn-block edums-sideregform-btnreserve" ng-model="reservate" href="#modal-container-5"\
-           ng-click="reservate(e)" data-toggle="modal">\
+           ng-click="reservate(e, true)" data-toggle="modal">\
             <i class="fa fa-caret-right" aria-hidden="true" ></i> One-Click Anmeldung\
           </button>\
 \

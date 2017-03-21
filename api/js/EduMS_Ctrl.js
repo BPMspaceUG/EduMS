@@ -491,8 +491,13 @@ $scope.brandtabChange = function(){
 /*
 Handlefunction for clickevents -> click arrow-down next to partitioners
 */
+$scope.teilnehmerZahlcountUp = function() {
+  if ($scope.rinfo.mTeilnehmerZahl>=1) {$scope.rinfo.mTeilnehmerZahl += 1};
+  $scope.reservationlistupdate(false)
+}
 $scope.teilnehmerZahlcountDown = function() {
-  if ($scope.rinfo.mTeilnehmerZahl>1) {$scope.rinfo.mTeilnehmerZahl = $scope.rinfo.mTeilnehmerZahl-1};
+  if ($scope.rinfo.mTeilnehmerZahl>1) {$scope.rinfo.mTeilnehmerZahl -= 1};
+  $scope.reservationlistupdate(false)
 }
 
 $scope.sortType = 'start_date'
@@ -503,39 +508,62 @@ On click a ckeckbox from the main-modal:
 If either a course and/or its exam is selected handle/update the reservation list.
 */
 $scope.reservationlistupdate = function(c) { //c = course/event thats picked
-  var reslist = $scope.rinfo.courses, oneIsChecked = false, sum = 0
-  var isInList = _.find(reslist,function(p){return c.event_id==p.event_id})
-  if (c.checked || c.exam.checked) {oneIsChecked=true};
-  if (oneIsChecked) {
-    if (!isInList) {
-      if (c.exam) {c.exam.checked=true};
-      reslist.push(c)
+  $scope.reslistSum = 0 //reset variable and re-calc at the end
+  var reslist = $scope.rinfo.courses, oneIsChecked = false
+  //if executed with a course update the list
+  if (c) {
+    var isInList = _.find(reslist,function(p){return c.event_id==p.event_id})
+    if (c.checked || c.exam.checked) {oneIsChecked=true};
+    if (oneIsChecked) {
+      if (!isInList) {
+        if (c.exam) {c.exam.checked=true};
+        reslist.push(c)
+      };
+    }else{
+      for (var i = 0; i < reslist.length; i++) {
+        if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
+      };
+    }
+  };
+  //calculate a sum of all selected courses
+  reslist.forEach( function(e){
+    if (e.checked==true) {
+      $scope.reslistSum += e.price
+    }
+    if (e.exam && e.exam.checked==true) {
+      $scope.reslistSum += e.exam.coursePrice
     };
-  }else{
-    for (var i = 0; i < reslist.length; i++) {
-      if (reslist[i].event_id == c.event_id) {reslist.splice(i,1)};    
-    };
-  }
+  } )
+  // sum = sum * participants
+  $scope.reslistSum *= $scope.rinfo.mTeilnehmerZahl
 }
+
+
 
 /*
 On click 'btnreserve' from a sidebar-element:
 -> set event and exam checked, update reservationlist, hide button 
 */
-$scope.btnRegFkt = function(e) { //c = event
+$scope.btnRegFkt = function(e) { //c = event 
+  var exampreis = 0
   e.checked = true
   if (e.exam != 0) {e.exam.checked=true};
   $scope.rinfo.courses.push(e)
   e.btnRegister=!e.btnRegister
+  if (e.exam) {
+    exampreis = e.exam.coursePrice || 0
+  };  
+  $scope.reslistSum = (e.price + exampreis) * $scope.rinfo.mTeilnehmerZahl
 }
 
 /*
 On click btn reservate from siderbar-element or Modal:
 -> create a final reservationobject from selections and send it to the api-server
 */
-$scope.reservate = function(e) {
+$scope.reservate = function(e, oneClick) {
+  var oneClick = oneClick || false
  $scope.rinfo.eventIds=[]
- $scope.send = {eventIds:[]} 
+ $scope.send = {eventIds:[], oneclick:oneClick} 
 
  _.each($scope.rinfo.courses, function(c){
 
