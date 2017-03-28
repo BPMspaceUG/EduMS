@@ -19,6 +19,7 @@ funcitons overview:
   tablesearchchange - automatic change of the modal searchfield
   teilnehmerZahlcountDown - coutner for partitionerarrow 
   reservationlistupdate - handling changes of the reservationlist
+  packagelistupdate - handling packages based on reservationlist
   btnRegFkt - handling for initialbuttons of sidebarelements
   reservate - define and send reservation
   dismissInnerModalA-D -  handling for closebehavior of (overlayed) modals
@@ -41,6 +42,7 @@ Funktionenübersicht:
   tablesearchchange -   Automatische änderung des Suchfeldes im Modal
   teilnehmerZahlcountDown -   Couter für Teilnehmerzahl 
   reservationlistupdate -   Handling für Änderungen in der Reservierungsauswahlliste
+  packagelistupdate -   Handling für Packete in abhänigkeit der Reservierungsauswahlliste
   btnRegFkt -   Handling für Initialbuttons der Sidebarelemente
   reservate -   Reservierung definieren und senden
   dismissInnerModalA-D -  Handling für das Schließverhalten der (sich überlagernden) Modale
@@ -93,6 +95,14 @@ $scope.tomorrow = new Date(''+$scope.now.getFullYear(), ''+$scope.now.getMonth()
    }
 
    $scope.topiccourseCourse = response.topiccourselist 
+
+  $scope.package = response.packagelist
+   for (var i = 0; i < $scope.package.length; i++) {
+    $scope.package[i].packageDescriptionFooter = $sce.trustAsHtml('<div>'+$scope.package[i].packageDescriptionFooter+'</div>')
+    $scope.package[i].packageDescription = $sce.trustAsHtml('<div>'+$scope.package[i].packageDescription+'</div>')
+    $scope.package[i].packageDescriptionSidebar = $sce.trustAsHtml('<div>'+$scope.package[i].packageDescriptionSidebar+'</div>')
+    $scope.package[i].packageImage = $sce.trustAsHtml('<div>'+$scope.package[i].packageImage+'</div>')
+   }
 
   $scope.courses = response.courselist;
   for (var i = 0; i < $scope.courses.length; i++) {
@@ -440,7 +450,7 @@ for (var i = 0; i < $scope.topics.length; i++) { //für alle topics
 };
 $scope.sideBarCoursesStart = _.filter($scope.eventlist, function(x){return x.test != 1})
 console.log('fertiges $scope.topics: ', $scope.topics); 
-
+$scope.definepackages()
       /*//On topic-tab or course-accordion click -> change URL-field: window.history.replaceState('Object', 'Title', '/another-new-url');
       $scope.panelList = {}
       // log('asdf')
@@ -467,6 +477,43 @@ console.log('fertiges $scope.topics: ', $scope.topics);
   eventonly()
   descriptiononly()
 }
+
+$scope.recalcPackageSum = function(a){
+  var sumNormal = 0, sumDiscount = 0
+  _.each($scope.packageEventBundle, function(bundle){
+    bundle.list.forEach(function(event){
+      var sumNow = ((event.examParticipants * event.nextEvent.exam.coursePrice) 
+        + (event.courseParticipants * event.nextEvent.price))
+      sumNormal += sumNow
+      sumDiscount += (sumNow * (1/bundle.list[0].package_discount))
+    })
+  })
+  $scope.sumNormal = Math.round(sumNormal)
+  $scope.sumDiscount = Math.round(sumDiscount)
+}
+$scope.definepackages = function(){
+  $scope.packageOrderSelectSwitch = true
+  $scope.packageEventBundle = {}
+  $scope.package.map(function(p){
+    p.nextEvent = $scope.eventlist.find(function(e){return e.course_id == p.course_id})
+    p.dayAmount = Math.round((new Date(p.nextEvent.finish_date).getTime() -  new Date(p.nextEvent.start_date).getTime())/(24*60*60*1000))
+    p.courseParticipants = 1
+    p.examParticipants = 1
+    p.maxParticipants = _.range(1,15)
+    return p
+  })
+  .forEach(function(p){
+    if (! $scope.packageEventBundle[p.package_id]) 
+      {$scope.packageEventBundle[p.package_id]={list:[], sumCourses:0, sumExam:0, sumDayAmount:0, sumDiscount:0}}
+    $scope.packageEventBundle[p.package_id].list.push(p)
+    $scope.packageEventBundle[p.package_id].sumCourses += p.nextEvent.price * (1+1/p.package_discount)
+    $scope.packageEventBundle[p.package_id].sumExam += p.nextEvent.exam.coursePrice * (1+1/p.package_discount)
+    $scope.packageEventBundle[p.package_id].sumDiscount += (p.nextEvent.exam.coursePrice + p.nextEvent.price) * (1/p.package_discount)
+    $scope.packageEventBundle[p.package_id].sumDayAmount += p.dayAmount
+  })
+  log('packageEventBundle: ');log($scope.packageEventBundle)
+}
+
 
 /*
 If Navbar get clicked, the value in the modal-search-bar becomes the name of the Navbarelement
@@ -536,8 +583,35 @@ $scope.reservationlistupdate = function(c) { //c = course/event thats picked
   } )
   // sum = sum * participants
   $scope.reslistSum *= $scope.rinfo.mTeilnehmerZahl
+  $scope.packagelistupdate(reslist)
 }
 
+/*
+On reservationlistupdate, rinfo.package gets created on base of the new reslist
+ where package has at least one of the selected courses
+*/
+$scope.packagelistupdate = function(reslist) {
+  var list = reslist || false, tmp = []
+  if (list) {
+    // find if couses of a package are selected and witch in packages are unselectet -> possible
+    $scope.rinfo.package ={
+      selected: $scope.package.filter(function(p) { return list.find(function(c) {return c.course_id == p.course_id}) }),
+      possible: $scope.package.filter(function(p) { return ! list.find(function(c) {return c.course_id == p.course_id}) }),
+     }
+     $scope.rinfo.package.possibleString = $scope.rinfo.package.possible.map(function(p){return 'c '+p.course_id+', in p '+p.package_id}).join('| ')
+     //find completed packages -> no more in possible list and in selected == predicted amount
+    $scope.rinfo.package.selected.forEach(function(s){
+      var exitsAsPossibility = $scope.rinfo.package.possible.find(function(pos){ return s.package_id == pos.package_id }),
+      equalAmount = $scope.rinfo.package.selected.filter(function(sel){ return s.package_id == sel.package_id })
+      // log('exitsAsPossibility lenEqualAmount: ');log(! exitsAsPossibility);log(lenEqualAmount);
+      if ( ! exitsAsPossibility && equalAmount.length == s.package_course_amount){
+        tmp.push( equalAmount[0].package_id )
+      }
+    })
+    $scope.rinfo.package.complete = _.uniq(tmp)
+  }
+  log('$scope.rinfo.package: ');log($scope.rinfo.package);
+}
 
 
 /*

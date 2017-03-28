@@ -39,6 +39,10 @@
    
      <div class="tab-content edums-tabpanels-tabcontent">
       <div class="tab-pane active edums-tabcontent-brandpanel" id="panel-brand">
+      <button class="btn btn-block edums-packageorderselecswitch" ng-click="packageOrderSelectSwitch = !packageOrderSelectSwitch">Order / Select</button>
+      <package-select ng-repeat="bundle in packageEventBundle track by $index"></package-select>
+<!--       <package-order></package-order>
+      <package-sum></package-sum> -->
         <div ng-bind-html="brandDescription"></div>
 
       </div>
@@ -393,7 +397,12 @@
                     </div>
                     <p ng-if="reslistSum > 0"><b>
                     Summe: {{reslistSum | number : 2}} €  ({{reslistSum*1.19 | number : 2}} €)
-                    </b></p>
+                    </b></p> 
+                   <p ng-if="reslistSum > 0">Packageinfo
+                     selected: {{rinfo.package.selected.length}}, possible: {{rinfo.package.possible.length}}, complete: {{rinfo.package.complete.length}}
+                    </p>                   
+                    <p ng-if="reslistSum > 0">Rest: {{rinfo.package.possibleString}}
+                    </p>
 
                  </div>
                   <div class="row edums-taformgroup">

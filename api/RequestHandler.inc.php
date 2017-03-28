@@ -146,7 +146,10 @@ class RequestHandler
 
       case "reserve":
         require_once 'reservavtionMail.php'; //newer Version for Linux - PHP - sendmail 
-        // file_put_contents('logs/reserveLog.log', date("d.m.Y - H:i:s",time())."\nEmpfangene Reservierungsparameter: ".$handle."\n-----------\n", FILE_APPEND | LOCK_EX);
+        file_put_contents('logs/reserveLog.log', 
+          "\n".date("d.m.Y - H:i:s",time()).
+          "\n"."section: ".json_encode($section).
+          "\n"."handle: ".json_encode($_POST)."\n-----------\n", FILE_APPEND | LOCK_EX);
       
       case 'reserveInfo': return 'reserveInfo';
         break;
@@ -209,6 +212,8 @@ class RequestHandler
       }
     $queryTopics = substr($queryTopics,3,strlen($queryTopics));    
     $return['topiclist'] = $this->getResultArray($rootquery.$queryTopics);
+
+    $return['packagelist'] = $this->getResultArray('SELECT * FROM `v_packagecourse_notdepercatedlevelnotzero` WHERE brand_id = '.$brandId.'');
 
     //3.2 check if there is a requested topic and its existence in the topiclist of the brand
     if (isset($_GET['topic'])) {

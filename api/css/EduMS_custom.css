@@ -83,7 +83,7 @@
     border-radius: 10px;
     border-color: #428bca;
 }
-.edums-infocore-btnta{
+.edums-infocore-btnta {
      min-width:200px;
     margin-bottom: 15px; 
     width:100%;
@@ -101,6 +101,16 @@
     color: #fff;
     background-color: #428bca;
     border-color: #428bca;
+}
+
+.edums-package-btnta{
+    margin: 0;
+    background: orange;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) ;
 }
 
 .edums-btnta-icon{}
@@ -354,6 +364,40 @@
 }
 .edums-guaranteelabel{
     width: 90%;
+}
+
+
+.edums-packagebundle{
+    border-style: solid;
+    border-color: grey;
+    padding: 0px 7px 7px 7px;
+    margin: 2px 2px 2px 2px;
+}
+
+.edums-packageOrder{
+    border-style: solid;
+    border-color: grey;
+    padding: 0px 7px 7px 7px;
+    margin: 2px 2px 2px 2px;
+}
+.edums-packagesum{
+    border-style: solid;
+    border-color: grey;
+    padding: 0px 7px 7px 7px;
+    margin: 2px 2px 2px 2px;
+}
+.edums-redsum{
+    color: red;
+}
+.edums-packagehead{
+    background-color: lightgrey;
+    padding-left: 10px;
+}
+.edums-packagediscountsum{
+    color: orange;
+}
+.edums-packageorderselecswitch{
+    opacity: 0.8;
 }
 
 /**ID´s:

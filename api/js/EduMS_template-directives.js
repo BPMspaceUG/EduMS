@@ -425,4 +425,108 @@ Bus: 62, 131 Haltestelle Hansapark</p>\
 '
 }
 });
+
+//
+app.directive('packageSelect', function() {
+  return{
+    template:
+`
+<div class="edums-packagebundle" ng-if="packageOrderSelectSwitch">
+  <div class="edums-packagehead">
+    <h3>{{bundle.list[0].packageHeadline}}</h3>
+    <div ng-bind-html="bundle.list[0].packageDescriptionSidebar"></div>
+  </div>
+  <div class="edums-packagesumary">
+    <div>
+      <div>Schulung {{bundle.sumDayAmount}} Tage Kurssumme {{bundle.sumCourses  | number : 2}} €  {{bundle.sumCourses *1.19 | number : 2}} € inkl.Mwst.</div>
+      <div>Zertifizierungsprüfung (optional) {{bundle.sumExam  | number : 2}} €  {{bundle.sumExam  *1.19 | number : 2}} € inkl.Mwst.</div>
+      <div ng-if="bundle.sumDiscount">Sie sparen im Paket <i class="edums-packagediscountsum">{{bundle.sumDiscount *1.19 | number : 2}} Euro!</i></div> 
+    </div>
+  </div>
+  <div>
+    <table class="table table-bordered table-hover table-striped edums-tabody-tatable">
+      <tbody class="edums-tatable-body">
+        <tr ng-repeat="event in bundle.list">
+          <td>{{event.nextEvent.start_date}} - {{event.nextEvent.finish_date}}</td>
+          <td>{{event.nextEvent.internet_location_name}}</td>               
+          <td><div ng-if="event.nextEvent.guaranteelabel != 'none'">{{event.nextEvent.guaranteelabel}}</div></td>               
+          <td><i aria-hidden="true" class="fa fa-shopping-cart"></i>
+          <i aria-hidden="true" class="fa  fa-check-circle"></i></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn edums-package-btnta" href="#modal-container-1"
+    data-toggle="modal"><i class="fa fa-cart-plus" ></i> Weitere Kurse</button>
+  </div>
+</div>
+`
+}
+});
+
+//
+app.directive('packageOrder', function() {
+  return{
+    template:
+`
+<div class="edums-packageOrder" ng-if="!packageOrderSelectSwitch">
+  <div ng-repeat="bundle in packageEventBundle track by $index">
+    <div class="edums-packagehead">
+      <h3>{{bundle.list[0].packageHeadline}}</h3>
+    </div>
+    <div ng-repeat="event in bundle.list track by $index">
+
+      <div class="edums-packagehead">
+        <h4>{{event.nextEvent.course_name}}</h4>
+      </div>
+
+      <div class="row">
+        <span class="col">{{event.nextEvent.start_date}} - {{event.nextEvent.finish_date}}</span>
+        <span class="col">{{event.nextEvent.location_name}}</span>
+        <span class="col">Einzelpreis: € {{Math.round(event.nextEvent.price * (1+1/event.package_discount))}},- zzgl. Mwst.</span>
+      </div>
+
+      <div class="row">Teilnehmerzahl 
+        <span class="dropdown">
+          <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">{{event.courseParticipants}}
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li ng-repeat="num in event.maxParticipants"><a ng-click="event.courseParticipants = num; recalcPackageSum()">{{num}}</a></li>
+          </ul>
+        </span>
+        <span class="col">Kurse Gesamt: € {{event.courseParticipants * Math.round(event.nextEvent.price * (1+1/event.package_discount))}},- zzgl. Mwst.</span>
+      </div>
+
+      <div class="row">Mit Prüfung 
+        <span class="dropdown">
+          <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">{{event.examParticipants}}
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li ng-repeat="num in event.maxParticipants"><a ng-click="event.examParticipants = num; recalcPackageSum()">{{num}}</a></li>
+          </ul>
+        </span>
+        <span class="col">Kurse Gesamt: € {{event.examParticipants * Math.round(event.nextEvent.exam.coursePrice * (1+1/event.package_discount))}},- zzgl. Mwst.</span>
+      </div>
+    
+    </div>
+  </div>
+</div>
+`
+}
+
+});
+//
+app.directive('packageSum', function() {
+  return{
+    template:
+`
+<div class="edums-packagesum" ng-if="sumNormal > 0">
+  <div>Gesamt Schulungen/Prüfungen <span class="pull-right">€ {{sumNormal}},- zzgl. Mwst.</span></div>
+  <div>Rabatt Komplettpaket <span class="edums-redsum pull-right">€ -{{sumDiscount}},- zzgl. Mwst.</span></div>
+  <hr>
+  <div>Gesamt <span class="pull-right">€ {{sumNormal-sumDiscount}},- zzgl. Mwst.</span></div>
+</div>
+`
+}
+
+});
 </script>
