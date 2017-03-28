@@ -1,5 +1,5 @@
 USE `bpmspace_edums_v5`;
-
+ 
 
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES';
 
@@ -480,3 +480,90 @@ UPDATE `status_trainer` SET `status_trainer`='invited' WHERE `status_trainer_id`
 UPDATE `status_trainer` SET `status_trainer`='informed' WHERE `status_trainer_id`='3';
 UPDATE `status_trainer` SET `status_trainer`='accepted' WHERE `status_trainer_id`='2'; 
 UPDATE `status_trainer` SET `status_trainer`='disinvited' WHERE `status_trainer_id`='5'; 
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+
+SET @dcs := '[das|den|der|die|ein|eit|end|ere|ers|ese|gen|ige|ine|ist|men|mit|nde|nen|nge|nte|ren|vok|vel|vit|van]';
+SET @zcs := '[de|di|ei|el|en|er|es|ge|he|ht|ic|ie|it|le|li|nd|ne|ng|re|sc|se|si|st|te|un|bi|fa|tu|ra|ke]';
+SET @strt := '[A|E|I|O|U|L|K|P|R]';
+
+UPDATE brand SET `imprint` = concat('<p>imprint', str_random_lipsum(100,200,0), '</p>');
+UPDATE brand SET `protection_of_data_privacy` = concat('<p>Protection of data privacy</p>', str_random_lipsum(100,200,0), '</p>');
+UPDATE brand SET `terms_and_conditions` = concat('<p>terms</p>', str_random_lipsum(100,200,0), '</p>');
+UPDATE brand SET `email` = str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"');
+UPDATE brand SET `after_reservation_text_pre` = '<p>Thank your for reservation</p>';
+UPDATE brand SET `after_reservation_text_post` = concat('<p>After reservation Modal post-text</p>');
+UPDATE brand SET `mail_text_pre` = concat('<p>E-Mail reservation pre-text', str_random_lipsum(5,5,0), '</p>');
+UPDATE brand SET `mail_text_post` = concat('<p>E-Mail reservation post-text', str_random_lipsum(5,5,0), '</p>');
+UPDATE brand SET `registration_acceptance_text` = concat('<p>reservation acceptance-text', str_random_lipsum(5,15,0), '</p>');
+
+UPDATE brand_location SET `location_id` = str_random('D');
+UPDATE brand_location SET `brand_id` = str_random('D');
+
+UPDATE feedback SET `event_id` = str_random('D(d)');
+UPDATE feedback SET `feeback_value` = concat('feeback value ', str_random_lipsum(3,30,0));
+
+UPDATE `brand` SET `brand_name`=concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs));
+UPDATE `brand` SET `brand_name`='BPMspace' WHERE `brand_id`='1';
+
+UPDATE brand SET `login` = LOWER(brand_name);
+
+UPDATE brand SET `css-style`=CONCAT('<style> h1 { color:#',str_random('XXXXXX'),';} h2 { color:#',str_random('XXXXXX'),';}');
+
+UPDATE brand SET `brandHeadline`= CONCAT("Brand with ID ",`brand_id`);
+
+UPDATE brand SET `brandDescription`= CONCAT("<h2>brand description from brand with ID ", brand_id, "</h2><p>",str_random_lipsum(20,10,NULL),"</p><p>",str_random_lipsum(30,5,NULL),"</p><p>",str_random_lipsum(25,16,NULL),"</p>");
+UPDATE brand SET `brandDescriptionFooter`= CONCAT("<h2>FOOTER brand description from brand with ID ", brand_id, "</h2><p>",str_random_lipsum(10,5,NULL),"</p>");
+UPDATE brand SET `brandDescriptionSidebar`= CONCAT("<h2>SIDEBAR brand description from brand with ID ", brand_id, "</h2><p>",str_random_lipsum(12,10,NULL),"</p>");
+
+UPDATE topic SET topicName=concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs));
+UPDATE topic SET `topicHeadline`= CONCAT("TOPIC with ID ",`topic_id`);
+UPDATE topic SET topicDescription=concat('Topic description',str_random_lipsum(30,7,NULL));
+UPDATE topic SET topicDescriptionSidebar=concat('Topic description sidebar',str_random_lipsum(30,7,NULL));
+UPDATE topic SET topicDescriptionFooter=concat('Topic description footer',str_random_lipsum(30,7,NULL));
+
+UPDATE course SET course_name=concat('Course with ID: ', course_id) where test!='1' AND deprecated='1';
+UPDATE course SET course_name=concat('Exam with ID: ',course_id) where test='1' AND deprecated='1';
+
+UPDATE course c
+    JOIN topic_course tc ON tc.course_id = c.course_id
+    JOIN topic t ON tc.topic_id = t.topic_id
+SET c.course_name = CONCAT('Course with ID ',c.course_id,' in Topic ',t.topic_id,', Level: ',tc.level,', Rank: ',tc.rank) where test!='1' AND c.deprecated!='1' ;
+
+UPDATE course c
+    JOIN `course_test` ct ON ct.test_id = c.course_id
+SET c.course_name = CONCAT('Exam with ID ', ct.test_id, ' for Course with ID ', ct.course_id ) where test!='0' AND c.deprecated!='1';
+
+UPDATE course SET courseDescription=CONCAT("<h2>Course description from course with ID ", Course_id, "</h2><p>",str_random_lipsum(24,14,NULL),"</p><p>",str_random_lipsum(24,17,NULL),"</p><p>",str_random_lipsum(5,1,NULL),"</p>");
+UPDATE course SET courseDescriptionMail=CONCAT("<h2>Course description from course with ID ", Course_id, "</h2><p>",str_random_lipsum(24,14,NULL),"</p><p>",str_random_lipsum(24,17,NULL),"</p>");
+
+UPDATE participant SET last_name=concat('lastname ', participant_id);
+UPDATE participant SET first_name=concat('firstname ', participant_id);
+
+UPDATE organization SET `organization_name`= concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random('c'), str_random(@zcs), str_random('c(16)'));
+UPDATE organization SET `contact_url`= str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"');
+UPDATE organization SET `address_line_1`= CONCAT(str_random(@zcs), str_random(@dcs), '-street');
+UPDATE organization SET `address_line_2`= CONCAT(str_random('Dd(2)'), str_random('[a|b|c|d|e]'));
+UPDATE organization SET `city`= concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs), str_random('c(4)'));
+UPDATE organization SET `state`= concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs), str_random('c(4)'));
+UPDATE organization SET `zip`= str_random('DdDdD');
+UPDATE organization SET `country`= str_random('[De|Au|Be|Po|Swe|Ned|Swi]');
+
+
+UPDATE participant SET `email_address_2`=  str_random('c{3}c(5)[.|_]c{8}c(8)@[google|yahoo|live|mail]".com"');
+UPDATE participant SET `phone_business`= concat(str_random('DdDdD'),' - ',str_random('DdDdD'));
+UPDATE participant SET `phone_private`= concat(str_random('DdDdD'),' - ',str_random('DdDdD'));
+UPDATE participant SET `phone_mobile`= concat(str_random('DdDdD'),' - ',str_random('DdDdD'));
+UPDATE participant SET `phone_fax`= concat(str_random('DdDdD'),' - ',str_random('DdDdD'));
+
+UPDATE participant SET `address_line_1` = CONCAT(str_random(@zcs), str_random(@dcs), '-street');
+UPDATE participant SET `address_line_2` = CONCAT(str_random('Dd(2)'), str_random('[a|b|c|d|e]'));
+UPDATE participant SET `city` = concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs), str_random('c(4)'));
+UPDATE participant SET `state` = concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs), str_random('c(4)'));
+UPDATE participant SET `zip` = str_random('DdDdD');
+UPDATE participant SET `country` = str_random('[De|Au|Be|Po|Swe|Ned|Swi]');
+UPDATE participant SET `place_of_birth` = concat(str_random(@strt), str_random(@zcs), str_random(@dcs), str_random(@zcs), str_random('c(4)'));
+
+
+
